@@ -16,12 +16,12 @@ import FormTestimony from "./pages/FormTestimony";
 import Profile from "./pages/Profile";
 import Recomendations from "./pages/Recomendations";
 import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 import injectContext from "./store/appContext";
 
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
-import Login from "./pages/Login";
 
 //create your first component
 const Layout = () => {
