@@ -77,7 +77,7 @@ const Register = () => {
       </div>
 
       {/* Image Panel */}
-      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${signUpImage})` }}></div>
+      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${signUpImage})`, backgroundPosition: "center top"}}></div>
     </div>
   )
 }
