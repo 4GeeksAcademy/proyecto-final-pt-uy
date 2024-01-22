@@ -57,6 +57,40 @@ body {
     min-height: 70vh;
 }
 
+.boldText {
+    font-weight: bolder ;
+}
+
+.greyText {
+    color: #8C91A2
+}
+
+.linkStyle {
+    color: #0078CD;
+    text-decoration: none;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.formMargin{
+    margin: 90px;
+    margin-top: 50px;
+}
+
+.btn-outline-darkBlue{
+    color: #103559;
+    border-color: #103559;
+}
+
+.btn-darkBlue{
+    background-color: #103559;
+    color: white;
+}
+
 @media screen and (min-width: 768px) {
     .image-panel {
         height: 100vh;
