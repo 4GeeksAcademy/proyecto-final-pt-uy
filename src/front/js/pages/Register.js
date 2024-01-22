@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-import signUpImage from "../../img/signUp_image.png";
+import signUpImage from "../../img/signup.jpg";
 import logo from "../../img/el_refugio_logo.png";
 
 const Register = () => {
@@ -19,10 +19,12 @@ const Register = () => {
 
           {/* Text */}
           <h1 className="fw-bold lh-1 mb-2 mb-md-3">Registro de Usario</h1>
-          <div className="d-flex flex-row fs-7 mb-4 mb-md-4">
-            <p className="greyText pe-2">¿Ya tienes un usuario?</p>
-            <Link to={"/login"} className="linkStyle">Ingresa</Link>
-          </div>
+          <p className='fs-7 mb-4 mb-md-5 text-neutral-60'>
+            ¿Ya tienes un usuario? 
+            <Link className="ps-1 fw-medium text-info text-decoration-none" to={"/login"}>
+              Ingresa
+            </Link>
+          </p>
 
           {/* Form */}
           <form className='d-flex flex-column w-100'>
@@ -51,20 +53,20 @@ const Register = () => {
             </div>
 
             {/* Password */}
-            <div className="mb-4 mb-md-5">
+            <div className="mb-4">
               <label for="password" className="form-label">Contraseña</label>
               <input type="password" className="form-control py-2 px-4" id="password" placeholder="Ingresa tu contraseña" />
             </div>
 
             <div className='mb-3 d-flex'>
-              <Link to={""} className="linkStyle ms-auto">¿Necesitas ayuda?</Link>
+              <Link to={""} className="fw-medium fs-7 text-info text-decoration-none ms-auto">¿Necesitas ayuda?</Link>
             </div>
 
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
-              <div className="col-4 col-md-3 me-2">
+              <Link to={"/"} className="col-4 col-md-3 me-2">
                 <button type='button' className='btn btn-outline-primary rounded-pill w-100'>Cancelar</button>
-              </div>
+              </Link>
               <div className="col-5">
                 <button type='button' className="btn btn-primary rounded-pill w-100">Registarme</button>
               </div>
