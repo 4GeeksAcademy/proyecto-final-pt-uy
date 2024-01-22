@@ -1,6 +1,6 @@
 import React from 'react';
 
-import forgot from "../../img/forgotPassword.png";
+import forgot from "../../img/forgotPassword.jpg";
 import logo from "../../img/el_refugio_logo.png";
 
 
