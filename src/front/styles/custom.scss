@@ -1,0 +1,33 @@
+// Customize default theme variables
+$primary: #003459;
+$secondary: #EEC77E;
+$info: #0078CD;
+$body-color: #003459;
+$input-placeholder-color: #99A2A5;
+
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+
+// Add custom theme
+$custom-colors: (
+  "neutral-100": #00171F,
+  "neutral-80": #242B33,
+  "neutral-60": #667479,
+  "neutral-40": #99A2A5,
+  "neutral-20": #CCD1D2,
+  "neutral-10": #EBEEEF,
+  "neutral-0": #FDFDFD,
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+// Include Bootstrap
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+.btn-secondary {
+  color: #002A48;
+  font-weight: 500;
+}
+.btn-secondary:hover {
+  color: #002A48;
+}
