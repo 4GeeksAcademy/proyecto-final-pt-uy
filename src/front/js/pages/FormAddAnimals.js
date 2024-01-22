@@ -1,5 +1,4 @@
-import React from 'react'
-import "../../styles/home.css";
+import React from 'react';
 
 const FormAddAnimals = () => {
   return (
@@ -7,4 +6,4 @@ const FormAddAnimals = () => {
   )
 }
 
-export default FormAddAnimals
+export default FormAddAnimals;

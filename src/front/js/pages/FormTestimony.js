@@ -1,5 +1,4 @@
-import React from 'react'
-import "../../styles/home.css";
+import React from 'react';
 
 const FormTestimony = () => {
   return (
@@ -7,4 +6,4 @@ const FormTestimony = () => {
   )
 }
 
-export default FormTestimony
+export default FormTestimony;

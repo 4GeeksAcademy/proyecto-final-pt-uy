@@ -1,5 +1,4 @@
-import React from 'react'
-import "../../styles/home.css";
+import React from 'react';
 
 const AnimalList = () => {
   return (
@@ -7,4 +6,4 @@ const AnimalList = () => {
   )
 }
 
-export default AnimalList
+export default AnimalList;
