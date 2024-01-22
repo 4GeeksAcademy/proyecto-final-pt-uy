@@ -20,6 +20,7 @@ import Profile from "./pages/Profile";
 import Recomendations from "./pages/Recomendations";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import NewPassword from "./pages/NewPassword.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -58,6 +59,7 @@ const App = () => {
                             <Route path="/edit-animals" element={<FormEditAnimals />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
+                            <Route path="/new-password" element={<NewPassword/>} />
                         </Route>
                     </Routes>
                 </UserContextProvider>
