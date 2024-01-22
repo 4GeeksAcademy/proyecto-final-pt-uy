@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import loginImg from "../../img/login.jpg";
 import logo from "../../img/el_refugio_logo.png";
@@ -21,7 +21,7 @@ const Login = () => {
 
           {/* Text */}
           <h1 className='fw-bold lh-1 mb-2 mb-md-3'>Bienvenido <br />nuevamente!</h1>
-          <p className='fs-7 mb-4 mb-md-5'>¿No tienes un usuario? <span className="ps-1 fw-medium" onClick={() => navigate("/register")}>Regístrate</span></p>
+          <p className='fs-7 mb-4 mb-md-5 text-neutral-60'>¿No tienes un usuario? <Link className="ps-1 fw-medium text-info text-decoration-none" to={"/register"}>Regístrate</Link></p>
 
           {/* Form */}
           <form className='d-flex flex-column w-100'>
@@ -35,7 +35,7 @@ const Login = () => {
             <div className="mb-4 mb-md-5">
               <label htmlFor="password" className="form-label">Contraseña</label>
               <input type="password" className="form-control mb-2" id="password" placeholder='Ingresa tu contraseña' />
-              <p className='text-end fs-7 fw-medium'>¿Olvidaste tu contraseña?</p>
+              <p className='text-end fs-7 fw-medium text-info'><Link to={"/forgot-password"} className='fw-medium text-info text-decoration-none' >¿Olvidaste tu contraseña?</Link></p>
             </div>
 
             {/* Buttons */}
