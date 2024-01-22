@@ -1,5 +1,4 @@
-import React from 'react'
-import "../../styles/home.css";
+import React from 'react';
 
 const AnimalProfile = () => {
   return (
@@ -7,4 +6,4 @@ const AnimalProfile = () => {
   )
 }
 
-export default AnimalProfile
+export default AnimalProfile;

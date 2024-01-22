@@ -1,4 +1,61 @@
+/* 
+    General Styles used on every website (Don't Repeat Yourself)
+*/
+/*=============== GOOGLE FONTS ===============*/
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
 
+/*=============== VARIABLES CSS ===============*/
+:root {
+  /*========== Colors ==========*/
+  --dark-blue: #003459;
+  --dark-blue-80: #002A48;
+  --dark-blue-60: #00528C;
+  --dark-blue-40: #0078CD;
+  --mon-yellow: #F7DBA7;
+  --mon-yellow-80: #EEC77E;
+  --mon-yellow-60: #F1D092;
+  --mon-yellow-40: #FCEED5;
+  --neutral-color-100: #00171F;
+  --neutral-color-80: #242B33;
+  --neutral-color-60: #667479;
+  --neutral-color-40: #99A2A5;
+  --neutral-color-20: #CCD1D2;
+  --neutral-color-10: #EBEEEF;
+  --neutral-color-0: #FDFDFD;
+
+  /*========== Font and typography ==========*/
+  --body-font: 'Fredoka', sans-serif;
+}
+
+body {
+    font-family: var(--body-font);
+    color: var(--dark-blue);
+}
+
+.fs-7 {
+    font-size: 14px;
+}
+
+.logo-container {
+    display: flex;
+    width: 100%;
+    max-width: 150px;
+}
+
+.logo-container img {
+    max-width: 100%;
+}
+
+.image-panel {
+    height: 30vh;
+    background-repeat: no-repeat;
+    background-position: left top; 
+    background-size: cover;
+}
+
+.form-panel {
+    min-height: 70vh;
+}
 
 .boldText {
     font-weight: bolder ;
@@ -32,4 +89,18 @@
 .btn-darkBlue{
     background-color: #103559;
     color: white;
+}
+
+@media screen and (min-width: 768px) {
+    .image-panel {
+        height: 100vh;
+    }
+
+    .form-panel {
+        min-height: 100vh;
+    }
+
+    .logo-container {
+        max-width: 180px;
+    }
 }

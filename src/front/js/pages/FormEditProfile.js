@@ -1,5 +1,4 @@
-import React from 'react'
-import "../../styles/home.css";
+import React from 'react';
 
 const FormEditProfile = () => {
   return (
@@ -7,4 +6,4 @@ const FormEditProfile = () => {
   )
 }
 
-export default FormEditProfile
+export default FormEditProfile;

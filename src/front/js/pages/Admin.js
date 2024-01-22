@@ -1,5 +1,4 @@
-import React from 'react'
-import "../../styles/home.css";
+import React from 'react';
 
 const Admin = () => {
   return (
@@ -7,4 +6,4 @@ const Admin = () => {
   )
 }
 
-export default Admin
+export default Admin;
