@@ -1,6 +1,6 @@
 import React from 'react';
 
-import newPassword from "../../img/newPassword.png"
+import newPassword from "../../img/newPassword.jpg"
 import logo from "../../img/el_refugio_logo.png";
 
 const NewPassword = () => {
