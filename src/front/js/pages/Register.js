@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-import "../../styles/home.css";
 import SignUpImage from "../../img/SignUpImage.png";
 import LogoImage from "../../img/Logo.png";
 
