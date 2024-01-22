@@ -1,5 +1,4 @@
-import React from 'react'
-import "../../styles/home.css";
+import React from 'react';
 
 const Register = () => {
   return (
@@ -7,4 +6,4 @@ const Register = () => {
   )
 }
 
-export default Register
+export default Register;

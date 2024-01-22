@@ -1,5 +1,4 @@
-import React from 'react'
-import "../../styles/home.css";
+import React from 'react';
 
 const ForgotPassword = () => {
   return (
@@ -7,4 +6,4 @@ const ForgotPassword = () => {
   )
 }
 
-export default ForgotPassword
+export default ForgotPassword;

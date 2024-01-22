@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../../styles/home.css";
+
 import loginImg from "../../img/login.jpg";
 import logo from "../../img/el_refugio_logo.png";
 
