@@ -1,9 +1,9 @@
 import React from 'react';
 
-const FormAddAnimals = () => {
+const FormAddAnimal = () => {
   return (
     <div>FormAddAnimals</div>
   )
 }
 
-export default FormAddAnimals;
+export default FormAddAnimal;

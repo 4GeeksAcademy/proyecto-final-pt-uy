@@ -5,14 +5,14 @@ import { UserContextProvider } from "./contexts/userContext.js";
 
 import LayoutWithNav from "./layoutWithNav.js";
 import LayoutWithoutNav from "./layoutWithoutNav.js";
+import LayoutDashAdmin from "./layoutDashAdmin.js";
 
 import { Home } from "./pages/home";
 import AboutUs from "./pages/AboutUs";
-import Admin from "./pages/Admin";
 import AnimalList from "./pages/AnimalList";
 import AnimalProfile from "./pages/AnimalProfile";
 import ForgotPassword from "./pages/ForgotPassword";
-import FormAddAnimals from "./pages/FormAddAnimals";
+import FormAddAnimal from "./component/FormAddAnimal.js";
 import FormEditAnimals from "./pages/FormEditAnimals";
 import FormEditProfile from "./pages/FormEditProfile";
 import FormTestimony from "./pages/FormTestimony";
@@ -53,13 +53,15 @@ const App = () => {
                         </Route>
 
                         <Route element={<LayoutWithoutNav />}>
-                            <Route path="/admin" element={<Admin />} />
                             <Route path="/forgot-password" element={<ForgotPassword />} />
-                            <Route path="/add-animals" element={<FormAddAnimals />} />
-                            <Route path="/edit-animals" element={<FormEditAnimals />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/new-password" element={<NewPassword/>} />
+                        </Route>
+
+                        <Route element={<LayoutDashAdmin />} >
+                            <Route path="/add-animal" element={<FormAddAnimal />} />
+                            <Route path="/edit-animals" element={<FormEditAnimals />} />
                         </Route>
                     </Routes>
                 </UserContextProvider>
