@@ -17,6 +17,7 @@ $custom-colors: (
   "neutral-20": #CCD1D2,
   "neutral-10": #EBEEEF,
   "neutral-0": #FDFDFD,
+  "linear": #FCEED5,
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
