@@ -6,10 +6,15 @@ from flask import Flask, request, jsonify, url_for, send_from_directory
 from flask_migrate import Migrate
 from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
-from api.models import db
+from api.models import db,User,RoleEnum
 from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+from flask_jwt_extended import JWTManager
+from flask_bcrypt import Bcrypt
 
 # from models import Person
 
@@ -18,6 +23,12 @@ static_file_dir = os.path.join(os.path.dirname(
     os.path.realpath(__file__)), '../public/')
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+
+
+app.config["JWT_SECRET_KEY"] = "prueba"  
+jwt = JWTManager(app)
+
+bcrypt = Bcrypt(app)
 
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
@@ -66,6 +77,68 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0  # avoid cache memory
     return response
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    body = request.get_json(silent=True)
+    if body is None:
+        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
+
+    required_fields = ['name', 'last_name', 'username', 'password', 'email']
+
+    for field in required_fields:
+        if field not in body or body[field] is None:
+            return jsonify({'msg': f'El campo {field} es obligatorio'}), 400
+
+    user = User()
+    user.name = body['name']
+    user.last_name = body['last_name']
+    user.user_name = body['username']
+    user.email = body['email']
+    pw_hash = bcrypt.generate_password_hash(body['password']).decode('utf-8')
+    user.password = pw_hash
+    user.is_active = True
+
+    #valores opcionales (pueden ser None)
+    user.address = body.get('address')
+    user.phone_number = body.get('phone_number')
+    user.backyard = body.get('backyard')
+    user.other_pets = body.get('other_pets')
+    user.role = body.get('role', RoleEnum.USER)  #Valor predeterminado si no se proporciona
+
+    db.session.add(user)
+    db.session.commit()
+    return jsonify({'msg': 'Usuario registrado'}), 200
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    body = request.get_json(silent=True)
+
+    if body is None:
+        return jsonify({"msg": "Debes enviar las credenciales en el body"}), 400
+    if 'username' not in body:
+        return jsonify({"msg": "El campo username es obligatorio"}), 400
+    if 'password' not in body:
+        return jsonify({"msg": "El campo password es obligatorio"}), 400
+    
+    user = User.query.filter_by(user_name = body['username']).first()
+    if user is None or not bcrypt.check_password_hash(user.password, body['password']):
+        return jsonify({'msg': 'Usuario o contraseña incorrectos'}), 400
+    
+    access_token = create_access_token(identity = user.id)
+    return jsonify({"msg": "Login correcto", "token": access_token})
+
+
+
+
+
+
+
+
+
+
 
 
 # this only runs if `$ python src/main.py` is executed

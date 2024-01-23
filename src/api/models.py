@@ -37,7 +37,7 @@ class User(db.Model):
     last_name = db.Column(db.String(30), nullable=False)
     user_name = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(80), unique=False, nullable=False)
+    password = db.Column(db.String(250), unique=False, nullable=False)
     address = db.Column(db.String(50), nullable=True)
     phone_number = db.Column(db.Integer, nullable=True)
     backyard = db.Column(db.Enum(YesNoEnum, name="yes_no_enum_backyard"), nullable=True)
