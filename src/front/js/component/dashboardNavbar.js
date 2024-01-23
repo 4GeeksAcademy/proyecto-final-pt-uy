@@ -7,10 +7,7 @@ export default function DashboardNavbar() {
         <nav  className="d-flex justify-content-end w-100 bg-white p-3 fw-medium">
           <ul class="nav m-0 p-0">
             <li class="nav-item m-0 p-0">
-              <Link class="nav-link" to={"/"} >Perfil</Link>
-            </li>
-            <li class="nav-item m-0 p-0">
-              <p class="nav-link">Logout</p>
+              <Link class="dash nav-link" to={"/"} ><i class="fa-solid fa-house"></i> Inicio</Link>
             </li>
           </ul>
         </nav>
