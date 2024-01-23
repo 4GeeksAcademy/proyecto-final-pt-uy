@@ -46,7 +46,7 @@ export const Navbar = () => {
 								Regístrate
 							</Link>
 						</li>
-						<li className="nav-item mx-3">
+						<li className="nav-item ms-3">
 							<Link to="/login" className="text-body-color fw-medium text-decoration-none">
 								Ingresa
 							</Link>
