@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import logo from "../../img/el_refugio_logo.png";
 
@@ -15,9 +15,9 @@ export default function DashboardLeftPanel() {
 
             {/* Left Navbar */}
             <nav className="d-flex flex-column w-100 mt-3">
-            <Link to={"/"} className="dash-panel-link fw-medium active"><i className="fa-regular fa-heart me-3"></i> Peluditos</Link>
-            <Link to={"/"} className="dash-panel-link fw-medium"><i className="fa-regular fa-circle-user me-3"></i> Usuarios</Link>
-            <Link to={"/"} className="dash-panel-link fw-medium"><i className="fa-regular fa-star me-3"></i> Testimonios</Link>
+            <NavLink to={"/table-animals"} className="dash-panel-link fw-medium"><i className="fa-regular fa-heart me-3"></i> Peluditos</NavLink>
+            <NavLink to={"/table-users"} className="dash-panel-link fw-medium"><i className="fa-regular fa-circle-user me-3"></i> Usuarios</NavLink>
+            <NavLink to={"/table-reviews"} className="dash-panel-link fw-medium"><i className="fa-regular fa-star me-3"></i> Testimonios</NavLink>
             </nav>
         </div>
     );

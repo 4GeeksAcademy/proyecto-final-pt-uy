@@ -21,6 +21,9 @@ import Recomendations from "./pages/Recomendations";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import NewPassword from "./pages/NewPassword.js";
+import TableAnimals from "./component/tableAnimals.js";
+import TableReviews from "./component/tableReviews.js";
+import TableUsers from "./component/tableUsers.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -62,6 +65,9 @@ const App = () => {
                         <Route element={<LayoutDashAdmin />} >
                             <Route path="/add-animal" element={<FormAddAnimal />} />
                             <Route path="/edit-animals" element={<FormEditAnimals />} />
+                            <Route path="/table-animals" element={<TableAnimals />} />
+                            <Route path="/table-reviews" element={<TableReviews />} />
+                            <Route path="/table-users" element={<TableUsers />} />
                         </Route>
                     </Routes>
                 </UserContextProvider>
