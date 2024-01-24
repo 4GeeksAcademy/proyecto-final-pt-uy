@@ -83,7 +83,7 @@ def delete_testimony(testimony_id):
     return jsonify({"msg":"Testimony deleted successfully"}),200
 
 #####Queda pendiente a desarrollo en el FrontEnd########
-@pi.route('/testimony/<int:testimony_id>', methods=['PUT'])
+@api.route('/testimony/<int:testimony_id>', methods=['PUT'])
 @jwt_required()
 def update_testimony(testimony_id):
     testimony = Testimony.query.get(testimony_id)
