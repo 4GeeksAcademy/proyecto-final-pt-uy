@@ -16,27 +16,27 @@ export const Navbar = () => {
 				<div class="collapse navbar-collapse" id="navbarText">
 					<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 						<li class="nav-item">
-							<Link to="/" className="mt-3 mt-lg-0 nav-link text-body-color fw-medium text-decoration-none">
+							<Link to="/" className="mt-3 mt-lg-0 nav-link text-primary fw-medium text-decoration-none">
 								Inicio
 							</Link>
 						</li>
 						<li class="nav-item">
-							<Link to="/animal-list" className="nav-link text-body-color fw-medium text-decoration-none">
+							<Link to="/animal-list" className="nav-link text-primary fw-medium text-decoration-none">
 								Peluditos
 							</Link>
 						</li>
 						<li class="nav-item">
-							<Link to="/recomendations" className="nav-link text-body-color fw-medium text-decoration-none">
+							<Link to="/recomendations" className="nav-link text-primary fw-medium text-decoration-none">
 								Información
 							</Link>
 						</li>
 						<li class="nav-item">
-							<Link to="/about" className="nav-link text-body-color fw-medium text-decoration-none">
+							<Link to="/about" className="nav-link text-primary fw-medium text-decoration-none">
 								Sobre Nosotros
 							</Link>
 						</li>
 						<li class="nav-item">
-							<Link to="/about" className="nav-link text-body-color fw-medium text-decoration-none">
+							<Link to="/about" className="nav-link text-primary fw-medium text-decoration-none">
 								Contacto
 							</Link>
 						</li>
