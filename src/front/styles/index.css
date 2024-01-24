@@ -122,12 +122,6 @@ body {
     min-width: 100px;
 }
 
-@media screen and (min-width: 576px) {
-    .dash-left-panel {
-        max-width: 300px;
-    }
-}
-
 @media screen and (min-width: 768px) {
     .image-panel {
         height: 100vh;
@@ -139,5 +133,9 @@ body {
 
     .logo-container {
         max-width: 180px;
+    }
+
+    .dash-left-panel {
+        min-width: 250px;
     }
 }

@@ -7,7 +7,7 @@ const FormAddAnimal = () => {
     <div>
       <h1 className='fs-4'>Ingresar Peludito</h1>
 
-      <form className='bg-white rounded-1 shadow-sm p-4 pb-5'>
+      <form className='bg-white rounded-1 shadow-sm p-3 p-md-4 pb-5'>
         {/* SECCIÓN DATOS */}
         <h2 className='fs-5 border-bottom border-neutral-10 pb-1'>Datos</h2>
         <div className='d-flex flex-column w-100'>
@@ -42,7 +42,7 @@ const FormAddAnimal = () => {
               </div>
               
               {/* Info adicional */}
-              <div className='d-flex h-100' style={{minWidth: "330px", flexGrow: 2}}>
+              <div className='d-flex h-100' style={{minWidth: "300px", flexGrow: 2}}>
                 <div className="mb-3 table-item-big w-100 h-100">
                   <label htmlFor="additionalInfo" className="form-label">Información adicional</label>
                   <textarea className="form-control" id="additionalInfo" placeholder='Ingresa si corresponde' style={{minHeight: "140px"}}/>
