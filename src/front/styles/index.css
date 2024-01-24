@@ -31,6 +31,10 @@ body {
     font-family: var(--body-font);
 }
 
+.fs-0 {
+    font-size: 100px;
+}
+
 .fs-7 {
     font-size: 14px;
 }

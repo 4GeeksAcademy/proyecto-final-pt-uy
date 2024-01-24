@@ -38,16 +38,16 @@ export const Footer = () => (
 				{/* Social media and contact information */}
 				<div className="d-flex align-items-center mx-auto me-lg-0 mt-3 mt-lg-0">
 					<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none me-3">
-						<i class="fa-brands fa-facebook"></i>
+						<i className="fa-brands fa-facebook"></i>
 					</Link>
 					<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
-						<i class="fa-brands fa-instagram"></i>
+						<i className="fa-brands fa-instagram"></i>
 					</Link>
 					<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
-						<i class="fa-solid fa-phone"></i>
+						<i className="fa-solid fa-phone"></i>
 					</Link>
 					<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none ms-3">
-						<i class="fa-regular fa-envelope"></i>
+						<i className="fa-regular fa-envelope"></i>
 					</Link>
 				</div>
 			</div>
