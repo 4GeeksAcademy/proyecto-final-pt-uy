@@ -23,7 +23,43 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
+ ######## user routes ############
+@api.route('/user/<int:user_id>', methods=['PUT'])
+@jwt_required()
+def update_user(user_id):
+    user = User.query.get(user_id)
 
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    data = request.get_json()
+
+    # Campos obligatorios
+    if 'name' in data:
+        user.name = data['name']
+    if 'last_name' in data:
+        user.last_name = data['last_name']
+    if 'user_name' in data:
+        user.user_name = data['user_name']
+    if 'email' in data:
+        user.email = data['email']
+    if 'role' in data:
+        user.role = data['role']
+
+    # Campos opcionales
+    if 'address' in data:
+        user.address = data['address']
+    if 'phone_number' in data:
+        user.phone_number = data['phone_number']
+    if 'backyard' in data:
+        user.backyard = data['backyard']
+    if 'other_pets' in data:
+        user.other_pets = data['other_pets']
+
+    db.session.commit()
+
+    return jsonify({"message": "User updated successfully"}), 200
+####################################
 
  ######## testimony routes ##########
 @api.route('/testimony', methods=['POST'])
