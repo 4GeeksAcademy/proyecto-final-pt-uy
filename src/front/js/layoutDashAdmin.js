@@ -6,14 +6,16 @@ import DashboardNavbar from "./component/dashboardNavbar";
 
 const LayoutDashAdmin = () => {
   return (
-    <div className="d-flex" style={{backgroundColor: "#F7F8FA"}}>
+    <div className="container-fluid d-flex p-0 mt-2" style={{backgroundColor: "#F7F8FA", maxWidth: "1400px"}}>
       {/* LEFT PANEL */}
       <DashboardLeftPanel />
 
       {/* RIGHT PANEL */}
       <div className="d-flex flex-column w-100" >
         <DashboardNavbar />
-        <Outlet />
+        <div className="p-4">
+          <Outlet />
+        </div>
       </div>      
     </div>
   );

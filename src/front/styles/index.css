@@ -106,6 +106,22 @@ body {
     width: 85%;
 }
 
+.table-item-super {
+    min-width: 320px;
+}
+.table-item-big {
+    min-width: 300px;
+}
+.table-item-med {
+    min-width: 250px;
+}
+.table-item-small {
+    min-width: 200px;
+}
+.table-item-mini {
+    min-width: 100px;
+}
+
 @media screen and (min-width: 576px) {
     .dash-left-panel {
         max-width: 300px;
