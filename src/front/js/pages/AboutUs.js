@@ -80,6 +80,111 @@ const AboutUs = () => {
           </div>
         </div>
       </div>
+
+      {/*Faqs*/}
+      <div className='container my-5'>
+        <div className='text-center mb-5'>
+          <h2 className="fw-semibold mb-1">FAQ</h2>
+          <p className="fw-semibold">Preguntas frecuentes sobre El Refugio</p>
+        </div>
+
+        {/*Acordion questions and answers*/}
+        <div className='pb-3 mt-5'>
+          <div class="accordion accordion-flush " id="accordionFlushExample">
+            <div class="accordion-item border border-0 border-start border-primary border-3 my-3">
+              <h2 class="accordion-header d-grid">
+                <button class="btn collapsed text-start py-0 ps-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                  ¿Cursus turpis massa tincidunt dui ut ornare lectus sit?
+                </button>
+              </h2>
+              <div id="flush-collapseOne" class="accordion-collapse collapse text-neutral-80" data-bs-parent="#accordionFlushExample">
+                <p class="accordion-body py-0 my-3">
+                  Adipiscing at in tellus integer feugiat scelerisque varius. Enim ut tellus elementum sagittis vitae. Vulputate mi sit amet mauris commodo quis imperdiet massa. Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+                <p class="accordion-body py-0">
+                  Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+              </div>
+            </div>
+            <div class="accordion-item border border-0 border-start border-primary border-3 my-3">
+              <h2 class="accordion-header d-grid">
+                <button class="btn collapsed text-start py-0 ps-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                  ¿Non diam phasellus vestibulum lorem sed risus?
+                </button>
+              </h2>
+              <div id="flush-collapseTwo" class="accordion-collapse collapse text-neutral-80" data-bs-parent="#accordionFlushExample">
+                <p class="accordion-body py-0 my-3">
+                  Adipiscing at in tellus integer feugiat scelerisque varius. Enim ut tellus elementum sagittis vitae. Vulputate mi sit amet mauris commodo quis imperdiet massa. Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+                <p class="accordion-body py-0">
+                  Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+              </div>
+            </div>
+            <div class="accordion-item border border-0 border-start border-primary border-3 my-3">
+              <h2 class="accordion-header d-grid">
+                <button class="btn collapsed text-start py-0 ps-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                  ¿Non diam phasellus vestibulum lorem sed risus?
+                </button>
+              </h2>
+              <div id="flush-collapseThree" class="accordion-collapse collapse text-neutral-80" data-bs-parent="#accordionFlushExample">
+                <p class="accordion-body py-0 my-3">
+                  Adipiscing at in tellus integer feugiat scelerisque varius. Enim ut tellus elementum sagittis vitae. Vulputate mi sit amet mauris commodo quis imperdiet massa. Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+                <p class="accordion-body py-0">
+                  Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+              </div>
+            </div>
+            <div class="accordion-item border border-0 border-start border-primary border-3 my-3">
+              <h2 class="accordion-header d-grid">
+                <button class="btn collapsed text-start py-0 ps-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                  ¿Cursus turpis massa tincidunt dui ut ornare lectus sit?
+                </button>
+              </h2>
+              <div id="flush-collapseFour" class="accordion-collapse collapse text-neutral-80" data-bs-parent="#accordionFlushExample">
+                <p class="accordion-body py-0 my-3">
+                  Adipiscing at in tellus integer feugiat scelerisque varius. Enim ut tellus elementum sagittis vitae. Vulputate mi sit amet mauris commodo quis imperdiet massa. Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+                <p class="accordion-body py-0">
+                  Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+              </div>
+            </div>
+            <div class="accordion-item border border-0 border-start border-primary border-3 my-3">
+              <h2 class="accordion-header d-grid">
+                <button class="btn collapsed text-start py-0 ps-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFive" aria-expanded="false" aria-controls="flush-collapseFive">
+                  ¿Non diam phasellus vestibulum lorem sed risus?
+                </button>
+              </h2>
+              <div id="flush-collapseFive" class="accordion-collapse collapse text-neutral-80" data-bs-parent="#accordionFlushExample">
+                <p class="accordion-body py-0 my-3">
+                  Adipiscing at in tellus integer feugiat scelerisque varius. Enim ut tellus elementum sagittis vitae. Vulputate mi sit amet mauris commodo quis imperdiet massa. Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+                <p class="accordion-body py-0">
+                  Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+              </div>
+            </div>
+            <div class="accordion-item border border-0 border-start border-primary border-3 my-3">
+              <h2 class="accordion-header d-grid">
+                <button class="btn collapsed text-start py-0 ps-4 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseSix" aria-expanded="false" aria-controls="flush-collapseSix">
+                  ¿Cursus turpis massa tincidunt dui ut ornare lectus sit?
+                </button>
+              </h2>
+              <div id="flush-collapseSix" class="accordion-collapse collapse text-neutral-80" data-bs-parent="#accordionFlushExample">
+                <p class="accordion-body py-0 my-3">
+                  Adipiscing at in tellus integer feugiat scelerisque varius. Enim ut tellus elementum sagittis vitae. Vulputate mi sit amet mauris commodo quis imperdiet massa. Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+                <p class="accordion-body py-0">
+                  Augue interdum velit euismod in pellentesque massa placerat duis ultricies. At imperdiet dui accumsan sit amet nulla facilisi.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   )
 }
