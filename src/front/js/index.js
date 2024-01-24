@@ -10,7 +10,6 @@ import "../styles/index.css";
 
 //import your own components
 import App from "./app";
-import Layout from "./layout";
 
 //render your react application
 ReactDOM.render(<App />, document.querySelector("#app"));
