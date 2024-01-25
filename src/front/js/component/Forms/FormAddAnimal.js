@@ -45,7 +45,7 @@ const FormAddAnimal = () => {
         {/* SECCIÓN DATOS */}
         <h2 className='fs-5 border-bottom border-neutral-10 pb-1'>Datos</h2>
         <div className='d-flex flex-column w-100 mb-5'>
-          <div className='d-inline-flex flex-wrap gap-3 w-100'>
+          <div className='d-inline-flex flex-wrap column-gap-3 w-100'>
 
             {/* Nombre */}
             <Input
@@ -67,9 +67,9 @@ const FormAddAnimal = () => {
             <Select size='mini' id="microchip" label="Microchip" register={register} errors={errors} />
             <Select size='small' id="status" label="Estado" options={statusOptions} register={register} errors={errors} />
 
-            <div className='d-inline-flex flex-wrap w-100 gap-3'>
+            <div className='d-inline-flex flex-wrap w-100 column-gap-3'>
               {/* Fechas */}
-              <div className='d-flex flex-column gap-3' style={{ minWidth: "240px", maxWidth: "400px", flexGrow: 1 }}>
+              <div className='d-flex flex-column' style={{ minWidth: "240px", maxWidth: "400px", flexGrow: 1 }}>
                 <DateInput
                   id="birthDate"
                   label="Fecha de Nacimiento"

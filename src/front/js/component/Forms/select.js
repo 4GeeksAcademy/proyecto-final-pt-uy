@@ -6,7 +6,7 @@ const defaultOptions = [{ value: "yes", label: "Sí" }, { value: "no", label: "N
 export default function Select({ size = "med", id, label, options = defaultOptions, register, errors, ...rest }) {
 
     return (
-        <div className={`mb-3 table-item-${size} flex-grow-1 mb-3`}>
+        <div className={`table-item-${size} flex-grow-1 mb-3`}>
             <label htmlFor={id} className="form-label">{label}</label>
             <select
                 id={id}
