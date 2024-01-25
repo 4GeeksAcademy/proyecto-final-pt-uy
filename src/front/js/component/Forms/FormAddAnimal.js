@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 import Select from './select.js';
@@ -21,7 +21,7 @@ const defaultValues = {
   birthDate: null,
   publicationDate: new Date(),
   additionalInfo: "",
-  photos: null,
+  photos: [],
 };
 
 // Opciones de los selects
@@ -34,12 +34,20 @@ const statusOptions = [{ value: "adopted", label: "Adoptado" }, { value: "not_ad
 const FormAddAnimal = () => {
 
   const form = useForm({ defaultValues, mode: "onBlur" });
-  const { register, control, formState, handleSubmit, reset } = form;
+  const { register, control, formState, handleSubmit, reset, watch } = form;
   const { errors, isSubmitting, isSubmitted, isSubmitSuccessful } = formState;
 
+  const watchPhotos = watch("photos");
+  const filesArray = Array.from(watchPhotos);
+  const filesURL = filesArray.map(file => URL.createObjectURL(file));
+
   useEffect(() => {
-    // Resetear el formulario luego de que fue enviado exitosamente
+    // Si el formulario fue enviado exitosamente...
     if (isSubmitSuccessful) {
+      // Liberar los objetos URL creados para previsualizar las imagenes
+      filesURL.forEach(fileURL => URL.revokeObjectURL(fileURL));
+
+      // Resetear el form
       reset();
     }
   }, [isSubmitSuccessful, reset]);
@@ -47,6 +55,7 @@ const FormAddAnimal = () => {
   const onSubmit = (data) => {
     console.log("Form submited", data);
   };
+
 
   return (
     <div>
@@ -123,22 +132,37 @@ const FormAddAnimal = () => {
         <div className='d-inline-flex flex-wrap w-100 gap-3 mb-5'>
           {/* Input */}
           <div className='d-flex flex-column'>
-            <p className='fs-7 text-neutral-40 mb-1'>Formatos aceptados: .jpg o .png</p>
-
+            <label htmlFor='photos' className="form-label">Selecciona hasta 5 fotos</label>
             <div className="mb-3 table-item-mini">
               <input
                 type="file"
                 className="form-control"
                 id="photos"
-                placeholder='Nombre del peludito'
-                {...register("photos")}
+                accept="image/png, image/jpeg"
+                multiple
+                {...register("photos", {
+                  validate: (fieldValue) => {
+                    console.log(fieldValue.length);
+                    return fieldValue.length < 6 || "Sólo puedes subir hasta 5 imágenes";
+                  }
+                })}
               />
+              {/* TO-DO: gestionar la carga de modo que al seleccionar más imágenes éstas se agreguen en vez de sustituir a las anteriores */}
+              <p className='fs-7 text-neutral-40 mb-1'>Formatos aceptados: .jpg o .png</p>
+              <p className="fs-7 text-danger">{errors.photos?.message}</p>
             </div>
           </div>
 
           {/* Thumbnails */}
-          <div className='d-inline-flex flex-wrap flex-grow-1 gap-1 align-items-center justify-content-start'>
-            {/* Aquí irían las miniaturas de las fotos seleccionadas */}
+          <div className='d-inline-flex flex-wrap flex-grow-1 gap-2 align-items-center justify-content-center justify-content-md-start'>
+            {
+              filesURL.map((preview, index) => (
+                <div key={index} className="d-flex justify-content-center overflow-hidden rounded-2 shadow-sm" style={{ maxWidth: "80px", height: "80px" }}>
+                  <img className="d-flex w-100 object-fit-cover" src={preview} alt="preview" />
+                  {/* TO-DO: implementar funcionalidad de eliminar la imagen */}
+                </div>
+              ))
+            }
           </div>
         </div>
 
