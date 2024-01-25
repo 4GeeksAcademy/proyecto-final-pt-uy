@@ -39,6 +39,21 @@ def handle_hello():
     return jsonify(response_body), 200
 
  ######## users routes ############
+# ================== Get all users ================ #
+@api.route('/users', methods=['GET'])
+@jwt_required()
+def get_users():
+    users_query = User.query.all()
+    serialized_users = list(map(lambda item: item.serialize(), users_query))
+
+    response_body = {
+         "msg": "ok",
+         "total_users": len(serialized_users),
+         "result": serialized_users
+     }
+    
+    return jsonify(response_body), 200
+
 
 @api.route('/user/<int:user_id>', methods=['PUT'])
 @jwt_required()
