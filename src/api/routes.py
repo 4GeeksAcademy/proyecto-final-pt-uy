@@ -262,3 +262,35 @@ def register_animal():
     }
 
     return jsonify(response_body), 201
+
+# =============== Get All Animals ================== #
+@api.route('/animals', methods=['GET'])
+@jwt_required()
+def get_animals():
+    animals_query = Animals.query.all()
+    serialized_animals = []
+
+    for animal in animals_query:
+        # Serializar el animal
+        serialized_animal = animal.serialize()
+
+        # Obtener las imágenes asociadas al animal
+        images_query = Animals_images.query.filter_by(animal_id=animal.id).all()
+
+        # Obtener solo las URL de las imágenes
+        image_urls = [image.image_url for image in images_query]
+
+        # Agregar las URLs al objeto del animal
+        serialized_animal['image_urls'] = image_urls
+
+        # Agregar el animal serializado a la lista resultante
+        serialized_animals.append(serialized_animal)
+
+    response_body = {
+         "msg": "ok",
+         "total_animals": len(serialized_animals),
+         "result": serialized_animals
+     }
+    
+    return jsonify(response_body), 200
+
