@@ -157,7 +157,7 @@ const FormAddAnimal = () => {
           <div className='d-inline-flex flex-wrap flex-grow-1 gap-2 align-items-center justify-content-center justify-content-md-start'>
             {
               filesURL.map((preview, index) => (
-                <div key={index} className="d-flex justify-content-center overflow-hidden rounded-2 shadow-sm" style={{ maxWidth: "80px", height: "80px" }}>
+                <div key={index} className="d-flex justify-content-center overflow-hidden rounded-2 border border-3 border-white shadow-sm" style={{ maxWidth: "80px", height: "80px" }}>
                   <img className="d-flex w-100 object-fit-cover" src={preview} alt="preview" />
                   {/* TO-DO: implementar funcionalidad de eliminar la imagen */}
                 </div>
