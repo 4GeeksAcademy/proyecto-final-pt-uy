@@ -294,3 +294,28 @@ def get_animals():
     
     return jsonify(response_body), 200
 
+
+# =============== Get One Animal by Id ================== #
+@api.route('/animal/<int:animal_id>', methods=['GET'])
+@jwt_required()
+def get_animal(animal_id):
+    animal = Animals.query.get(animal_id)
+
+    if not animal:
+        return jsonify({"message": "Animal not found"}), 404
+    
+    # Serializar el animal
+    serialized_animal = animal.serialize()
+
+    # Obtener las imágenes asociadas al animal
+    images_query = Animals_images.query.filter_by(animal_id=animal.id).all()
+
+    # Obtener solo las URL de las imágenes
+    image_urls = [image.image_url for image in images_query]
+
+    # Agregar las URLs al objeto del animal
+    serialized_animal['image_urls'] = image_urls
+
+    return jsonify(serialized_animal), 200
+
+
