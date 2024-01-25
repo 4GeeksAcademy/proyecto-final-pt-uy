@@ -3,7 +3,7 @@ import React from "react";
 const defaultOptions = [{ value: "yes", label: "Sí" }, { value: "no", label: "No" }];
 
 
-export default function Select({ size = "med", id, label, options = defaultOptions, register, ...rest }) {
+export default function Select({ size = "med", id, label, options = defaultOptions, register, errors, ...rest }) {
 
     return (
         <div className={`mb-3 table-item-${size} flex-grow-1 mb-3`}>
@@ -18,6 +18,7 @@ export default function Select({ size = "med", id, label, options = defaultOptio
                     options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)
                 }
             </select>
+            <p className="fs-7 text-danger">{errors[id]?.message}</p>
         </div>
     );
 }

@@ -34,7 +34,8 @@ const statusOptions = [{ value: "adopted", label: "Adoptado" }, { value: "not_ad
 const FormAddAnimal = () => {
 
   const form = useForm({ defaultValues, mode: "onBlur" });
-  const { register, control } = form;
+  const { register, control, formState } = form;
+  const { errors } = formState;
 
   return (
     <div>
@@ -54,16 +55,17 @@ const FormAddAnimal = () => {
               placeholder="Nombre del peludito"
               register={register}
               validationSchema={{ required: "El nombre es requerido" }}
+              errors={errors}
             />
 
-            <Select size='small' id="type" label="Tipo" options={typeOptions} register={register} />
-            <Select size='small' id="sex" label="Sexo" options={sexOptions} register={register} />
-            <Select size='small' id="size" label="Tamaño" options={sizeOptions} register={register} />
-            <Select size='mini' id="vaccinated" label="Vacunado" register={register}></Select>
-            <Select size='mini' id="dewormed" label="Desparasitado" register={register} />
-            <Select size='mini' id="castrated" label="Castrado" register={register} />
-            <Select size='mini' id="microchip" label="Microchip" register={register} />
-            <Select size='small' id="status" label="Estado" options={statusOptions} register={register} />
+            <Select size='small' id="type" label="Tipo" options={typeOptions} register={register} errors={errors} />
+            <Select size='small' id="sex" label="Sexo" options={sexOptions} register={register} errors={errors} />
+            <Select size='small' id="size" label="Tamaño" options={sizeOptions} register={register} errors={errors} />
+            <Select size='mini' id="vaccinated" label="Vacunado" register={register} errors={errors} />
+            <Select size='mini' id="dewormed" label="Desparasitado" register={register} errors={errors} />
+            <Select size='mini' id="castrated" label="Castrado" register={register} errors={errors} />
+            <Select size='mini' id="microchip" label="Microchip" register={register} errors={errors} />
+            <Select size='small' id="status" label="Estado" options={statusOptions} register={register} errors={errors} />
 
             <div className='d-inline-flex flex-wrap w-100 gap-3'>
               {/* Fechas */}
@@ -74,6 +76,7 @@ const FormAddAnimal = () => {
                   placeholder="Selecciona fecha"
                   register={register}
                   validationSchema={{ required: "La fecha de nacimiento es requerida. Puede ser estimada." }}
+                  errors={errors}
                 />
 
                 <DateInput
@@ -81,6 +84,7 @@ const FormAddAnimal = () => {
                   label="Fecha de Publicación"
                   placeholder="Selecciona fecha"
                   register={register}
+                  errors={errors}
                 />
               </div>
 
@@ -94,6 +98,7 @@ const FormAddAnimal = () => {
                     id="additionalInfo"
                     placeholder='Ingresa si corresponde'
                     {...register("additionalInfo", { maxLength: { value: 400, message: "La información adicional no puede superar los 400 caracteres." } })}
+                    errors={errors}
                   />
                 </div>
               </div>
