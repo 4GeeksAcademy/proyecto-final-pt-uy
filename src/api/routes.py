@@ -55,6 +55,19 @@ def get_users():
     return jsonify(response_body), 200
 
 
+# ================== Get one user by id ================= #
+@api.route('/user/<int:user_id>', methods=['GET'])
+@jwt_required()
+def get_user(user_id):
+    user = User.query.get(user_id)
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+    
+    return jsonify(user.serialize()), 200
+
+
+
 @api.route('/user/<int:user_id>', methods=['PUT'])
 @jwt_required()
 def update_user(user_id):
