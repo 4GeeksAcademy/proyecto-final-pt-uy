@@ -3,29 +3,29 @@ import enum
 
 db = SQLAlchemy()
 
-class YesNoEnum(enum.Enum):
+class YesNoEnum(str, enum.Enum):
     YES = "yes"
     NO = "no"
 
-class RoleEnum(enum.Enum):
+class RoleEnum(str, enum.Enum):
     ADMIN = "admin"
     USER = "user"
 
-class TypeEnum(enum.Enum):
+class TypeEnum(str, enum.Enum):
     CAT = "cat"
     DOG = "dog"
 
-class SizeEnum(enum.Enum):
+class SizeEnum(str, enum.Enum):
     SMALL = "small"
     MEDIUM = "medium"
     LARGE = "large"
     EXTRA_LARGE = "extra_large" 
 
-class GenderEnum(enum.Enum):
+class GenderEnum(str, enum.Enum):
     MALE = "male"
     FEMALE = "female"
 
-class StatusEnum(enum.Enum):
+class StatusEnum(str, enum.Enum):
     ADOPTED = "adopted"
     NOT_ADOPTED = "not_adopted"
     PASSED_AWAY = "passed_away"
