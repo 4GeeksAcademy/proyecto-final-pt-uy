@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useFieldArray, useForm, FieldErrors } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 import Select from './select.js';
@@ -34,13 +34,17 @@ const statusOptions = [{ value: "adopted", label: "Adoptado" }, { value: "not_ad
 const FormAddAnimal = () => {
 
   const form = useForm({ defaultValues, mode: "onBlur" });
-  const { register, control, formState } = form;
-  const { errors } = formState;
+  const { register, control, formState, handleSubmit, reset } = form;
+  const { errors, isSubmitting, isSubmitted, isSubmitSuccessful } = formState;
+
+  const onSubmit = (data) => {
+    console.log("Form submited", data);
+  };
 
   return (
     <div>
       <h1 className='fs-4'>Ingresar Peludito</h1>
-      <form className='bg-white rounded-1 shadow-sm p-3 p-md-4 pb-5'>
+      <form className='bg-white rounded-1 shadow-sm p-3 p-md-4 pb-5' onSubmit={handleSubmit(onSubmit)} >
 
         {/* SECCIÓN DATOS */}
         <h2 className='fs-5 border-bottom border-neutral-10 pb-1'>Datos</h2>
@@ -134,7 +138,7 @@ const FormAddAnimal = () => {
         {/* Buttons */}
         <div className="d-flex gap-2 justify-content-end w-100">
           <button type='button' className='btn btn-outline-primary rounded-4 px-3 px-md-4'>Cancelar</button>
-          <button type='button' className="btn btn-primary rounded-4 px-4 px-md-5">Registrar Peludito</button>
+          <button type='submit' className="btn btn-primary rounded-4 px-4 px-md-5" disabled={isSubmitting}>Registrar Peludito</button>
         </div>
       </form>
 
