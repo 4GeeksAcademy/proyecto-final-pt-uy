@@ -1,31 +1,32 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import reconstructor
 import enum
 
 db = SQLAlchemy()
 
-class YesNoEnum(enum.Enum):
+class YesNoEnum(str, enum.Enum):
     YES = "yes"
     NO = "no"
 
-class RoleEnum(enum.Enum):
+class RoleEnum(str, enum.Enum):
     ADMIN = "admin"
     USER = "user"
 
-class TypeEnum(enum.Enum):
+class TypeEnum(str, enum.Enum):
     CAT = "cat"
     DOG = "dog"
 
-class SizeEnum(enum.Enum):
+class SizeEnum(str, enum.Enum):
     SMALL = "small"
     MEDIUM = "medium"
     LARGE = "large"
     EXTRA_LARGE = "extra_large" 
 
-class GenderEnum(enum.Enum):
+class GenderEnum(str, enum.Enum):
     MALE = "male"
     FEMALE = "female"
 
-class StatusEnum(enum.Enum):
+class StatusEnum(str, enum.Enum):
     ADOPTED = "adopted"
     NOT_ADOPTED = "not_adopted"
     PASSED_AWAY = "passed_away"
@@ -64,8 +65,8 @@ class User(db.Model):
 class Animals(db.Model):
     __tablename__ = "animals"
     id = db.Column(db.Integer, primary_key=True)
-    identification_code = db.Column(db.String(10), unique=True, nullable=False)
-    type = db.Column(db.Enum(TypeEnum, name="type_enum"))
+    identification_code = db.Column(db.String(10), unique=True)
+    type = db.Column(db.Enum(TypeEnum, name="type_enum"), nullable=False)
     name = db.Column(db.String(30), nullable=False)
     size = db.Column(db.Enum(SizeEnum, name="size_enum"))
     gender = db.Column(db.Enum(GenderEnum, name="gender_enum"))
@@ -99,9 +100,11 @@ class Animals(db.Model):
             "status": self.status
         }
 
+
 class Animals_images(db.Model):
     __tablename__ = "animals_images"
     id = db.Column(db.Integer, primary_key=True)
+    public_id = db.Column(db.String, nullable=False)
     image_url = db.Column(db.String, nullable=False)
     animal_id = db.Column(db.Integer, db.ForeignKey("animals.id"))
     animal_relationship = db.relationship(Animals)
@@ -112,6 +115,7 @@ class Animals_images(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "public_id": self.public_id,
             "image_url": self.image_url,
             "animal_id": self.animal_id
         }

@@ -6,7 +6,7 @@ import DashboardNavbar from "./component/dashboardNavbar";
 
 const LayoutDashAdmin = () => {
   return (
-    <div className="container-fluid d-flex p-0 mt-2" style={{backgroundColor: "#F7F8FA", maxWidth: "1400px"}}>
+    <div className="container-fluid d-flex p-0 mt-2 bg-linear-0 vh-100" style={{maxWidth: "1400px"}}>
       {/* LEFT PANEL */}
       <div className="offcanvas-md offcanvas-start" tabIndex="-1" id="offcanvasResponsive" aria-labelledby="offcanvasResponsiveLabel" style={{maxWidth: "75vw"}}>
         <div className="d-flex justify-content-end bg-white d-md-none position-relative z-3">
@@ -31,7 +31,7 @@ const LayoutDashAdmin = () => {
           </button>
           <DashboardNavbar />
         </div>
-        <div className="p-3 p-md-4">
+        <div className="p-3 p-md-4 overflow-y-scroll">
           <Outlet />
         </div>
       </div>      
