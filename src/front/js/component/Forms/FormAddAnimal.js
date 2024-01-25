@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
@@ -36,6 +36,13 @@ const FormAddAnimal = () => {
   const form = useForm({ defaultValues, mode: "onBlur" });
   const { register, control, formState, handleSubmit, reset } = form;
   const { errors, isSubmitting, isSubmitted, isSubmitSuccessful } = formState;
+
+  useEffect(() => {
+    // Resetear el formulario luego de que fue enviado exitosamente
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
 
   const onSubmit = (data) => {
     console.log("Form submited", data);
