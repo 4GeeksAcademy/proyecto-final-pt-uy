@@ -1,10 +1,65 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import Input from '../component/Forms/input';
+import { useForm } from 'react-hook-form';
 
 import signUpImage from "../../img/signup.jpg";
 import logo from "../../img/el_refugio_logo.png";
 
+
+const defaultValues = {
+  name: "",
+  lastname: "",
+  userName: "",
+  email: "",
+  password: ""
+};
+
+
 const Register = () => {
+  const { register, handleSubmit, formState, reset, control } = useForm({ defaultValues, mode: "onBlur" });
+  const { errors, isSubmitting, isSubmitSuccessful } = formState;
+
+  const onSubmit = (data) => {
+    console.log("Form submitted", data);
+
+    const registerUrl = 'https://silver-space-carnival-q7qqq69g9x4j3479v-3001.app.github.dev/register';
+
+    const credentials = {
+      name: `${data.name}`,
+      last_name: `${data.lastname}`,
+      username: `${data.userName}`,
+      email: `${data.email}`,
+      password: `${data.password}`,
+      role: "USER"
+    };
+
+    fetch(registerUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(credentials),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error en la solicitud de inicio de sesión');
+        }
+        return response.json();
+      })
+      .then(res => {
+        console.log('Usuario Registrado:', res);
+        // Aquí puedes manejar la respuesta del servidor después del inicio de sesión exitoso
+      })
+      .catch(error => {
+        console.error('Error durante el registro:', error);
+        // Aquí puedes manejar los errores, por ejemplo, mostrar un mensaje al usuario
+      });
+
+    reset()
+  };
+
+
   return (
     <div className='d-flex flex-column-reverse flex-md-row min-vh-100'>
       {/* Form Panel */}
@@ -20,42 +75,99 @@ const Register = () => {
           {/* Text */}
           <h1 className="fw-bold lh-1 mb-2 mb-md-3">Registro de Usario</h1>
           <p className='fs-7 mb-4 mb-md-5 text-neutral-60'>
-            ¿Ya tienes un usuario? 
+            ¿Ya tienes un usuario?
             <Link className="ps-1 fw-medium text-info text-decoration-none" to={"/login"}>
               Ingresa
             </Link>
           </p>
 
           {/* Form */}
-          <form className='d-flex flex-column w-100'>
+          <form className='d-flex flex-column w-100' onSubmit={handleSubmit(onSubmit)}>
             {/* Name */}
             <div className="mb-3">
-              <label for="name" className="form-label">Nombre</label>
-              <input type="text" className="form-control py-2 px-4" id="name" placeholder="Ingresa tu nombre" />
+              <Input
+              size="big"
+              id="name"
+              type="text"
+              label="Nombre"
+              placeholder="Ingresa tu nombre"
+              register={register}
+              validationSchema={{ required: "El nombre es requerido" }}
+              errors={errors}
+              />
             </div>
 
             {/* Lastname */}
             <div className="mb-3">
-              <label for="lastname" className="form-label">Apellidos</label>
-              <input type="text" className="form-control py-2 px-4" id="lastname" placeholder="Ingresa tus apellidos" />
+              <Input
+                size="big"
+                id="lastname"
+                type="text"
+                label="Apellido"
+                placeholder="Ingresa tu apellido"
+                register={register}
+                validationSchema={{ required: "El apellido es requerido" }}
+                errors={errors}
+              />
             </div>
 
             {/* UserName */}
             <div className="mb-3">
-              <label for="userName" className="form-label">Nombre de Usuario</label>
-              <input type="text" className="form-control py-2 px-4" id="userName" placeholder="Elige un nombre de usuario" />
+              <Input
+                size="big"
+                id="userName"
+                type="text"
+                label="Nombre de Usuario"
+                placeholder="Elige un nombre de usuario"
+                register={register}
+                validationSchema={{
+                  required: "Este campo es requerido", minLength: {
+                    value: 5,
+                    message: "El nombre de usuario debe tener al menos 5 caracteres",
+                  },
+                }}
+                errors={errors}
+              />
             </div>
 
             {/* Email */}
             <div className="mb-3">
-              <label for="email" className="form-label">Email</label>
-              <input type="email" className="form-control py-2 px-4" id="email" placeholder="Ingresa tu email" />
+              <Input
+                size="big"
+                id="email"
+                type="email"
+                label="Correo Electrónico"
+                placeholder="Ingresa tu correo electrónico"
+                register={register}
+                validationSchema={{
+                  required: "Este campo es requerido",
+                  pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: "Formato de correo electrónico no válido",
+                  },
+                }}
+                errors={errors}
+              />
             </div>
 
             {/* Password */}
             <div className="mb-4">
-              <label for="password" className="form-label">Contraseña</label>
-              <input type="password" className="form-control py-2 px-4" id="password" placeholder="Ingresa tu contraseña" />
+              <Input
+                size="big"
+                id="password"
+                type="password"
+                label="Contraseña"
+                placeholder="Ingresa tu contraseña"
+                register={register}
+                validationSchema={{
+                  required: "Este campo es requerido",
+                  minLength: {
+                    value: 8,
+                    message: "La contraseña debe tener al menos 8 caracteres",
+                  },
+                }}
+                errors={errors}
+              />
             </div>
 
             <div className='mb-3 d-flex'>
@@ -68,7 +180,7 @@ const Register = () => {
                 <button type='button' className='btn btn-outline-primary rounded-pill w-100'>Cancelar</button>
               </Link>
               <div className="col-5">
-                <button type='button' className="btn btn-primary rounded-pill w-100">Registarme</button>
+                <button type='submit' disabled={isSubmitting} className="btn btn-primary rounded-pill w-100">Registarme</button>
               </div>
             </div>
 
@@ -77,7 +189,7 @@ const Register = () => {
       </div>
 
       {/* Image Panel */}
-      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${signUpImage})`, backgroundPosition: "center top"}}></div>
+      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${signUpImage})`, backgroundPosition: "center top" }}></div>
     </div>
   )
 }
