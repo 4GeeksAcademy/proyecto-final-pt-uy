@@ -26,18 +26,18 @@ const Profile = () => {
       {/*Personal information */}
       <form className='mt-2 mb-5'>
         <div className='d-flex flex-column flex-md-row'>
-          <div class="mb-3 col-md-5 my-3">
-            <label for="name" class="form-label fw-medium">Nombre</label>
-            <input type="text" class="form-control bg-white" id="name" value={"poner valor del name del usuario que se traiga"} disabled />
+          <div className="mb-3 col-md-5 my-3">
+            <label for="name" className="form-label fw-medium">Nombre</label>
+            <input type="text" className="form-control bg-white" id="name" value={"poner valor del name del usuario que se traiga"} disabled />
           </div>
-          <div class="mb-3 col-md-6 ms-md-auto my-3">
-            <label for="lastname" class="form-label fw-medium">Apellidos</label>
-            <input type="text" class="form-control bg-white" id="lastname" value={"poner valor del lastname del usuario que se traiga"} disabled />
+          <div className="mb-3 col-md-6 ms-md-auto my-3">
+            <label for="lastname" className="form-label fw-medium">Apellidos</label>
+            <input type="text" className="form-control bg-white" id="lastname" value={"poner valor del lastname del usuario que se traiga"} disabled />
           </div>
         </div>
-        <div class="my-3">
-          <label for="userName" class="form-label fw-medium">Nombre de Usuario</label>
-          <input type="text" class="form-control bg-white" id="userName" value={"poner valor del userName del usuario que se traiga"} disabled />
+        <div className="my-3">
+          <label for="userName" className="form-label fw-medium">Nombre de Usuario</label>
+          <input type="text" className="form-control bg-white" id="userName" value={"poner valor del userName del usuario que se traiga"} disabled />
         </div>
       </form>
 
@@ -46,18 +46,18 @@ const Profile = () => {
       {/*Contact information*/}
       <form className='mb-2 mt-4'>
         <div className='d-flex flex-column flex-md-row'>
-          <div class="mb-3 col-md-5">
-            <label for="email" class="form-label fw-medium">Email</label>
+          <div className="mb-3 col-md-5">
+            <label for="email" className="form-label fw-medium">Email</label>
             <div className='input-group mb-3'>
-              <span class="input-group-text bg-white"><i class="fa-solid fa-envelope"></i></span>
-              <input type="email" class="form-control bg-white" id="email" value={"poner valor del email del usuario que se traiga"} disabled />
+              <span className="input-group-text bg-white"><i className="fa-solid fa-envelope"></i></span>
+              <input type="email" className="form-control bg-white" id="email" value={"poner valor del email del usuario que se traiga"} disabled />
             </div>
           </div>
-          <div class="mb-3 col-md-6 ms-md-auto">
-            <label for="phoneNumber" class="form-label fw-medium">Nímero de celular</label>
+          <div className="mb-3 col-md-6 ms-md-auto">
+            <label for="phoneNumber" className="form-label fw-medium">Nímero de celular</label>
             <div className='input-group mb-3'>
-              <span class="input-group-text bg-white"><i class="fa-solid fa-mobile"></i></span>
-              <input type="number" class="form-control bg-white" id="phoneNumber" value={"00000"} disabled />
+              <span className="input-group-text bg-white"><i className="fa-solid fa-mobile"></i></span>
+              <input type="number" className="form-control bg-white" id="phoneNumber" value={"00000"} disabled />
             </div>
           </div>
         </div>
@@ -67,37 +67,37 @@ const Profile = () => {
 
       {/*Other information */}
       <form className='my-5'>
-        <div class="mb-3">
-          <label for="address" class="form-label fw-medium">Dirección</label>
+        <div className="mb-3">
+          <label for="address" className="form-label fw-medium">Dirección</label>
           <div className='input-group mb-3'>
-            <span class="input-group-text bg-white"><i class="fa-sharp fa-solid fa-location-dot"></i></span>
-            <input type="text" class="form-control bg-white" id="address" value={"poner valor de address del usuario que se traiga"} disabled />
+            <span className="input-group-text bg-white"><i className="fa-sharp fa-solid fa-location-dot"></i></span>
+            <input type="text" className="form-control bg-white" id="address" value={"poner valor de address del usuario que se traiga"} disabled />
           </div>
         </div>
         <div className='d-flex flex-column flex-md-row'>
-          <div class="mb-3 col-md-5 my-3">
-            <label for="name" class="form-label fw-medium">Patio</label>
+          <div className="mb-3 col-md-5 my-3">
+            <label for="name" className="form-label fw-medium">Patio</label>
             <div className='ms-3'>
-              <div class="form-check form-check-inline me-5">
-                <input class="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-yes" value="yes" checked disabled />
-                <label class="form-check-label opacity-100 ms-3" for="backyard-yes">Sí</label>
+              <div className="form-check form-check-inline me-5">
+                <input className="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-yes" value="yes" checked disabled />
+                <label className="form-check-label opacity-100 ms-3" for="backyard-yes">Sí</label>
               </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-no" value="no" disabled />
-                <label class="form-check-label opacity-100 ms-3" for="backyard-no">No</label>
+              <div className="form-check form-check-inline">
+                <input className="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-no" value="no" disabled />
+                <label className="form-check-label opacity-100 ms-3" for="backyard-no">No</label>
               </div>
             </div>
           </div>
-          <div class="mb-3 col-md-6 ms-md-auto my-3">
-            <label for="name" class="form-label fw-medium">Mascotas</label>
+          <div className="mb-3 col-md-6 ms-md-auto my-3">
+            <label for="name" className="form-label fw-medium">Mascotas</label>
             <div className='ms-3'>
-              <div class="form-check form-check-inline me-5">
-                <input class="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-yes" value="yes" checked disabled />
-                <label class="form-check-label opacity-100 ms-3" for="other_pets-yes">Sí</label>
+              <div className="form-check form-check-inline me-5">
+                <input className="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-yes" value="yes" checked disabled />
+                <label className="form-check-label opacity-100 ms-3" for="other_pets-yes">Sí</label>
               </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-no" value="no" disabled />
-                <label class="form-check-label opacity-100 ms-3" for="other_pets-no">No</label>
+              <div className="form-check form-check-inline">
+                <input className="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-no" value="no" disabled />
+                <label className="form-check-label opacity-100 ms-3" for="other_pets-no">No</label>
               </div>
             </div>
           </div>
