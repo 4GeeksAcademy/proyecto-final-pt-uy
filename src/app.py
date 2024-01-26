@@ -15,6 +15,7 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
+from flask_cors import CORS
 
 # from models import Person
 
@@ -29,7 +30,7 @@ app.config["JWT_SECRET_KEY"] = "prueba"
 jwt = JWTManager(app)
 
 bcrypt = Bcrypt(app)
-
+CORS(app)
 # database condiguration
 db_url = os.getenv("DATABASE_URL")
 if db_url is not None:
@@ -118,12 +119,12 @@ def login():
 
     if body is None:
         return jsonify({"msg": "Debes enviar las credenciales en el body"}), 400
-    if 'username' not in body:
-        return jsonify({"msg": "El campo username es obligatorio"}), 400
+    if 'email' not in body:
+        return jsonify({"msg": "El campo email es obligatorio"}), 400
     if 'password' not in body:
         return jsonify({"msg": "El campo password es obligatorio"}), 400
     
-    user = User.query.filter_by(user_name = body['username']).first()
+    user = User.query.filter_by(email = body['email']).first()
     if user is None or not bcrypt.check_password_hash(user.password, body['password']):
         return jsonify({'msg': 'Usuario o contraseña incorrectos'}), 400
     
