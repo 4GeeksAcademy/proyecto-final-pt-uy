@@ -9,8 +9,8 @@ const Profile = () => {
   const [email, setEmail] = useState("user.email");
   const [phone, setPhone] = useState("user.phone_number");
   const [address, setAddress] = useState("user.address");
-  const [backyard, setBackyard] = useState("NO"); {/*user.backyard*/ }
-  const [otherPets, setOtherPets] = useState("YES"); {/*user.other_pets*/ }
+  const [backyard, setBackyard] = useState("no"); {/*user.backyard*/ }
+  const [otherPets, setOtherPets] = useState("yes"); {/*user.other_pets*/ }
 
   return (
 
@@ -85,11 +85,12 @@ const Profile = () => {
             <input type="text" className="form-control bg-white" id="address" value={address} disabled />
           </div>
         </div>
+        
         <div className='d-flex flex-column flex-md-row'>
           <div className="mb-3 col-md-5 my-3">
             <label for="name" className="form-label fw-medium">Patio</label>
             <div className='ms-3'>
-              {backyard === "YES" ?
+              {backyard === "yes" ?
                 <div>
                   <div className="form-check form-check-inline me-5">
                     <input className="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-yes" value="yes" checked disabled />
@@ -114,10 +115,11 @@ const Profile = () => {
               }
             </div>
           </div>
+
           <div className="mb-3 col-md-6 ms-md-auto my-3">
             <label for="name" className="form-label fw-medium">Mascotas</label>
             <div className='ms-3'>
-              {otherPets === "YES" ?
+              {otherPets === "yes" ?
                 <div>
                   <div className="form-check form-check-inline me-5">
                     <input className="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-yes" value="yes" checked disabled />
