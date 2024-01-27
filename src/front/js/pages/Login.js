@@ -131,6 +131,12 @@ const Login = () => {
               <div className="col-5">
                 <button type='submit' disabled={isSubmitting} className="btn btn-primary rounded-4 w-100">Login</button>
               </div>
+              {/* Spinner es renderizado mientras llega la respuesta del backend */}
+              {isSubmitting && (
+                <div className="spinner-border text-primary ms-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
             </div>
           </form>
         </div>
