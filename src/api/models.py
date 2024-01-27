@@ -31,6 +31,11 @@ class StatusEnum(str, enum.Enum):
     NOT_ADOPTED = "not_adopted"
     PASSED_AWAY = "passed_away"
 
+class UserStatusEnum(str, enum.Enum):
+    ACTIVE = "active"
+    DELETED = "deleted"
+    BANNED = "banned"
+
 class User(db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
@@ -44,6 +49,7 @@ class User(db.Model):
     backyard = db.Column(db.Enum(YesNoEnum, name="yes_no_enum_backyard"), nullable=True)
     other_pets = db.Column(db.String(30))
     role = db.Column(db.Enum(RoleEnum, name="role_enum"), default=RoleEnum.USER)
+    status = db.Column(db.Enum(UserStatusEnum, name="user_status_enum"), default=UserStatusEnum.ACTIVE)
 
     def __repr__(self):
         return 'User with id {} and userName {}'.format(self.id, self.user_name)
@@ -59,7 +65,8 @@ class User(db.Model):
             "phone_number": self.phone_number,
             "backyard": self.backyard,
             "other_pets": self.other_pets,
-            "role": self.role
+            "role": self.role,
+            "status": self.status,
         }
 
 class Animals(db.Model):
