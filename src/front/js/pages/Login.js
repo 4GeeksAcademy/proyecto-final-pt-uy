@@ -4,8 +4,10 @@ import { useForm } from 'react-hook-form';
 
 import loginImg from "../../img/login.jpg";
 import logo from "../../img/el_refugio_logo.png";
-import Input from '../component/Forms/input';
 
+import { login } from '../../client-API/backendAPI';
+
+import Input from '../component/Forms/input';
 
 const defaultValues = {
   email: "",
@@ -17,37 +19,9 @@ const Login = () => {
   const { register, handleSubmit, formState, reset, control } = useForm({ defaultValues, mode: "onBlur" });
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
-  const onSubmit = (data) => {
-    console.log("Form submitted", data);
-  
-    const loginUrl = 'https://silver-space-carnival-q7qqq69g9x4j3479v-3001.app.github.dev/login';
-  
-    const credentials = {
-      email: `${data.email}`,
-      password: `${data.password}`
-    };
-  
-    fetch(loginUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error en la solicitud de inicio de sesión');
-        }
-        return response.json();
-      })
-      .then(res => {
-        console.log('Inicio de sesión exitoso:', res);
-        // Aquí puedes manejar la respuesta del servidor después del inicio de sesión exitoso
-      })
-      .catch(error => {
-        console.error('Error durante el inicio de sesión:', error);
-        // Aquí puedes manejar los errores, por ejemplo, mostrar un mensaje al usuario
-      });
+  const onSubmit = async (data) => {
+    const token = await login(data.email, data.password)
+    console.log(token);
   };
   
 
