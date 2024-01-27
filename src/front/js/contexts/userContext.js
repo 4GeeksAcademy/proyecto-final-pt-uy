@@ -7,7 +7,11 @@ export const UserContext = createContext(null);
 
 // Estado inicial del store
 const storeInitialState = {
-  user: {},
+  user: {
+    id: null,
+    name: "",
+    role: "",
+  },
   token: "",
   animals: [],
 };
@@ -24,7 +28,16 @@ export function UserContextProvider({ children }) {
     const actions = {
         setAnimals: (animals) => setStore(prevState => ({ ...prevState, animals: animals })),
         setToken: (token) => setStore(prevState => ({ ...prevState, token: token })),
-        setUser: (user) => setStore(prevState => ({ ...prevState, user: user })),
+        setUser: (userInfo) => {
+          return setStore(prevState => ({ 
+            ...prevState, 
+            user: {
+              id: userInfo.id, 
+              name: userInfo.name, 
+              role: userInfo.role
+            }
+          }))
+        },
         synkWithLocalStorage: () => {
           const storedUser = localStorage.getItem("user");
           const storedToken = localStorage.getItem("token");

@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
 import loginImg from "../../img/login.jpg";
 import logo from "../../img/el_refugio_logo.png";
-import Input from '../component/Forms/input';
 
+import { login } from '../../client-API/backendAPI';
+import { useUserContext } from '../contexts/userContext';
+
+import Input from '../component/Forms/input';
 
 const defaultValues = {
   email: "",
@@ -16,40 +19,34 @@ const Login = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState, reset, control } = useForm({ defaultValues, mode: "onBlur" });
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
+  const { store, actions } = useUserContext();
 
-  const onSubmit = (data) => {
-    console.log("Form submitted", data);
-  
-    const loginUrl = 'https://silver-space-carnival-q7qqq69g9x4j3479v-3001.app.github.dev/login';
-  
-    const credentials = {
-      email: `${data.email}`,
-      password: `${data.password}`
-    };
-  
-    fetch(loginUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error en la solicitud de inicio de sesión');
-        }
-        return response.json();
-      })
-      .then(res => {
-        console.log('Inicio de sesión exitoso:', res);
-        // Aquí puedes manejar la respuesta del servidor después del inicio de sesión exitoso
-      })
-      .catch(error => {
-        console.error('Error durante el inicio de sesión:', error);
-        // Aquí puedes manejar los errores, por ejemplo, mostrar un mensaje al usuario
-      });
+  const [loginError, setLoginError] = useState("");
+
+  useEffect(() => {
+    // Si el formulario fue enviado exitosamente...
+    if (isSubmitSuccessful && !loginError && store.user.id) {
+      // Resetear el form
+      reset();
+      // Ir al home
+      navigate("/");
+    }
+
+  }, [isSubmitSuccessful, reset, store.user.id]);
+
+  const onSubmit = async (data) => {
+    setLoginError("");
+
+    try {
+      const credentials = await login(data.email, data.password);
+      actions.setToken(credentials.token);
+      actions.setUser(credentials.user);
+    } catch (error) {
+      console.error("Error on login: ", error);
+      setLoginError(error.message);
+    }
   };
-  
+
 
   return (
     <div className='d-flex flex-column-reverse flex-md-row min-vh-100'>
@@ -108,14 +105,38 @@ const Login = () => {
               <p className='text-end fs-7 fw-medium text-info'><Link to={"/forgot-password"} className='fw-medium text-info text-decoration-none' >¿Olvidaste tu contraseña?</Link></p>
             </div>
 
+            { // Errores generados por validaciones del frontend
+              Object.keys(errors).length > 0 &&
+              (
+                <div className="alert alert-danger mt-3" role="alert">
+                  Hay errores en el formulario. Por favor corrígelos y vuelve a intentar.
+                </div>
+              )
+            }
+
+            { // Errores generados por validaciones del backend
+              loginError !== "" &&
+              (
+                <div className="alert alert-danger mt-3" role="alert">
+                  {loginError}
+                </div>
+              )
+            }
+
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
               <div className="col-4 col-md-3 me-2">
-                <button type='button' className='btn btn-outline-primary rounded-4 w-100'>Cancelar</button>
+                <button type='button' className='btn btn-outline-primary rounded-4 w-100' onClick={() => { navigate("/") }}>Cancelar</button>
               </div>
               <div className="col-5">
                 <button type='submit' disabled={isSubmitting} className="btn btn-primary rounded-4 w-100">Login</button>
               </div>
+              {/* Spinner es renderizado mientras llega la respuesta del backend */}
+              {isSubmitting && (
+                <div className="spinner-border text-primary ms-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
             </div>
           </form>
         </div>
