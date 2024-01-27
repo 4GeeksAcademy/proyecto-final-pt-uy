@@ -7,6 +7,7 @@ import Select from './select.js';
 import Input from "./input.js";
 import DateInput from './dateInput.js';
 
+import { useUserContext } from "../../contexts/userContext.js";
 import { addAnimal } from '../../../client-API/backendAPI.js';
 
 // Valores por defecto para los campos del form
@@ -44,9 +45,12 @@ const FormAddAnimal = () => {
   const filesArray = Array.from(watchimages);
   const filesURL = filesArray.map(file => URL.createObjectURL(file));
 
+  const { store, actions } = useUserContext();
+
   const [addAnimalError, setAddAnimalError] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [newAnimal, setNewAnimal] = useState(null);
+
 
   useEffect(() => {
     // Si el formulario fue enviado exitosamente...
@@ -58,14 +62,12 @@ const FormAddAnimal = () => {
       // Resetear el form
       reset();
     }
-
   }, [isSubmitSuccessful, reset, newAnimal]);
 
 
   const onSubmit = async (data) => {
     setAddAnimalError("");
     const formData = new FormData();
-
     // Agregar datos del formulario
     Object.keys(data).forEach((key) => {
       if (data[key] !== "" && data[key] !== null) {
@@ -89,9 +91,8 @@ const FormAddAnimal = () => {
 
     // Realizar la solicitud al endpoint mediante el client-API
     try {
-      const response = await addAnimal(formData);
+      const response = await addAnimal(formData, store.token);
       setNewAnimal(response);
-
     } catch (error) {
       console.error("Error on animal register: ", error);
       setAddAnimalError(error.message);
