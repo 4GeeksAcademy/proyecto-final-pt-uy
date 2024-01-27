@@ -21,7 +21,7 @@ const defaultValues = {
   microchip: "",
   status: "",
   birth_date: null,
-  publication_date: new Date(),
+  publication_date: new Date().toISOString().substring(0,10),
   additional_information: "",
   images: [],
 };
@@ -251,7 +251,7 @@ const FormAddAnimal = () => {
               <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setShowModal(false)}></button>
             </div>
             <div className="modal-body">
-              <p>{`¡${animalNameRef.current} ha sido registrado/a! exitosamente!`}</p>
+              <p>{`¡${animalNameRef.current} ha sido registrado/a exitosamente!`}</p>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => navigate("/table-animals")}>Ver lista de peluditos</button>
