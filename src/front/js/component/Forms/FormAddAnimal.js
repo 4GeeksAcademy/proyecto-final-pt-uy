@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 import Select from './select.js';
@@ -38,37 +38,32 @@ const FormAddAnimal = () => {
 
   const form = useForm({ defaultValues, mode: "onBlur" });
   const { register, control, formState, handleSubmit, reset, watch, getValues } = form;
-  const { errors, isSubmitting, isSubmitted, isSubmitSuccessful } = formState;
+  const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
   const watchimages = watch("images");
   const filesArray = Array.from(watchimages);
   const filesURL = filesArray.map(file => URL.createObjectURL(file));
 
   const [addAnimalError, setAddAnimalError] = useState("");
-  const [showModal, setShowModal] = useState(false);
-  const animalNameRef = useRef("");  // Referencia necesaria para mostrar el nombre en el modal
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [newAnimal, setNewAnimal] = useState(null);
 
   useEffect(() => {
-    // Si el formulario fue enviado exitosamente y el backend no envío ningún error...
-    if (isSubmitSuccessful && !addAnimalError) {
-      // Obtener el nombre del animal antes de resetear el formulario
-      const name = getValues("name");
-      animalNameRef.current = name;
+    // Si el formulario fue enviado exitosamente...
+    if (isSubmitSuccessful && !addAnimalError && newAnimal) {
+      // Mostrar el modal
+      setShowSuccessModal(true);
       // Liberar los objetos URL creados para previsualizar las imagenes
       filesURL.forEach(fileURL => URL.revokeObjectURL(fileURL));
-      // Mostrar el modal
-      setShowModal(true);
       // Resetear el form
       reset();
     }
 
-  }, [isSubmitSuccessful, reset]);
+  }, [isSubmitSuccessful, reset, newAnimal]);
 
 
   const onSubmit = async (data) => {
-    console.log("Form submited", data);
     setAddAnimalError("");
-
     const formData = new FormData();
 
     // Agregar datos del formulario
@@ -94,7 +89,8 @@ const FormAddAnimal = () => {
 
     // Realizar la solicitud al endpoint mediante el client-API
     try {
-      const newAnimal = await addAnimal(formData);
+      const response = await addAnimal(formData);
+      setNewAnimal(response);
 
     } catch (error) {
       console.error("Error on animal register: ", error);
@@ -189,7 +185,6 @@ const FormAddAnimal = () => {
                 multiple
                 {...register("images", {
                   validate: (fieldValue) => {
-                    console.log(fieldValue.length);
                     return fieldValue.length < 6 || "Sólo puedes subir hasta 5 imágenes";
                   }
                 })}
@@ -241,9 +236,9 @@ const FormAddAnimal = () => {
             Cancelar
           </button>
 
-          <button 
-            type='submit' 
-            className="btn btn-primary rounded-4 px-4 px-md-5" 
+          <button
+            type='submit'
+            className="btn btn-primary rounded-4 px-4 px-md-5"
             disabled={isSubmitting}
           >
             Registrar Peludito
@@ -259,22 +254,26 @@ const FormAddAnimal = () => {
       </form>
 
       {/* Modal */}
-      <div className="modal" tabIndex="-1" role="dialog" style={{ display: showModal ? 'block' : 'none' }}>
-        <div className="modal-dialog" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Registro exitoso</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setShowModal(false)}></button>
-            </div>
-            <div className="modal-body">
-              <p>{`¡${animalNameRef.current} ha sido registrado/a exitosamente!`}</p>
-            </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => navigate("/table-animals")}>Ver lista de peluditos</button>
+      {
+        newAnimal &&
+        <div className="modal" tabIndex="-1" role="dialog" style={{ display: showSuccessModal ? 'block' : 'none' }}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Registro exitoso</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setShowSuccessModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <p>{`¡${newAnimal.name} ha sido registrado/a exitosamente!`}</p>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => navigate("/table-animals")}>Ver lista de peluditos</button>
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => navigate(`/animal-profile:${newAnimal.id}`)}>{`Ver ficha de ${newAnimal.name}`}</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      }
 
       <DevTool control={control} />
     </div>
