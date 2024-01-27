@@ -43,6 +43,10 @@ body {
     font-size: 14px;
 }
 
+.modal {
+    background-color: rgba(0,0,0,0.5);
+}
+
 .logo-container {
     display: flex;
     width: 100%;
