@@ -6,6 +6,7 @@ import loginImg from "../../img/login.jpg";
 import logo from "../../img/el_refugio_logo.png";
 
 import { login } from '../../client-API/backendAPI';
+import { useUserContext } from '../contexts/userContext';
 
 import Input from '../component/Forms/input';
 
@@ -18,10 +19,11 @@ const Login = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState, reset, control } = useForm({ defaultValues, mode: "onBlur" });
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
+  const {store, actions} = useUserContext();
 
   const onSubmit = async (data) => {
-    const token = await login(data.email, data.password)
-    console.log(token);
+    const token = await login(data.email, data.password);
+    actions.setToken(token);
   };
   
 
