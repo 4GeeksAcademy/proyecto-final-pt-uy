@@ -21,7 +21,7 @@ const defaultValues = {
   microchip: "",
   status: "",
   birth_date: null,
-  publication_date: new Date().toISOString().substring(0,10),
+  publication_date: new Date().toISOString().substring(0, 10),
   additional_information: "",
   images: [],
 };
@@ -233,11 +233,26 @@ const FormAddAnimal = () => {
 
         {/* Buttons */}
         <div className="d-flex gap-2 justify-content-end w-100">
-          <button type='button' className='btn btn-outline-primary rounded-4 px-3 px-md-4'>Cancelar</button>
-          <button type='submit' className="btn btn-primary rounded-4 px-4 px-md-5" disabled={isSubmitting}>Registrar Peludito</button>
+          <button
+            type='button'
+            className='btn btn-outline-primary rounded-4 px-3 px-md-4'
+            onClick={() => navigate('/table-animals')}
+          >
+            Cancelar
+          </button>
+
+          <button 
+            type='submit' 
+            className="btn btn-primary rounded-4 px-4 px-md-5" 
+            disabled={isSubmitting}
+          >
+            Registrar Peludito
+          </button>
+
+          {/* Spinner es renderizado mientras llega la respuesta del backend */}
           {isSubmitting && (
             <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Registrando...</span>
+              <span className="visually-hidden">Loading...</span>
             </div>
           )}
         </div>
