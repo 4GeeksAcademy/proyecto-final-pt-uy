@@ -150,6 +150,7 @@ const FormAddAnimal = () => {
                   label="Fecha de Publicación"
                   placeholder="Selecciona fecha"
                   register={register}
+                  validationSchema={{ required: "La fecha de publicación es requerida." }}
                   errors={errors}
                 />
               </div>
