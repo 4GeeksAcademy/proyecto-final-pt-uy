@@ -8,20 +8,20 @@ import logo from "../../img/el_refugio_logo.png";
 
 export const Navbar = () => {
 	const navigate = useNavigate();
-	const {store, actions} = useUserContext();
+	const { store, actions } = useUserContext();
 
 	const handleLogout = () => {
 		actions.setToken("");
 		actions.setUser({
-			id: "", 
-			name: "", 
+			id: "",
+			name: "",
 			role: ""
 		});
 		navigate("/login");
 	}
 
 	return (
-		<nav className="navbar navbar-expand-lg my-3">
+		<nav className="navbar navbar-expand-lg my-4">
 			<div className="container">
 				<Link to="/" className="logo-container me-4">
 					<img src={logo} alt="Logo" />
@@ -59,26 +59,46 @@ export const Navbar = () => {
 							</Link>
 						</li>
 					</ul>
-					<Link 
-						className="me-3 mb-3 mb-lg-0 nav-link ms-auto text-body-color fw-medium text-decoration-none"
-						to={store.user.id ? "/profile" : "/register"} 
-					>
-						{store.user.id ? "Perfil" : "Regístrate"}
-					</Link>
 
-					{ 
-						!store.user.id && 
-						<Link to="/login" className="nav-link text-body-color fw-medium text-decoration-none">
-							Ingresa
-						</Link>
-					}
-					{ 
-						store.user.id && 
-						<button className="nav-link text-body-color fw-medium text-decoration-none" onClick={handleLogout}>
-							Logout
-						</button> 
-					}
-					
+					<ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+
+						{ // Botón para ir al Admin Dashboard
+							store.user.role === "admin" &&
+							<li className="nav-item">
+								<Link to="/table-animals" className="nav-link text-primary fw-medium text-decoration-none">
+									Dashboard
+								</Link>
+							</li>
+						}
+
+						{/* Link Regístrate ó Perfil */}
+						<li className="nav-item">
+							<Link
+								to={store.user.id ? "/profile" : "/register"}
+								className="nav-link text-primary fw-medium text-decoration-none"
+							>
+								{store.user.id ? "Perfil" : "Regístrate"}
+							</Link>
+						</li>
+
+						{ // Link Login
+							!store.user.id &&
+							<li className="nav-item">
+								<Link to="/login" className="nav-link text-primary fw-medium text-decoration-none">
+									Ingresa
+								</Link>
+							</li>
+						}
+
+						{ // Link Logout
+							store.user.id &&
+							<li className="nav-item">
+								<button className="nav-link text-primary fw-medium text-decoration-none" onClick={handleLogout}>
+									Logout
+								</button>
+							</li>
+						}
+					</ul>
 				</div>
 			</div>
 		</nav>
