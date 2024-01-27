@@ -1,18 +1,36 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { useUserContext } from "../contexts/userContext";
 
 import logo from "../../img/el_refugio_logo.png";
 
+
 export const Navbar = () => {
+	const navigate = useNavigate();
+	const { store, actions } = useUserContext();
+
+	const handleLogout = () => {
+		actions.setToken("");
+		actions.setUser({
+			id: "",
+			name: "",
+			role: ""
+		});
+		navigate("/login");
+	}
+
 	return (
-		<nav className="navbar navbar-expand-lg">
+		<nav className="navbar navbar-expand-lg my-4">
 			<div className="container">
 				<Link to="/" className="logo-container me-4">
 					<img src={logo} alt="Logo" />
 				</Link>
+
 				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
 				</button>
+
 				<div className="collapse navbar-collapse" id="navbarText">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						<li className="nav-item">
@@ -41,12 +59,50 @@ export const Navbar = () => {
 							</Link>
 						</li>
 					</ul>
-					<Link to="/register" className="me-3 mb-3 mb-lg-0 nav-link ms-auto text-body-color fw-medium text-decoration-none">
-						Regístrate
-					</Link>
-					<Link to="/login" className="nav-link text-body-color fw-medium text-decoration-none">
-						Ingresa
-					</Link>
+
+					<ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+
+						{ // Link para ir al Admin Dashboard
+							store.user.role === "admin" &&
+							<li className="nav-item">
+								<Link to="/table-animals" className="nav-link text-primary fw-medium text-decoration-none">
+								<i className="fa-solid fa-list-check"></i> Dashboard
+								</Link>
+							</li>
+						}
+
+						{ // Links visibles si hay un usuario logeado
+							store.user.id &&
+							<>
+							<li className="nav-item">
+								<Link to="/profile" className="nav-link text-primary fw-medium text-decoration-none">
+									<i className="fa-solid fa-address-card"></i> Perfil
+								</Link>
+							</li>
+							<li className="nav-item">
+								<button className="nav-link text-primary fw-medium text-decoration-none" onClick={handleLogout}>
+									<i className="fa-solid fa-right-from-bracket"></i> Logout
+								</button>
+							</li>
+							</>
+						}
+
+						{ // Links visibles si NO hay un usuario logeado
+							!store.user.id &&
+							<>
+							<li className="nav-item">
+								<Link to="/register" className="nav-link text-primary fw-medium text-decoration-none">
+									Regístrate
+								</Link>
+							</li>
+							<li className="nav-item">
+								<Link to="/login" className="nav-link text-primary fw-medium text-decoration-none">
+									Ingresa
+								</Link>
+							</li>
+							</>
+						}
+					</ul>
 				</div>
 			</div>
 		</nav>
