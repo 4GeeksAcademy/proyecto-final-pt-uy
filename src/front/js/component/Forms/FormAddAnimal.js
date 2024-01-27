@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
@@ -7,54 +7,100 @@ import Select from './select.js';
 import Input from "./input.js";
 import DateInput from './dateInput.js';
 
+import { addAnimal } from '../../../client-API/backendAPI.js';
+
 // Valores por defecto para los campos del form
 const defaultValues = {
   name: "",
   type: "",
-  sex: "",
+  gender: "",
   size: "",
   vaccinated: "",
   dewormed: "",
   castrated: "",
   microchip: "",
   status: "",
-  birthDate: null,
-  publicationDate: new Date(),
-  additionalInfo: "",
-  photos: [],
+  birth_date: null,
+  publication_date: new Date(),
+  additional_information: "",
+  images: [],
 };
 
 // Opciones de los selects
 const typeOptions = [{ value: "dog", label: "Perro" }, { value: "cat", label: "Gato" }];
-const sexOptions = [{ value: "male", label: "Macho" }, { value: "female", label: "Hembra" }];
+const genderOptions = [{ value: "male", label: "Macho" }, { value: "female", label: "Hembra" }];
 const sizeOptions = [{ value: "small", label: "Pequeño" }, { value: "medium", label: "Mediano" }, { value: "large", label: "Grande" }, { value: "extra_large", label: "Extra grande" }];
 const statusOptions = [{ value: "adopted", label: "Adoptado" }, { value: "not_adopted", label: "No adoptado" }, { value: "passed_away", label: "Fallecido" }];
 
 
 const FormAddAnimal = () => {
+  const navigate = useNavigate();
 
   const form = useForm({ defaultValues, mode: "onBlur" });
-  const { register, control, formState, handleSubmit, reset, watch } = form;
+  const { register, control, formState, handleSubmit, reset, watch, getValues } = form;
   const { errors, isSubmitting, isSubmitted, isSubmitSuccessful } = formState;
 
-  const watchPhotos = watch("photos");
-  const filesArray = Array.from(watchPhotos);
+  const watchimages = watch("images");
+  const filesArray = Array.from(watchimages);
   const filesURL = filesArray.map(file => URL.createObjectURL(file));
 
+  const [addAnimalError, setAddAnimalError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const animalNameRef = useRef("");  // Referencia necesaria para mostrar el nombre en el modal
+
   useEffect(() => {
-    // Si el formulario fue enviado exitosamente...
-    if (isSubmitSuccessful) {
+    // Si el formulario fue enviado exitosamente y el backend no envío ningún error...
+    if (isSubmitSuccessful && !addAnimalError) {
+      // Obtener el nombre del animal antes de resetear el formulario
+      const name = getValues("name");
+      animalNameRef.current = name;
       // Liberar los objetos URL creados para previsualizar las imagenes
       filesURL.forEach(fileURL => URL.revokeObjectURL(fileURL));
-
+      // Mostrar el modal
+      setShowModal(true);
       // Resetear el form
       reset();
     }
+
   }, [isSubmitSuccessful, reset]);
 
-  const onSubmit = (data) => {
+
+  const onSubmit = async (data) => {
     console.log("Form submited", data);
-  };
+    setAddAnimalError("");
+
+    const formData = new FormData();
+
+    // Agregar datos del formulario
+    Object.keys(data).forEach((key) => {
+      if (data[key] !== "" && data[key] !== null) {
+        if (key === 'images') {
+          if (data.images.length > 0) {
+            // Agregar cada archivo de imagen por separado
+            Array.from(data[key]).forEach((image) => {
+              formData.append(key, image);
+            });
+          }
+        }
+        else if (key.endsWith('_date')) {
+          const isoDate = data[key].toISOString();
+          formData.append(key, isoDate);
+        }
+        else {
+          formData.append(key, data[key]);
+        }
+      }
+    });
+
+    // Realizar la solicitud al endpoint mediante el client-API
+    try {
+      const newAnimal = await addAnimal(formData);
+
+    } catch (error) {
+      console.error("Error on animal register: ", error);
+      setAddAnimalError(error.message);
+    }
+  }
 
 
   return (
@@ -78,8 +124,8 @@ const FormAddAnimal = () => {
               errors={errors}
             />
 
-            <Select size='small' id="type" label="Tipo" options={typeOptions} register={register} errors={errors} />
-            <Select size='small' id="sex" label="Sexo" options={sexOptions} register={register} errors={errors} />
+            <Select size='small' id="type" label="Tipo" options={typeOptions} register={register} validationSchema={{ required: "El tipo es requerido" }} errors={errors} />
+            <Select size='small' id="gender" label="Sexo" options={genderOptions} register={register} errors={errors} />
             <Select size='small' id="size" label="Tamaño" options={sizeOptions} register={register} errors={errors} />
             <Select size='mini' id="vaccinated" label="Vacunado" register={register} errors={errors} />
             <Select size='mini' id="dewormed" label="Desparasitado" register={register} errors={errors} />
@@ -91,7 +137,7 @@ const FormAddAnimal = () => {
               {/* Fechas */}
               <div className='d-flex flex-column' style={{ minWidth: "240px", maxWidth: "400px", flexGrow: 1 }}>
                 <DateInput
-                  id="birthDate"
+                  id="birth_date"
                   label="Fecha de Nacimiento"
                   placeholder="Selecciona fecha"
                   register={register}
@@ -100,7 +146,7 @@ const FormAddAnimal = () => {
                 />
 
                 <DateInput
-                  id="publicationDate"
+                  id="publication_date"
                   label="Fecha de Publicación"
                   placeholder="Selecciona fecha"
                   register={register}
@@ -111,13 +157,13 @@ const FormAddAnimal = () => {
               {/* Info adicional */}
               <div className='d-flex h-100' style={{ minWidth: "300px", flexGrow: 2 }}>
                 <div className="mb-3 table-item-big w-100 h-100">
-                  <label htmlFor="additionalInfo" className="form-label">Información adicional</label>
+                  <label htmlFor="additional_information" className="form-label">Información adicional</label>
                   <textarea
                     className="form-control"
                     style={{ minHeight: "140px" }}
-                    id="additionalInfo"
+                    id="additional_information"
                     placeholder='Ingresa si corresponde'
-                    {...register("additionalInfo", { maxLength: { value: 400, message: "La información adicional no puede superar los 400 caracteres." } })}
+                    {...register("additional_information", { maxLength: { value: 400, message: "La información adicional no puede superar los 400 caracteres." } })}
                     errors={errors}
                   />
                 </div>
@@ -132,15 +178,15 @@ const FormAddAnimal = () => {
         <div className='d-inline-flex flex-wrap w-100 gap-3 mb-5'>
           {/* Input */}
           <div className='d-flex flex-column'>
-            <label htmlFor='photos' className="form-label">Selecciona hasta 5 fotos</label>
+            <label htmlFor='images' className="form-label">Selecciona hasta 5 fotos</label>
             <div className="mb-3 table-item-mini">
               <input
                 type="file"
                 className="form-control"
-                id="photos"
+                id="images"
                 accept="image/png, image/jpeg"
                 multiple
-                {...register("photos", {
+                {...register("images", {
                   validate: (fieldValue) => {
                     console.log(fieldValue.length);
                     return fieldValue.length < 6 || "Sólo puedes subir hasta 5 imágenes";
@@ -149,7 +195,7 @@ const FormAddAnimal = () => {
               />
               {/* TO-DO: gestionar la carga de modo que al seleccionar más imágenes éstas se agreguen en vez de sustituir a las anteriores */}
               <p className='fs-7 text-neutral-40 mb-1'>Formatos aceptados: .jpg o .png</p>
-              <p className="fs-7 text-danger">{errors.photos?.message}</p>
+              <p className="fs-7 text-danger">{errors.images?.message}</p>
             </div>
           </div>
 
@@ -166,12 +212,53 @@ const FormAddAnimal = () => {
           </div>
         </div>
 
+        { // Errores generados por validaciones del frontend
+          Object.keys(errors).length > 0 &&
+          (
+            <div className="alert alert-danger mt-3" role="alert">
+              Hay errores en el formulario. Por favor corrígelos y vuelve a intentar.
+            </div>
+          )
+        }
+
+        { // Errores generados por validaciones del backend
+          addAnimalError !== "" &&
+          (
+            <div className="alert alert-danger mt-3" role="alert">
+              Hay errores en el servidor. Por favor contacte al soporte técnico.
+            </div>
+          )
+        }
+
         {/* Buttons */}
         <div className="d-flex gap-2 justify-content-end w-100">
           <button type='button' className='btn btn-outline-primary rounded-4 px-3 px-md-4'>Cancelar</button>
           <button type='submit' className="btn btn-primary rounded-4 px-4 px-md-5" disabled={isSubmitting}>Registrar Peludito</button>
+          {isSubmitting && (
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Registrando...</span>
+            </div>
+          )}
         </div>
       </form>
+
+      {/* Modal */}
+      <div className="modal" tabIndex="-1" role="dialog" style={{ display: showModal ? 'block' : 'none' }}>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Registro exitoso</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setShowModal(false)}></button>
+            </div>
+            <div className="modal-body">
+              <p>{`¡${animalNameRef.current} ha sido registrado/a! exitosamente!`}</p>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => navigate("/table-animals")}>Ver lista de peluditos</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <DevTool control={control} />
     </div>

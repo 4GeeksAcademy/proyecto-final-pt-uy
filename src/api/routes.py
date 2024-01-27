@@ -188,6 +188,7 @@ def update_testimony(testimony_id):
 def register_animal():
     # Obtener datos del formulario
     animal_data = request.form
+    print(request.form)
 
     # Obtener imágenes del formulario
     images = request.files.getlist('images')
@@ -262,6 +263,7 @@ def register_animal():
     }
 
     return jsonify(response_body), 201
+
 
 # =============== Get All Animals ================== #
 @api.route('/animals', methods=['GET'])
