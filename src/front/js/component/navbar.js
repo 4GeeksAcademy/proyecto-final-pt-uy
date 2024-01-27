@@ -62,41 +62,45 @@ export const Navbar = () => {
 
 					<ul className="navbar-nav ms-auto mb-2 mb-lg-0">
 
-						{ // Botón para ir al Admin Dashboard
+						{ // Link para ir al Admin Dashboard
 							store.user.role === "admin" &&
 							<li className="nav-item">
 								<Link to="/table-animals" className="nav-link text-primary fw-medium text-decoration-none">
-									Dashboard
+								<i className="fa-solid fa-list-check"></i> Dashboard
 								</Link>
 							</li>
 						}
 
-						{/* Link Regístrate ó Perfil */}
-						<li className="nav-item">
-							<Link
-								to={store.user.id ? "/profile" : "/register"}
-								className="nav-link text-primary fw-medium text-decoration-none"
-							>
-								{store.user.id ? "Perfil" : "Regístrate"}
-							</Link>
-						</li>
+						{ // Links visibles si hay un usuario logeado
+							store.user.id &&
+							<>
+							<li className="nav-item">
+								<Link to="/profile" className="nav-link text-primary fw-medium text-decoration-none">
+									<i className="fa-solid fa-address-card"></i> Perfil
+								</Link>
+							</li>
+							<li className="nav-item">
+								<button className="nav-link text-primary fw-medium text-decoration-none" onClick={handleLogout}>
+									<i className="fa-solid fa-right-from-bracket"></i> Logout
+								</button>
+							</li>
+							</>
+						}
 
-						{ // Link Login
+						{ // Links visibles si NO hay un usuario logeado
 							!store.user.id &&
+							<>
+							<li className="nav-item">
+								<Link to="/register" className="nav-link text-primary fw-medium text-decoration-none">
+									Regístrate
+								</Link>
+							</li>
 							<li className="nav-item">
 								<Link to="/login" className="nav-link text-primary fw-medium text-decoration-none">
 									Ingresa
 								</Link>
 							</li>
-						}
-
-						{ // Link Logout
-							store.user.id &&
-							<li className="nav-item">
-								<button className="nav-link text-primary fw-medium text-decoration-none" onClick={handleLogout}>
-									Logout
-								</button>
-							</li>
+							</>
 						}
 					</ul>
 				</div>
