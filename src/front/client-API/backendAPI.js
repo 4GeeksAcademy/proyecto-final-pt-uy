@@ -1,13 +1,4 @@
-import { useUserContext } from '../js/contexts/userContext.js';
-
 const apiUrlBase = process.env.BACKEND_URL;
-
-
-// Obtener el token desde el contexto 
-export const getTokenFromContext = () => {
-    const { store } = useUserContext();
-    return store.token;
-};
 
 
 // Login 
@@ -37,9 +28,7 @@ export const login = async (email, password) => {
 
 
 // Register animal
-export const addAnimal = async (formData) => {
-    const token = getTokenFromContext();
-
+export const addAnimal = async (formData, token) => {
     try {
         const response = await fetch(`${apiUrlBase}api/animal`, {
             method: "POST",
