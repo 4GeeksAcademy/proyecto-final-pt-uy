@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User,Testimony, Animals, Animals_images
+from api.models import db, User,Testimony, Animals, Animals_images, Adoption_Users
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required
@@ -38,24 +38,38 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
- ######## users routes ############
+
+#################### USERS ROUTES ###################
 # ================== Get all users ================ #
 @api.route('/users', methods=['GET'])
 @jwt_required()
 def get_users():
     users_query = User.query.all()
-    serialized_users = list(map(lambda item: item.serialize(), users_query))
+
+    serialized_users = []
+    for user in users_query:
+        # Obtener la lista de animales adoptados por el usuario
+        adopted_animals = Adoption_Users.query.filter_by(user_id=user.id).all()
+
+        # Serializar la información del usuario y la lista de animales adoptados
+        user_info = user.serialize()
+        adopted_animals_info = [adoption.serialize() for adoption in adopted_animals]
+
+        # Agregar la lista de animales adoptados al diccionario del usuario
+        user_info["adopted_animals"] = adopted_animals_info
+
+        serialized_users.append(user_info)
 
     response_body = {
-         "msg": "ok",
-         "total_users": len(serialized_users),
-         "result": serialized_users
-     }
-    
+        "msg": "ok",
+        "total_users": len(serialized_users),
+        "result": serialized_users
+    }
+
     return jsonify(response_body), 200
 
 
-# ================== Get one user by id ================= #
+# ================= Get one user by id ================= #
 @api.route('/user/<int:user_id>', methods=['GET'])
 @jwt_required()
 def get_user(user_id):
@@ -63,11 +77,21 @@ def get_user(user_id):
 
     if not user:
         return jsonify({"message": "User not found"}), 404
-    
-    return jsonify(user.serialize()), 200
+
+    # Obtener la lista de animales adoptados por el usuario
+    adopted_animals = Adoption_Users.query.filter_by(user_id=user_id).all()
+
+    # Serializar la información del usuario y la lista de animales adoptados
+    user_info = user.serialize()
+    adopted_animals_info = [adoption.serialize() for adoption in adopted_animals]
+
+    # Agregar la lista de animales adoptados al diccionario del usuario
+    user_info["adopted_animals"] = adopted_animals_info
+
+    return jsonify(user_info), 200
 
 
-
+# ================= Modify one user by id ================= #
 @api.route('/user/<int:user_id>', methods=['PUT'])
 @jwt_required()
 def update_user(user_id):
@@ -103,9 +127,11 @@ def update_user(user_id):
     db.session.commit()
 
     return jsonify({"message": "User updated successfully"}), 200
-####################################
 
- ######## testimony routes ##########
+
+
+##################### TESTIMONIALS ROUTES #####################
+# ================= Register one testimony ================== #
 @api.route('/testimony', methods=['POST'])
 @jwt_required()
 def create_testimony():
@@ -133,15 +159,15 @@ def create_testimony():
     return jsonify({"message": "Testimony created successfully"}), 201
 
 
-
-@api.route('/testimony', methods=['GET'])
+# ================= Get all testimonials ================== #
+@api.route('/testimonials', methods=['GET'])
 @jwt_required()
 def get_testimonies():
     testimonies = Testimony.query.all()
     return jsonify([testimony.serialize() for testimony in testimonies]), 200
     
 
-
+# ================= Get one testimony by id ================== #
 @api.route('/testimony/<int:testimony_id>', methods=['GET'])
 def get_testimony(testimony_id):
     testimony = Testimony.query.get(testimony_id)
@@ -150,7 +176,7 @@ def get_testimony(testimony_id):
     return jsonify(testimony.serialize()), 200
 
 
-
+# ================= Delete one testimony ================== #
 @api.route('/testimony/<int:testimony_id>', methods=['DELETE'])
 @jwt_required()
 def delete_testimony(testimony_id):
@@ -162,7 +188,8 @@ def delete_testimony(testimony_id):
     db.session.commit()
     return jsonify({"msg":"Testimony deleted successfully"}),200
 
-#####Queda pendiente a desarrollo en el FrontEnd########
+
+# ================= Modify one testimony by id ================= #
 @api.route('/testimony/<int:testimony_id>', methods=['PUT'])
 @jwt_required()
 def update_testimony(testimony_id):
@@ -178,11 +205,10 @@ def update_testimony(testimony_id):
     db.session.commit()
     return jsonify({"message": "Testimony updated successfully"}), 200
 
-##########################################################################################
 
-################ Animals routes ######################
 
-# =============== Register an Animal ================== #
+##################### ANIMALS ROUTES #####################
+# =============== Register an Animal =================== #
 @api.route('/animal', methods=['POST'])
 @jwt_required()
 def register_animal():
