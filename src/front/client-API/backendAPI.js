@@ -1,8 +1,5 @@
 const apiUrlBase = process.env.BACKEND_URL;
 
-// Hasta terminar de integrar el login, se hardcodea el token:
-const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjMxODUyNywianRpIjoiZGM1NGRhYmMtNzBkYi00MjQ4LTkwYjctMjViNTVkYmQ3OWQ1IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6OCwibmJmIjoxNzA2MzE4NTI3LCJjc3JmIjoiYTVmN2FkNzEtZTM1Zi00YjJjLWE3NmItZmZiMTc2Yjk0N2VjIiwiZXhwIjoxNzA2MzE5NDI3fQ.wIC-rSoPXGHeW0icLlgSVR2gBLVKHcJSWUvHMRYeyi8";
-
 // Login 
 export const login = async (email, password) => {
     try {
@@ -20,7 +17,7 @@ export const login = async (email, password) => {
         }
 
         const data = await response.json();
-        return data.token;
+        return {token: data.token, user: data.user};
 
     } catch (error) {
         console.error('Error fetching token:', error);
@@ -30,7 +27,7 @@ export const login = async (email, password) => {
 
 
 // Register animal
-export const addAnimal = async (formData) => {
+export const addAnimal = async (formData, token) => {
     try {
         const response = await fetch(`${apiUrlBase}api/animal`, {
             method: "POST",

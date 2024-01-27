@@ -136,7 +136,7 @@ def login():
          "user": {
              "id": user.id,
              "name": user.name,
-             "status": user.status
+             "role": user.role
          }
     }
 

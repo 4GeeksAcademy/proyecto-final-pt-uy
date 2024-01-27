@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
@@ -19,13 +19,34 @@ const Login = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState, reset, control } = useForm({ defaultValues, mode: "onBlur" });
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
-  const {store, actions} = useUserContext();
+  const { store, actions } = useUserContext();
+
+  const [loginError, setLoginError] = useState("");
+
+  useEffect(() => {
+    // Si el formulario fue enviado exitosamente...
+    if (isSubmitSuccessful && !loginError && store.user.id) {
+      // Resetear el form
+      reset();
+      // Ir al home
+      navigate("/");
+    }
+
+  }, [isSubmitSuccessful, reset, store.user.id]);
 
   const onSubmit = async (data) => {
-    const token = await login(data.email, data.password);
-    actions.setToken(token);
+    setLoginError("");
+
+    try {
+      const credentials = await login(data.email, data.password);
+      actions.setToken(credentials.token);
+      actions.setUser(credentials.user);
+    } catch (error) {
+      console.error("Error on login: ", error);
+      setLoginError(error.message);
+    }
   };
-  
+
 
   return (
     <div className='d-flex flex-column-reverse flex-md-row min-vh-100'>
@@ -87,7 +108,7 @@ const Login = () => {
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
               <div className="col-4 col-md-3 me-2">
-                <button type='button' className='btn btn-outline-primary rounded-4 w-100' onClick={() => {navigate("/")}}>Cancelar</button>
+                <button type='button' className='btn btn-outline-primary rounded-4 w-100' onClick={() => { navigate("/") }}>Cancelar</button>
               </div>
               <div className="col-5">
                 <button type='submit' disabled={isSubmitting} className="btn btn-primary rounded-4 w-100">Login</button>
