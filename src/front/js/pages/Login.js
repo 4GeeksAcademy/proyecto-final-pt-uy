@@ -85,7 +85,7 @@ const Login = () => {
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
               <div className="col-4 col-md-3 me-2">
-                <button type='button' className='btn btn-outline-primary rounded-4 w-100'>Cancelar</button>
+                <button type='button' className='btn btn-outline-primary rounded-4 w-100' onClick={() => {navigate("/")}}>Cancelar</button>
               </div>
               <div className="col-5">
                 <button type='submit' disabled={isSubmitting} className="btn btn-primary rounded-4 w-100">Login</button>
