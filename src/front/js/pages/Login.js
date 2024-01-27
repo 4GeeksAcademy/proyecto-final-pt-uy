@@ -105,6 +105,24 @@ const Login = () => {
               <p className='text-end fs-7 fw-medium text-info'><Link to={"/forgot-password"} className='fw-medium text-info text-decoration-none' >¿Olvidaste tu contraseña?</Link></p>
             </div>
 
+            { // Errores generados por validaciones del frontend
+              Object.keys(errors).length > 0 &&
+              (
+                <div className="alert alert-danger mt-3" role="alert">
+                  Hay errores en el formulario. Por favor corrígelos y vuelve a intentar.
+                </div>
+              )
+            }
+
+            { // Errores generados por validaciones del backend
+              loginError !== "" &&
+              (
+                <div className="alert alert-danger mt-3" role="alert">
+                  {loginError}
+                </div>
+              )
+            }
+
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
               <div className="col-4 col-md-3 me-2">
