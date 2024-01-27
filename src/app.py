@@ -129,7 +129,18 @@ def login():
         return jsonify({'msg': 'Usuario o contraseña incorrectos'}), 400
     
     access_token = create_access_token(identity = user.id)
-    return jsonify({"msg": "Login correcto", "token": access_token})
+
+    response_body = {
+         "msg": "ok",
+         "token": access_token,
+         "user": {
+             "id": user.id,
+             "name": user.name,
+             "status": user.status
+         }
+    }
+
+    return jsonify(response_body), 200
 
 
 
