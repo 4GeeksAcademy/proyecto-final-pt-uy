@@ -534,6 +534,33 @@ def update_animal(animal_id):
 @api.route('/register-adoption', methods=['POST'])
 @jwt_required()
 def register_adoption():
+    """
+    Registra una adopción.
+
+    Requiere un token JWT de administrador para acceder.
+
+    Parámetros de la solicitud (JSON):
+    - user_id: ID del usuario adoptante.
+    - animal_id: ID del animal adoptado.
+
+    Ejemplo de solicitud JSON:
+    {
+        "user_id": 123,
+        "animal_id": 456
+    }
+
+    Respuestas posibles:
+    - 201: Adopción registrada exitosamente.
+    - 400: Solicitud inválida o faltan campos requeridos.
+    - 403: Acceso denegado (cuando el usuario no es administrador).
+    - 404: Usuario o animal no encontrado.
+    - 409: El animal ya tiene registrada una adopción.
+
+    Ejemplo de respuesta JSON (éxito):
+    {
+        "msg": "Adopción registrada exitosamente"
+    }
+    """
     current_user_id = get_jwt_identity()
 
     # Verificar si el usuario logeado es un administrador
