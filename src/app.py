@@ -11,6 +11,7 @@ from api.routes import api
 from api.endpoints.adoptions import adoptions_bp
 from api.endpoints.animals import animals_bp
 from api.endpoints.testimonials import testimonials_bp
+from api.endpoints.users import users_bp
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import create_access_token
@@ -57,6 +58,7 @@ app.register_blueprint(api, url_prefix='/api')
 app.register_blueprint(adoptions_bp, url_prefix='/adopciones')
 app.register_blueprint(animals_bp, url_prefix='/animales')
 app.register_blueprint(testimonials_bp, url_prefix='/testimonios')
+app.register_blueprint(users_bp, url_prefix='/usuarios')
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
