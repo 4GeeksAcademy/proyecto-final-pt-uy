@@ -157,7 +157,7 @@ class Adoption_Users(db.Model):
     user_relationship = db.relationship(User)
     animal_id = db.Column(db.Integer, db.ForeignKey("animals.id"), unique=True, nullable=False)
     animal_relationship = db.relationship(Animals)
-    testimony_id = db.Column(db.Integer, db.ForeignKey("testimony.id"), unique=True, nullable=False)
+    testimony_id = db.Column(db.Integer, db.ForeignKey("testimony.id"), unique=True)
     testimony_relationship = db.relationship(Testimony)
 
     def __repr__(self):
