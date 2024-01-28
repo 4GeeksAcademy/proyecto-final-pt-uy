@@ -12,6 +12,7 @@ from api.endpoints.adoptions import adoptions_bp
 from api.endpoints.animals import animals_bp
 from api.endpoints.testimonials import testimonials_bp
 from api.endpoints.users import users_bp
+from api.endpoints.auth import auth_bp
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import create_access_token
@@ -59,15 +60,16 @@ app.register_blueprint(adoptions_bp, url_prefix='/adopciones')
 app.register_blueprint(animals_bp, url_prefix='/animales')
 app.register_blueprint(testimonials_bp, url_prefix='/testimonios')
 app.register_blueprint(users_bp, url_prefix='/usuarios')
+app.register_blueprint(auth_bp, url_prefix='/auth')
 
 # Handle/serialize errors like a JSON object
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
+
+
 # generate sitemap with all your endpoints
-
-
 @app.route('/')
 def sitemap():
     if ENV == "development":
@@ -84,84 +86,6 @@ def serve_any_other_file(path):
     response = send_from_directory(static_file_dir, path)
     response.cache_control.max_age = 0  # avoid cache memory
     return response
-
-
-@app.route('/register', methods=['POST'])
-def register():
-    body = request.get_json(silent=True)
-    if body is None:
-        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
-
-    required_fields = ['name', 'last_name', 'username', 'password', 'email']
-
-    for field in required_fields:
-        if field not in body or body[field] is None:
-            return jsonify({'msg': f'El campo {field} es obligatorio'}), 400
-
-    user = User()
-    user.name = body['name']
-    user.last_name = body['last_name']
-    user.user_name = body['username']
-    user.email = body['email']
-    pw_hash = bcrypt.generate_password_hash(body['password']).decode('utf-8')
-    user.password = pw_hash
-    user.is_active = True
-
-    #valores opcionales (pueden ser None)
-    user.address = body.get('address')
-    user.phone_number = body.get('phone_number')
-    user.backyard = body.get('backyard')
-    user.other_pets = body.get('other_pets')
-    user.role = body.get('role', RoleEnum.USER)  #Valor predeterminado si no se proporciona
-    user.status = body.get('status', UserStatusEnum.ACTIVE)
-
-    db.session.add(user)
-    db.session.commit()
-    return jsonify({'msg': 'Usuario registrado'}), 200
-
-
-@app.route('/login', methods=['POST'])
-def login():
-    body = request.get_json(silent=True)
-
-    if body is None:
-        return jsonify({"msg": "Debes enviar las credenciales en el body"}), 400
-    if 'email' not in body:
-        return jsonify({"msg": "El campo email es obligatorio"}), 400
-    if 'password' not in body:
-        return jsonify({"msg": "El campo password es obligatorio"}), 400
-    
-    user = User.query.filter_by(email = body['email']).first()
-    if user is None or not bcrypt.check_password_hash(user.password, body['password']):
-        return jsonify({'msg': 'Usuario o contraseña incorrectos'}), 400
-    
-    if user.status == "banned":
-        return jsonify({'msg': 'Acceso denegado. Tu cuenta ha sido suspendida. Si crees que esto es un error, por favor contacta al soporte.'}), 403
-    
-    if user.status == "deleted":
-        return jsonify({'msg': 'Tu cuenta ha sido eliminada. Si crees que esto es un error, por favor contacta al soporte.'}), 403
-    
-    access_token = create_access_token(identity = user.id)
-
-    response_body = {
-         "msg": "ok",
-         "token": access_token,
-         "user": {
-             "id": user.id,
-             "name": user.name,
-             "role": user.role
-         }
-    }
-
-    return jsonify(response_body), 200
-
-
-
-
-
-
-
-
 
 
 
