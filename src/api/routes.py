@@ -123,6 +123,8 @@ def update_user(user_id):
         user.backyard = data['backyard']
     if 'other_pets' in data:
         user.other_pets = data['other_pets']
+    if 'status' in data:
+        user.status = data['status']
 
     db.session.commit()
 
