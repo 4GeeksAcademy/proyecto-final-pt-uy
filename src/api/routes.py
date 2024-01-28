@@ -203,6 +203,28 @@ def ban_unban_user(user_id):
     return jsonify({"message": "Estado de usuario cambiado exitosamente"}), 200
 
 
+# ================== Eliminar Usuario ================== #
+@api.route('/user/delete/<int:user_id>', methods=['DELETE'])
+@jwt_required()
+def delete_user(user_id):
+    current_user = User.query.get(get_jwt_identity())
+
+    # Verificar que el usuario logeado sea el propio usuario o tenga rol "admin"
+    if current_user.id != user_id and current_user.role != RoleEnum.ADMIN:
+        return jsonify({"message": "Acceso denegado. No tienes permisos para eliminar este usuario"}), 403
+
+    user_to_delete = User.query.get(user_id)
+
+    if not user_to_delete:
+        return jsonify({"message": "Usuario no encontrado"}), 404
+
+    # Cambiar el estado del usuario a "deleted"
+    user_to_delete.status = UserStatusEnum.DELETED
+
+    db.session.commit()
+
+    return jsonify({"message": "Usuario eliminado exitosamente"}), 200
+
 
 
 ##################### TESTIMONIALS ROUTES #####################
