@@ -129,6 +129,12 @@ def login():
     if user is None or not bcrypt.check_password_hash(user.password, body['password']):
         return jsonify({'msg': 'Usuario o contraseña incorrectos'}), 400
     
+    if user.status == "banned":
+        return jsonify({'msg': 'Acceso denegado. Tu cuenta ha sido suspendida. Si crees que esto es un error, por favor contacta al soporte.'}), 403
+    
+    if user.status == "deleted":
+        return jsonify({'msg': 'Tu cuenta ha sido eliminada. Si crees que esto es un error, por favor contacta al soporte.'}), 403
+    
     access_token = create_access_token(identity = user.id)
 
     response_body = {
