@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 from api.models import RoleEnum, StatusEnum, db, User, Animals, Adoption_Users
 
-adoptions_bp = Blueprint('adoptions', __name__)
+adoptions_bp = Blueprint('adopciones', __name__)
 
 # Allow CORS requests to this API
 CORS(adoptions_bp)
@@ -12,11 +12,11 @@ CORS(adoptions_bp)
 
 ############################## ADOPTIONS ROUTES ##############################
 # ============= Registrar Adopción (Solo para Administradores) ============= #
-@adoptions_bp.route('/adoption', methods=['POST'])
+@adoptions_bp.route('/adopcion', methods=['POST'])
 @jwt_required()
 def register_adoption():
     """
-    /adoptions/adoption
+    /adopciones/adopcion
 
     Registra una adopción.
 
