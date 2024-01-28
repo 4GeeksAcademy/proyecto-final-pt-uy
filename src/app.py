@@ -8,6 +8,7 @@ from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
 from api.models import UserStatusEnum,db,User,RoleEnum
 from api.routes import api
+#from api.endpoints.adoptions import adoptions_bp
 from api.admin import setup_admin
 from api.commands import setup_commands
 from flask_jwt_extended import create_access_token
@@ -49,8 +50,9 @@ setup_admin(app)
 # add the admin
 setup_commands(app)
 
-# Add all endpoints form the API with a "api" prefix
+# Add all endpoints form the API
 app.register_blueprint(api, url_prefix='/api')
+#app.register_blueprint(adoptions_bp, url_prefix='/adoptions')
 
 # Handle/serialize errors like a JSON object
 
