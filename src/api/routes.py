@@ -444,3 +444,31 @@ def get_animal(animal_id):
     return jsonify(serialized_animal), 200
 
 
+# ================== Eliminar Animal (Solo para Administradores) ================== #
+@api.route('/animal/delete/<int:animal_id>', methods=['DELETE'])
+@jwt_required()
+def delete_animal(animal_id):
+    current_user = User.query.get(get_jwt_identity())
+
+    # Verificar que el usuario logeado tenga rol "admin"
+    if current_user.role != RoleEnum.ADMIN:
+        return jsonify({"message": "Acceso denegado. Se requiere rol de administrador"}), 403
+
+    animal_to_delete = Animals.query.get(animal_id)
+
+    if not animal_to_delete:
+        return jsonify({"message": "Animal no encontrado"}), 404
+
+    # Verificar si hay registros relacionados
+    has_images = db.session.query(Animals_images).filter_by(animal_id=animal_id).count() > 0
+    has_testimonies = db.session.query(Testimony).filter_by(animal_id=animal_id).count() > 0
+    has_adoptions = db.session.query(Adoption_Users).filter_by(animal_id=animal_id).count() > 0
+
+    if has_images or has_testimonies or has_adoptions:
+        return jsonify({"message": "No se puede eliminar el animal debido a registros relacionados"}), 400
+
+    # Eliminar el animal de la base de datos
+    db.session.delete(animal_to_delete)
+    db.session.commit()
+
+    return jsonify({"message": "Animal eliminado exitosamente"}), 200

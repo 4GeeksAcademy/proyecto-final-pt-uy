@@ -30,7 +30,7 @@ export const login = async (email, password) => {
 // Register animal
 export const addAnimal = async (formData, token) => {
     try {
-        const response = await fetch(`${apiUrlBase}api/animal`, {
+        const response = await fetch(`${apiUrlBase}/api/animal`, {
             method: "POST",
             headers: {
                 "Authorization": "Bearer " + token
