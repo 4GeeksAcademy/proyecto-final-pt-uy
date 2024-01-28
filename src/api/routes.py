@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User,Testimony, Animals, Animals_images, Adoption_Users
+from api.models import RoleEnum, UserStatusEnum, db, User,Testimony, Animals, Animals_images, Adoption_Users
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -171,6 +171,37 @@ def change_password():
     db.session.commit()
 
     return jsonify({"message": "Contraseña cambiada exitosamente"}), 200
+
+
+# ================== Recuperar Contraseña (Usuario No Logeado) ================== #
+# TO-DO
+
+
+# ================== Banear o Desbanear Usuario ================== #
+@api.route('/user/ban-unban/<int:user_id>', methods=['PATCH'])
+@jwt_required()
+def ban_unban_user(user_id):
+    current_user = User.query.get(get_jwt_identity())
+
+    # Verificar que el usuario logeado tenga rol "admin"
+    if current_user.role != RoleEnum.ADMIN:
+        return jsonify({"message": "Acceso denegado. Se requiere rol de administrador"}), 403
+
+    user_to_ban_unban = User.query.get(user_id)
+
+    if not user_to_ban_unban:
+        return jsonify({"message": "Usuario no encontrado"}), 404
+
+    # Cambiar el estado del usuario (banear/desbanear)
+    if user_to_ban_unban.status == UserStatusEnum.ACTIVE:
+        user_to_ban_unban.status = UserStatusEnum.BANNED
+    else:
+        user_to_ban_unban.status = UserStatusEnum.ACTIVE
+
+    db.session.commit()
+
+    return jsonify({"message": "Estado de usuario cambiado exitosamente"}), 200
+
 
 
 
