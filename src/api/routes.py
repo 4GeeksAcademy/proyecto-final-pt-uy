@@ -5,14 +5,17 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User,Testimony, Animals, Animals_images, Adoption_Users
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from cloudinary import config as cloudinary_config
 from cloudinary.uploader import upload
+from flask_bcrypt import Bcrypt
 
 from dotenv import load_dotenv
 import os
 
 api = Blueprint('api', __name__)
+
+bcrypt = Bcrypt()
 
 # Allow CORS requests to this API
 CORS(api)
@@ -129,6 +132,45 @@ def update_user(user_id):
     db.session.commit()
 
     return jsonify({"message": "User updated successfully"}), 200
+
+
+# ================== Cambiar Contraseña (Usuario Logeado) ================== #
+@api.route('/user/change-password', methods=['POST'])
+@jwt_required()
+def change_password():
+    # Obtener la identidad del usuario desde el token JWT
+    current_user_id = get_jwt_identity()
+
+    # Obtener el usuario actual
+    current_user = User.query.get(current_user_id)
+
+    # Verificar que el usuario exista
+    if not current_user:
+        return jsonify({"message": "Usuario no encontrado"}), 404
+
+    # Obtener las contraseñas proporcionadas en la solicitud
+    body = request.get_json(silent=True)
+    old_password = body['old_password']
+    new_password = body['new_password']
+
+    # Verificar que se proporcionen las contraseñas
+    if not old_password or not new_password:
+        return jsonify({"message": "Se requieren tanto la antigua como la nueva contraseña"}), 400
+
+    # Verificar que la old_password coincida con la contraseña actual del usuario
+    if not bcrypt.check_password_hash(current_user.password, old_password):
+        return jsonify({"message": "La antigua contraseña no es válida"}), 401
+
+    # Hash de la nueva contraseña antes de almacenarla
+    hashed_new_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+
+    # Actualizar la contraseña del usuario con la new_password
+    current_user.password = hashed_new_password
+
+    # Guardar los cambios en la base de datos
+    db.session.commit()
+
+    return jsonify({"message": "Contraseña cambiada exitosamente"}), 200
 
 
 
