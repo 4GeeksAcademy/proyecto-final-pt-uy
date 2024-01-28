@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import RoleEnum, UserStatusEnum, db, User,Testimony, Animals, Animals_images, Adoption_Users
+from api.models import RoleEnum, StatusEnum, TestimonyStatusEnum, UserStatusEnum, db, User,Testimony, Animals, Animals_images, Adoption_Users
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -323,7 +323,7 @@ def register_animal():
 
     for field in required_fields:
         if field not in animal_data:
-            return jsonify({'msg': f'The field {field} is required'}), 400
+            return jsonify({'msg': f'El campo {field} es requerido'}), 400
 
     animal = Animals()
     animal.name = animal_data['name']
@@ -526,3 +526,53 @@ def update_animal(animal_id):
     }
 
     return jsonify(response_body), 200
+
+
+
+############################## ADOPTIONS ROUTES ##############################
+# ============= Registrar Adopción (Solo para Administradores) ============= #
+@api.route('/register-adoption', methods=['POST'])
+@jwt_required()
+def register_adoption():
+    current_user_id = get_jwt_identity()
+
+    # Verificar si el usuario logeado es un administrador
+    current_user = User.query.get(current_user_id)
+    if current_user.role != RoleEnum.ADMIN:
+        return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
+
+    # Obtener datos de la solicitud
+    data = request.json
+
+    # Validar que los campos requeridos estén presentes en la solicitud
+    required_fields = ['user_id', 'animal_id']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({"msg": f"El campo {field} es requerido"}), 400
+
+    user_id = data['user_id']
+    animal_id = data['animal_id']
+
+    # Verificar si el usuario y el animal existen en la base de datos
+    user = User.query.get(user_id)
+    animal = Animals.query.get(animal_id)
+
+    if not user:
+        return jsonify({"msg": "Usuario no encontrado"}), 404
+    if not animal:
+        return jsonify({"msg": "Animal no encontrado"}), 404
+
+    # Verificar si ya existe una adopción para este animal
+    existing_adoption = Adoption_Users.query.filter_by(animal_id=animal_id).first()
+    if existing_adoption:
+        return jsonify({"msg": "Este animal ya tiene registrada una adopción"}), 409
+
+    # Registrar la adopción
+    new_adoption = Adoption_Users(user_id=user_id, animal_id=animal_id)
+    db.session.add(new_adoption)
+
+    # Actualizar el estado del animal a "adoptado"
+    animal.status = StatusEnum.ADOPTED
+    db.session.commit()
+
+    return jsonify({"msg": "Adopción registrada exitosamente"}), 201
