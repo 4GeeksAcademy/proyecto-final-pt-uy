@@ -472,3 +472,57 @@ def delete_animal(animal_id):
     db.session.commit()
 
     return jsonify({"message": "Animal eliminado exitosamente"}), 200
+
+
+# ================== Actualizar Animal (Solo para Administradores) ================== #
+@api.route('/animal/update/<int:animal_id>', methods=['PUT'])
+@jwt_required()
+def update_animal(animal_id):
+    current_user = User.query.get(get_jwt_identity())
+
+    # Verificar que el usuario logeado tenga rol "admin"
+    if current_user.role != RoleEnum.ADMIN:
+        return jsonify({"message": "Acceso denegado. Se requiere rol de administrador"}), 403
+
+    animal_to_update = Animals.query.get(animal_id)
+
+    if not animal_to_update:
+        return jsonify({"message": "Animal no encontrado"}), 404
+
+    # Obtener nuevos datos del formulario (pueden ser parciales)
+    new_animal_data = request.form
+
+    # Actualizar los campos del animal con los nuevos datos
+    for field, value in new_animal_data.items():
+        setattr(animal_to_update, field, value)
+
+    # Gestionar las imágenes y actualizarlas en Cloudinary (por ahora sustituye las anteriores por las nuevas)
+    new_images = request.files.getlist('images')
+
+    # Eliminar todas las imágenes existentes del animal
+    Animals_images.query.filter_by(animal_id=animal_id).delete()
+
+    # Subir y almacenar las nuevas imágenes en Cloudinary
+    image_urls = []  # Lista para almacenar las URLs de las imágenes
+
+    for image in new_images:
+        upload_response = upload(image)  # Subir la imagen a Cloudinary
+        image_urls.append(upload_response['secure_url'])  # Obtener la URL y agregarla a la lista
+
+        # Almacenar la información de la imagen en la base de datos
+        animal_image = Animals_images(image_url=upload_response['secure_url'], public_id=upload_response['public_id'], animal_id=animal_id)
+        db.session.add(animal_image)
+
+    db.session.commit()
+
+    serialized_animal = animal_to_update.serialize()
+
+    # Agregar las nuevas URLs de las imágenes a la respuesta
+    serialized_animal['image_urls'] = image_urls
+
+    response_body = {
+        "msg": "ok",
+        "result": serialized_animal
+    }
+
+    return jsonify(response_body), 200
