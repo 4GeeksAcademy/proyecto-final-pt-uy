@@ -174,6 +174,24 @@ const Register = () => {
               <Link to={""} className="fw-medium fs-7 text-info text-decoration-none ms-auto">¿Necesitas ayuda?</Link>
             </div>
 
+            { // Errores generados por validaciones del frontend
+              Object.keys(errors).length > 0 &&
+              (
+                <div className="alert alert-danger mt-3" role="alert">
+                  Hay errores en el formulario. Por favor corrígelos y vuelve a intentar.
+                </div>
+              )
+            }
+
+            { // Errores generados por validaciones del backend
+              registerError !== "" &&
+              (
+                <div className="alert alert-danger mt-3" role="alert">
+                  {registerError}
+                </div>
+              )
+            }
+
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
               <div className="col-4 col-md-3 me-2">
