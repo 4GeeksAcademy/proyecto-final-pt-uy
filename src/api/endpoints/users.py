@@ -57,7 +57,7 @@ def get_user(user_id):
     user = User.query.get(user_id)
 
     if not user:
-        return jsonify({"message": "User not found"}), 404
+        return jsonify({"msg": "User not found"}), 404
 
     # Obtener la lista de animales adoptados por el usuario
     adopted_animals = Adoption_Users.query.filter_by(user_id=user_id).all()
@@ -80,7 +80,7 @@ def update_user(user_id):
     user = User.query.get(user_id)
 
     if not user:
-        return jsonify({"message": "User not found"}), 404
+        return jsonify({"msg": "User not found"}), 404
 
     data = request.get_json()
 
@@ -110,7 +110,7 @@ def update_user(user_id):
 
     db.session.commit()
 
-    return jsonify({"message": "User updated successfully"}), 200
+    return jsonify({"msg": "User updated successfully"}), 200
 
 
 
@@ -126,7 +126,7 @@ def change_password():
 
     # Verificar que el usuario exista
     if not current_user:
-        return jsonify({"message": "Usuario no encontrado"}), 404
+        return jsonify({"msg": "Usuario no encontrado"}), 404
 
     # Obtener las contraseñas proporcionadas en la solicitud
     body = request.get_json(silent=True)
@@ -135,11 +135,11 @@ def change_password():
 
     # Verificar que se proporcionen las contraseñas
     if not old_password or not new_password:
-        return jsonify({"message": "Se requieren tanto la antigua como la nueva contraseña"}), 400
+        return jsonify({"msg": "Se requieren tanto la antigua como la nueva contraseña"}), 400
 
     # Verificar que la old_password coincida con la contraseña actual del usuario
     if not bcrypt.check_password_hash(current_user.password, old_password):
-        return jsonify({"message": "La antigua contraseña no es válida"}), 401
+        return jsonify({"msg": "La antigua contraseña no es válida"}), 401
 
     # Hash de la nueva contraseña antes de almacenarla
     hashed_new_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
@@ -150,7 +150,7 @@ def change_password():
     # Guardar los cambios en la base de datos
     db.session.commit()
 
-    return jsonify({"message": "Contraseña cambiada exitosamente"}), 200
+    return jsonify({"msg": "Contraseña cambiada exitosamente"}), 200
 
 
 
@@ -167,12 +167,12 @@ def ban_unban_user(user_id):
 
     # Verificar que el usuario logeado tenga rol "admin"
     if current_user.role != RoleEnum.ADMIN:
-        return jsonify({"message": "Acceso denegado. Se requiere rol de administrador"}), 403
+        return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
 
     user_to_ban_unban = User.query.get(user_id)
 
     if not user_to_ban_unban:
-        return jsonify({"message": "Usuario no encontrado"}), 404
+        return jsonify({"msg": "Usuario no encontrado"}), 404
 
     # Cambiar el estado del usuario (banear/desbanear)
     if user_to_ban_unban.status == UserStatusEnum.ACTIVE:
@@ -182,7 +182,7 @@ def ban_unban_user(user_id):
 
     db.session.commit()
 
-    return jsonify({"message": "Estado de usuario cambiado exitosamente"}), 200
+    return jsonify({"msg": "Estado de usuario cambiado exitosamente"}), 200
 
 
 
@@ -194,16 +194,16 @@ def delete_user(user_id):
 
     # Verificar que el usuario logeado sea el propio usuario o tenga rol "admin"
     if current_user.id != user_id and current_user.role != RoleEnum.ADMIN:
-        return jsonify({"message": "Acceso denegado. No tienes permisos para eliminar este usuario"}), 403
+        return jsonify({"msg": "Acceso denegado. No tienes permisos para eliminar este usuario"}), 403
 
     user_to_delete = User.query.get(user_id)
 
     if not user_to_delete:
-        return jsonify({"message": "Usuario no encontrado"}), 404
+        return jsonify({"msg": "Usuario no encontrado"}), 404
 
     # Cambiar el estado del usuario a "deleted"
     user_to_delete.status = UserStatusEnum.DELETED
 
     db.session.commit()
 
-    return jsonify({"message": "Usuario eliminado exitosamente"}), 200
+    return jsonify({"msg": "Usuario eliminado exitosamente"}), 200

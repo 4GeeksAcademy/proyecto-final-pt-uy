@@ -103,9 +103,20 @@ def register_adoption_testimony():
 @testimonials_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_testimonials():
-    testimonials = Testimony.query.all()
+    testimonials_query = Testimony.query.all()
+
+    serialized_testimonials = []
+    for testimony in testimonials_query:
+        testimony_serialized = testimony.serialize()
+        serialized_testimonials.append(testimony_serialized)
+
+    response_body = {
+        "msg": "ok",
+        "total_testimonials": len(serialized_testimonials),
+        "result": serialized_testimonials
+    }
     
-    return jsonify([testimony.serialize() for testimony in testimonials]), 200
+    return jsonify(response_body), 200
 
   
 
@@ -114,7 +125,7 @@ def get_testimonials():
 def get_testimony(testimony_id):
     testimony = Testimony.query.get(testimony_id)
     if testimony is None:
-        return jsonify({"message": "Testimonio no encontrado"}), 404
+        return jsonify({"msg": "Testimonio no encontrado"}), 404
     
     return jsonify(testimony.serialize()), 200
 
