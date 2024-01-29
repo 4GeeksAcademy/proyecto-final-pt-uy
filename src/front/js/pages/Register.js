@@ -1,7 +1,9 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import Input from '../component/Forms/input';
 import { useForm } from 'react-hook-form';
+
+import { registerUser } from '../../client-API/backendAPI';
 
 import signUpImage from "../../img/signup.jpg";
 import logo from "../../img/el_refugio_logo.png";
@@ -17,46 +19,44 @@ const defaultValues = {
 
 
 const Register = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState, reset, control } = useForm({ defaultValues, mode: "onBlur" });
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
-  const onSubmit = (data) => {
+  const [registerError, setRegisterError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  useEffect(() => {
+    // Si el formulario fue enviado exitosamente...
+    if (isSubmitSuccessful && !registerError && isRegistered) {
+      // Mostrar el modal
+      setShowSuccessModal(true);
+      // Resetear el form
+      reset();
+    }
+
+  }, [isSubmitSuccessful, reset, isRegistered]);
+
+
+  const onSubmit = async (data) => {
+    setRegisterError("");
     console.log("Form submitted", data);
 
-    const registerUrl = 'https://silver-space-carnival-q7qqq69g9x4j3479v-3001.app.github.dev/register';
-
-    const credentials = {
+    const newUser = {
       name: `${data.name}`,
       last_name: `${data.lastname}`,
       username: `${data.userName}`,
       email: `${data.email}`,
-      password: `${data.password}`,
-      role: "USER"
+      password: `${data.password}`
     };
 
-    fetch(registerUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error en la solicitud de inicio de sesión');
-        }
-        return response.json();
-      })
-      .then(res => {
-        console.log('Usuario Registrado:', res);
-        // Aquí puedes manejar la respuesta del servidor después del inicio de sesión exitoso
-      })
-      .catch(error => {
-        console.error('Error durante el registro:', error);
-        // Aquí puedes manejar los errores, por ejemplo, mostrar un mensaje al usuario
-      });
-
-    reset()
+    try {
+      setIsRegistered(await registerUser(newUser));
+    } catch (error) {
+      console.error("Error on register: ", error);
+      setRegisterError(error.message);
+    }
   };
 
 
@@ -86,14 +86,14 @@ const Register = () => {
             {/* Name */}
             <div className="mb-3">
               <Input
-              size="big"
-              id="name"
-              type="text"
-              label="Nombre"
-              placeholder="Ingresa tu nombre"
-              register={register}
-              validationSchema={{ required: "El nombre es requerido" }}
-              errors={errors}
+                size="big"
+                id="name"
+                type="text"
+                label="Nombre"
+                placeholder="Ingresa tu nombre"
+                register={register}
+                validationSchema={{ required: "El nombre es requerido" }}
+                errors={errors}
               />
             </div>
 
@@ -174,22 +174,79 @@ const Register = () => {
               <Link to={""} className="fw-medium fs-7 text-info text-decoration-none ms-auto">¿Necesitas ayuda?</Link>
             </div>
 
+            { // Errores generados por validaciones del frontend
+              Object.keys(errors).length > 0 &&
+              (
+                <div className="alert alert-danger mt-3" role="alert">
+                  Hay errores en el formulario. Por favor corrígelos y vuelve a intentar.
+                </div>
+              )
+            }
+
+            { // Errores generados por validaciones del backend
+              registerError !== "" &&
+              (
+                <div className="alert alert-danger mt-3" role="alert">
+                  {registerError}
+                </div>
+              )
+            }
+
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
-              <Link to={"/"} className="col-4 col-md-3 me-2">
-                <button type='button' className='btn btn-outline-primary rounded-pill w-100'>Cancelar</button>
-              </Link>
-              <div className="col-5">
-                <button type='submit' disabled={isSubmitting} className="btn btn-primary rounded-pill w-100">Registarme</button>
+              <div className="col-4 col-md-3 me-2">
+                <button
+                  type='button'
+                  className='btn btn-outline-primary rounded-pill w-100'
+                  onClick={() => { navigate("/") }}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </button>
               </div>
-            </div>
 
+              <div className="col-5">
+                <button
+                  type='submit'
+                  className="btn btn-primary rounded-pill w-100"
+                  disabled={isSubmitting}
+                >
+                  Registarme
+                </button>
+              </div>
+
+              {/* Spinner es renderizado mientras llega la respuesta del backend */}
+              {isSubmitting && (
+                <div className="spinner-border text-primary ms-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
+            </div>
           </form>
         </div>
       </div>
 
       {/* Image Panel */}
       <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${signUpImage})`, backgroundPosition: "center top" }}></div>
+
+      {/* Modal */}
+      {
+        isRegistered &&
+        <div className="modal" tabIndex="-1" role="dialog" style={{ display: showSuccessModal ? 'block' : 'none' }}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Registro exitoso</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => navigate("/login")}></button>
+              </div>
+              <div className="modal-body">
+                <h2 className='f-5 fw-medium'>¡Felicidades!🥳</h2>
+                <p>Ahora eres usuario de nuestro sitio web y ya puedes loguearte.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   )
 }
