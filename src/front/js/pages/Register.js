@@ -24,15 +24,16 @@ const Register = () => {
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
   const [registerError, setRegisterError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
 
   useEffect(() => {
     // Si el formulario fue enviado exitosamente...
     if (isSubmitSuccessful && !registerError && isRegistered) {
+      // Mostrar el modal
+      setShowSuccessModal(true);
       // Resetear el form
       reset();
-      // Ir al login
-      navigate("/login");
     }
 
   }, [isSubmitSuccessful, reset, isRegistered]);
@@ -175,41 +176,59 @@ const Register = () => {
 
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
-                <div className="col-4 col-md-3 me-2">
-                  <button
-                    type='button'
-                    className='btn btn-outline-primary rounded-pill w-100'
-                    onClick={() => { navigate("/") }}
-                    disabled={isSubmitting}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-
-                <div className="col-5">
-                  <button 
-                    type='submit' 
-                    className="btn btn-primary rounded-pill w-100"
-                    disabled={isSubmitting}
-                  >
-                    Registarme
-                  </button>
-                </div>
-
-                {/* Spinner es renderizado mientras llega la respuesta del backend */}
-                {isSubmitting && (
-                  <div className="spinner-border text-primary ms-2" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                )}
+              <div className="col-4 col-md-3 me-2">
+                <button
+                  type='button'
+                  className='btn btn-outline-primary rounded-pill w-100'
+                  onClick={() => { navigate("/") }}
+                  disabled={isSubmitting}
+                >
+                  Cancelar
+                </button>
               </div>
 
+              <div className="col-5">
+                <button
+                  type='submit'
+                  className="btn btn-primary rounded-pill w-100"
+                  disabled={isSubmitting}
+                >
+                  Registarme
+                </button>
+              </div>
+
+              {/* Spinner es renderizado mientras llega la respuesta del backend */}
+              {isSubmitting && (
+                <div className="spinner-border text-primary ms-2" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
+            </div>
           </form>
         </div>
       </div>
 
       {/* Image Panel */}
       <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${signUpImage})`, backgroundPosition: "center top" }}></div>
+
+      {/* Modal */}
+      {
+        isRegistered &&
+        <div className="modal" tabIndex="-1" role="dialog" style={{ display: showSuccessModal ? 'block' : 'none' }}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Registro exitoso</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => navigate("/login")}></button>
+              </div>
+              <div className="modal-body">
+                <h2 className='f-5 fw-medium'>¡Felicidades!🥳</h2>
+                <p>Ahora eres usuario de nuestro sitio web y ya puedes loguearte.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   )
 }
