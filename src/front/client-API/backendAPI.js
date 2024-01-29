@@ -4,7 +4,7 @@ const apiUrlBase = process.env.BACKEND_URL;
 // Login 
 export const login = async (email, password) => {
     try {
-        const response = await fetch(`${apiUrlBase}/login`, {
+        const response = await fetch(`${apiUrlBase}/auth/login`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +30,7 @@ export const login = async (email, password) => {
 // Register animal
 export const addAnimal = async (formData, token) => {
     try {
-        const response = await fetch(`${apiUrlBase}/api/animal`, {
+        const response = await fetch(`${apiUrlBase}/animales/animal`, {
             method: "POST",
             headers: {
                 "Authorization": "Bearer " + token
