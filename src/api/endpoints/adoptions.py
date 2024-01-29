@@ -87,3 +87,35 @@ def register_adoption():
     db.session.commit()
 
     return jsonify({"msg": "Adopción registrada exitosamente"}), 201
+
+
+
+# ================= Get all adoptions ================== #
+@adoptions_bp.route('/', methods=['GET'])
+@jwt_required()
+def get_adoptions():
+    adoptions_query = Adoption_Users.query.all()
+
+    serialized_adoptions = []
+    for adoption in adoptions_query:
+        adoption_serialized = adoption.serialize()
+        serialized_adoptions.append(adoption_serialized)
+
+    response_body = {
+        "msg": "ok",
+        "total_adoptions": len(serialized_adoptions),
+        "result": serialized_adoptions
+    }
+    
+    return jsonify(response_body), 200
+
+  
+
+# ================= Get one adoption by id ================== #
+@adoptions_bp.route('/adopcion/<int:adoption_id>', methods=['GET'])
+def get_adoption(adoption_id):
+    adoption = Adoption_Users.query.get(adoption_id)
+    if adoption is None:
+        return jsonify({"msg": "Adopción no encontrada"}), 404
+    
+    return jsonify(adoption.serialize()), 200

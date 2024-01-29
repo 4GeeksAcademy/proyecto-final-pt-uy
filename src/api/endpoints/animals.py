@@ -44,7 +44,7 @@ def register_animal():
     images = request.files.getlist('images')
 
     if not animal_data:
-        return jsonify({"msg": "Error: the request does not include the required data"}), 400
+        return jsonify({"msg": "Error: la petición no contiene la información requerida"}), 400
 
     required_fields = ['name', 'type', 'birth_date']
 
@@ -170,7 +170,7 @@ def get_animal(animal_id):
     animal = Animals.query.get(animal_id)
 
     if not animal:
-        return jsonify({"message": "Animal not found"}), 404
+        return jsonify({"msg": "Peludito no encontrado"}), 404
     
     # Serializar el animal
     serialized_animal = animal.serialize()
@@ -201,12 +201,12 @@ def delete_animal(animal_id):
 
     # Verificar que el usuario logeado tenga rol "admin"
     if current_user.role != RoleEnum.ADMIN:
-        return jsonify({"message": "Acceso denegado. Se requiere rol de administrador"}), 403
+        return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
 
     animal_to_delete = Animals.query.get(animal_id)
 
     if not animal_to_delete:
-        return jsonify({"message": "Animal no encontrado"}), 404
+        return jsonify({"msg": "Peludito no encontrado"}), 404
 
     # Verificar si hay registros relacionados
     has_images = db.session.query(Animals_images).filter_by(animal_id=animal_id).count() > 0
@@ -214,13 +214,13 @@ def delete_animal(animal_id):
     has_adoptions = db.session.query(Adoption_Users).filter_by(animal_id=animal_id).count() > 0
 
     if has_images or has_testimonies or has_adoptions:
-        return jsonify({"message": "No se puede eliminar el animal debido a registros relacionados"}), 400
+        return jsonify({"msg": "No se puede eliminar este peludito debido a registros relacionados"}), 400
 
     # Eliminar el animal de la base de datos
     db.session.delete(animal_to_delete)
     db.session.commit()
 
-    return jsonify({"message": "Animal eliminado exitosamente"}), 200
+    return jsonify({"msg": "Peludito eliminado exitosamente"}), 200
 
 
 # ================== Actualizar Animal (Solo para Administradores) ================== #
@@ -237,12 +237,12 @@ def update_animal(animal_id):
 
     # Verificar que el usuario logeado tenga rol "admin"
     if current_user.role != RoleEnum.ADMIN:
-        return jsonify({"message": "Acceso denegado. Se requiere rol de administrador"}), 403
+        return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
 
     animal_to_update = Animals.query.get(animal_id)
 
     if not animal_to_update:
-        return jsonify({"message": "Animal no encontrado"}), 404
+        return jsonify({"msg": "Peludito no encontrado"}), 404
 
     # Obtener nuevos datos del formulario (pueden ser parciales)
     new_animal_data = request.form
