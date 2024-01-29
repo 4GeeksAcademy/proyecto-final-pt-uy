@@ -46,7 +46,7 @@ def register():
     user.phone_number = body.get('phone_number')
     user.backyard = body.get('backyard')
     user.other_pets = body.get('other_pets')
-    user.role = body.get('role', RoleEnum.USER)  #Valor predeterminado si no se proporciona
+    user.role = RoleEnum.USER  #Todo usuario se registra con rol USER inicialmente
     user.status = body.get('status', UserStatusEnum.ACTIVE)
 
     db.session.add(user)

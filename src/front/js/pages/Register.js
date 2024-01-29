@@ -1,7 +1,9 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import Input from '../component/Forms/input';
 import { useForm } from 'react-hook-form';
+
+import { registerUser } from '../../client-API/backendAPI';
 
 import signUpImage from "../../img/signup.jpg";
 import logo from "../../img/el_refugio_logo.png";
@@ -17,46 +19,43 @@ const defaultValues = {
 
 
 const Register = () => {
+  const navigate = useNavigate();
   const { register, handleSubmit, formState, reset, control } = useForm({ defaultValues, mode: "onBlur" });
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
-  const onSubmit = (data) => {
+  const [registerError, setRegisterError] = useState("");
+  const [isRegistered, setIsRegistered] = useState(false);
+
+  useEffect(() => {
+    // Si el formulario fue enviado exitosamente...
+    if (isSubmitSuccessful && !registerError && isRegistered) {
+      // Resetear el form
+      reset();
+      // Ir al login
+      navigate("/login");
+    }
+
+  }, [isSubmitSuccessful, reset, isRegistered]);
+
+
+  const onSubmit = async (data) => {
+    setRegisterError("");
     console.log("Form submitted", data);
 
-    const registerUrl = 'https://silver-space-carnival-q7qqq69g9x4j3479v-3001.app.github.dev/register';
-
-    const credentials = {
+    const newUser = {
       name: `${data.name}`,
       last_name: `${data.lastname}`,
       username: `${data.userName}`,
       email: `${data.email}`,
-      password: `${data.password}`,
-      role: "USER"
+      password: `${data.password}`
     };
 
-    fetch(registerUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials),
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error en la solicitud de inicio de sesión');
-        }
-        return response.json();
-      })
-      .then(res => {
-        console.log('Usuario Registrado:', res);
-        // Aquí puedes manejar la respuesta del servidor después del inicio de sesión exitoso
-      })
-      .catch(error => {
-        console.error('Error durante el registro:', error);
-        // Aquí puedes manejar los errores, por ejemplo, mostrar un mensaje al usuario
-      });
-
-    reset()
+    try {
+      setIsRegistered(await registerUser(newUser));
+    } catch (error) {
+      console.error("Error on register: ", error);
+      setRegisterError(error.message);
+    }
   };
 
 
@@ -86,14 +85,14 @@ const Register = () => {
             {/* Name */}
             <div className="mb-3">
               <Input
-              size="big"
-              id="name"
-              type="text"
-              label="Nombre"
-              placeholder="Ingresa tu nombre"
-              register={register}
-              validationSchema={{ required: "El nombre es requerido" }}
-              errors={errors}
+                size="big"
+                id="name"
+                type="text"
+                label="Nombre"
+                placeholder="Ingresa tu nombre"
+                register={register}
+                validationSchema={{ required: "El nombre es requerido" }}
+                errors={errors}
               />
             </div>
 

@@ -27,6 +27,32 @@ export const login = async (email, password) => {
 }
 
 
+// Register user
+export const registerUser = async ({name, last_name, username, email, password}) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/auth/register`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({name, last_name, username, email, password}),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error('Error on register user:', error);
+        throw error;
+    }
+}
+
+
+
 // Register animal
 export const addAnimal = async (formData, token) => {
     try {
@@ -49,7 +75,7 @@ export const addAnimal = async (formData, token) => {
 
     } catch (error) {
         console.error('Error trying to register an animal', error);
-        throw error; // Lanzar la excepción para que se propague hacia arriba
+        throw error; 
     }
 }
 
