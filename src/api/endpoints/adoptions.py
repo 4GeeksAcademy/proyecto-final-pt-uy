@@ -16,9 +16,10 @@ CORS(adoptions_bp)
 @jwt_required()
 def register_adoption():
     """
-    /adopciones/adopcion
-
     Registra una adopción.
+    
+    Endpoint:
+        POST /adopciones/adopcion
 
     Requiere un token JWT de administrador para acceder.
 

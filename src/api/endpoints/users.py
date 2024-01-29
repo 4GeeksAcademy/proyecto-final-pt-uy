@@ -49,6 +49,7 @@ def get_users():
     return jsonify(response_body), 200
 
 
+
 # ================= Get one user by id ================= #
 @users_bp.route('/usuario/<int:user_id>', methods=['GET'])
 @jwt_required()
@@ -69,6 +70,7 @@ def get_user(user_id):
     user_info["adopted_animals"] = adopted_animals_info
 
     return jsonify(user_info), 200
+
 
 
 # ================= Modify one user by id ================= #
@@ -111,6 +113,7 @@ def update_user(user_id):
     return jsonify({"message": "User updated successfully"}), 200
 
 
+
 # ================== Cambiar Contraseña (Usuario Logeado) ================== #
 @users_bp.route('/usuario/cambiar-contrasenia', methods=['POST'])
 @jwt_required()
@@ -150,8 +153,10 @@ def change_password():
     return jsonify({"message": "Contraseña cambiada exitosamente"}), 200
 
 
+
 # ================== Recuperar Contraseña (Usuario No Logeado) ================== #
 # TO-DO
+
 
 
 # ================== Banear o Desbanear Usuario ================== #
@@ -178,6 +183,7 @@ def ban_unban_user(user_id):
     db.session.commit()
 
     return jsonify({"message": "Estado de usuario cambiado exitosamente"}), 200
+
 
 
 # ================== Eliminar Usuario ================== #
