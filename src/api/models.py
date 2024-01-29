@@ -132,12 +132,14 @@ class Animals_images(db.Model):
             "animal_id": self.animal_id
         }
 
+
 class Testimony(db.Model):
     __tablename__ = "testimony"
     id = db.Column(db.Integer, primary_key=True)
     testimony_text = db.Column(db.String(400), nullable=False)
-    image_url = db.Column(db.String, unique=True)
+    image_url = db.Column(db.String)
     status = db.Column(db.Enum(TestimonyStatusEnum, name="testimony_status_enum"), nullable=False, default=TestimonyStatusEnum.PENDING)
+    adoption_id = db.Column(db.Integer, db.ForeignKey("adoption_users.id"), unique=True)
 
     def __repr__(self):
         return 'Testimony with id {} and status {}'.format(self.id, self.status)
@@ -147,8 +149,10 @@ class Testimony(db.Model):
             "id": self.id,
             "testimony_text": self.testimony_text,
             "image_url": self.image_url,
-            "status": self.status
+            "status": self.status,
+            "adoption_id": self.adoption_id
         }
+
 
 class Adoption_Users(db.Model):
     __tablename__ = "adoption_users"
@@ -158,7 +162,7 @@ class Adoption_Users(db.Model):
     animal_id = db.Column(db.Integer, db.ForeignKey("animals.id"), unique=True, nullable=False)
     animal_relationship = db.relationship(Animals)
     testimony_id = db.Column(db.Integer, db.ForeignKey("testimony.id"), unique=True)
-    testimony_relationship = db.relationship(Testimony)
+    testimony_relationship = db.relationship(Testimony, backref="adoption_users", uselist=False, foreign_keys=[testimony_id])
 
     def __repr__(self):
         return 'User with id {} has adopted an animal with id {} and wrote a testiomny with id {}'.format(self.user_id, self.animal_id, self.testimony_id)
