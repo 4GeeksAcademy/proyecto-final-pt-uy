@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import { UserContextProvider } from "./contexts/userContext.js";
+import { AnimalsContextProvider } from "./contexts/animalsContext.js";
 
 import LayoutWithNav from "./layoutWithNav.js";
 import LayoutWithoutNav from "./layoutWithoutNav.js";
@@ -41,35 +42,37 @@ const App = () => {
             <React.StrictMode>
                 <BrowserRouter basename={basename}>
                     <UserContextProvider>
-                        <Routes>
+                        <AnimalsContextProvider>
+                            <Routes>
 
-                            <Route element={<LayoutWithNav />}>
-                                <Route path="/" element={<Home />} />
-                                <Route path="/about" element={<AboutUs />} />
-                                <Route path="/animal-list" element={<AnimalList />} />
-                                <Route path="/animal-profile/:id" element={<AnimalProfile />} />
-                                <Route path="/edit-profile" element={<FormEditProfile />} />
-                                <Route path="/testimony" element={<FormTestimony />} />
-                                <Route path="/profile" element={<Profile />} />
-                                <Route path="/recomendations" element={<Recomendations />} />
-                                <Route path="*" element={<h1>Not found!</h1>} />
-                            </Route>
+                                <Route element={<LayoutWithNav />}>
+                                    <Route path="/" element={<Home />} />
+                                    <Route path="/about" element={<AboutUs />} />
+                                    <Route path="/animal-list" element={<AnimalList />} />
+                                    <Route path="/animal-profile/:id" element={<AnimalProfile />} />
+                                    <Route path="/edit-profile" element={<FormEditProfile />} />
+                                    <Route path="/testimony" element={<FormTestimony />} />
+                                    <Route path="/profile" element={<Profile />} />
+                                    <Route path="/recomendations" element={<Recomendations />} />
+                                    <Route path="*" element={<h1>Not found!</h1>} />
+                                </Route>
 
-                            <Route element={<LayoutWithoutNav />}>
-                                <Route path="/forgot-password" element={<ForgotPassword />} />
-                                <Route path="/login" element={<Login />} />
-                                <Route path="/register" element={<Register />} />
-                                <Route path="/new-password" element={<NewPassword />} />
-                            </Route>
+                                <Route element={<LayoutWithoutNav />}>
+                                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/register" element={<Register />} />
+                                    <Route path="/new-password" element={<NewPassword />} />
+                                </Route>
 
-                            <Route element={<LayoutDashAdmin />} >
-                                <Route path="/add-animal" element={<FormAddAnimal />} />
-                                <Route path="/edit-animals" element={<FormEditAnimals />} />
-                                <Route path="/table-animals" element={<TableAnimals />} />
-                                <Route path="/table-reviews" element={<TableReviews />} />
-                                <Route path="/table-users" element={<TableUsers />} />
-                            </Route>
-                        </Routes>
+                                <Route element={<LayoutDashAdmin />} >
+                                    <Route path="/add-animal" element={<FormAddAnimal />} />
+                                    <Route path="/edit-animals" element={<FormEditAnimals />} />
+                                    <Route path="/table-animals" element={<TableAnimals />} />
+                                    <Route path="/table-reviews" element={<TableReviews />} />
+                                    <Route path="/table-users" element={<TableUsers />} />
+                                </Route>
+                            </Routes>
+                        </AnimalsContextProvider>  
                     </UserContextProvider>
                 </BrowserRouter>
             </React.StrictMode>
