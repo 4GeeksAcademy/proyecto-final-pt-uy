@@ -153,8 +153,32 @@ body {
 }
 
 .animal-card {
-    width: 180px;
-    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 47%;
+    min-width: 150px;
+    max-width: 250px;
+    filter: drop-shadow(4px 4px 6px rgba(0,0,0,0.15));
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.animal-card:hover {
+    transform: translateY(-0.5rem);
+}
+
+.animal-card figure {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    height: 180px;
+}
+
+.animal-card figure img {
+    width: 100%;
+    object-fit: cover;
 }
 
 .animal-left-panel {
@@ -181,10 +205,23 @@ body {
 
     .banner {
         height: 378px;
+    }   
+}
+
+@media screen and (min-width: 992px) {
+    .animal-card {
+        width: 30%;
+        min-width: 180px;
+        max-width: 250px;
     }
 
+    .animal-card figure {
+        height: 200px;
+    }
+}
+
+@media screen and (min-width: 1400px) {
     .animal-card {
-        width: 234px;
-        height: 350px;
+        width: 23%;
     }
 }

@@ -1,7 +1,14 @@
 import React from 'react';
 
-import DashboardLeftPanel from '../component/dashboardLeftPanel';
-import DashboardNavbar from '../component/dashboardNavbar';
+import CardAnimal from '../component/cardAnimal';
+
+const animalOne = {
+  identificationCode: "RD0012",
+  name: "Lola",
+  gender: "female",
+  birthDate: "Tue, 12 Dec 2023 00:00:00 GMT",
+  imageUrl: "https://res.cloudinary.com/dnwfyqslx/image/upload/v1706385647/jddpb30yh9c6wovx07jh.jpg"
+};
 
 const AnimalList = () => {
   return (
@@ -68,11 +75,11 @@ const AnimalList = () => {
           </div>
 
           {/* Listado de cards */}
-          <div className="d-flex flex-wrap justify-content-center align-items-start gap-3 gap-md-4 my-4">
+          <div className="d-flex flex-wrap justify-content-center align-items-start gap-3 gap-lg-4 my-4">
             {
-              Array.from({length: 12}, (v, i) => i).map((card, index) => {
+              Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
                 return (
-                  <div className='animal-card bg-neutral-20 rounded shadow'></div>
+                  <CardAnimal key={index} animal={animalOne} />
                 )
               })
             }
@@ -82,19 +89,19 @@ const AnimalList = () => {
           <nav className='my-4'>
             <ul className="pagination justify-content-center">
               <li className="page-item disabled">
-                <button className='page-link' onClick={() => {}}>Anterior</button>
+                <button className='page-link' onClick={() => { }}>Anterior</button>
               </li>
               <li className="page-item">
-                <button className='page-link' onClick={() => {}}>1</button>
+                <button className='page-link' onClick={() => { }}>1</button>
               </li>
               <li className="page-item">
-                <button className='page-link' onClick={() => {}}>2</button>
+                <button className='page-link' onClick={() => { }}>2</button>
               </li>
               <li className="page-item">
-                <button className='page-link' onClick={() => {}}>3</button>
+                <button className='page-link' onClick={() => { }}>3</button>
               </li>
               <li className="page-item">
-                <button className='page-link' onClick={() => {}}>Siguiente</button>
+                <button className='page-link' onClick={() => { }}>Siguiente</button>
               </li>
             </ul>
           </nav>
