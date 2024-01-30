@@ -3,6 +3,7 @@ import React from 'react';
 import CardAnimal from '../component/cardAnimal';
 
 const animalOne = {
+  id: 12,
   identificationCode: "RD0012",
   name: "Lola",
   gender: "female",
