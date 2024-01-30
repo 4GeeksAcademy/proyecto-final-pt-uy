@@ -2,6 +2,14 @@ import React from 'react';
 
 import CardAnimal from '../component/cardAnimal';
 
+const animalOne = {
+  identificationCode: "RD0012",
+  name: "Lola",
+  gender: "female",
+  birthDate: "Tue, 12 Dec 2023 00:00:00 GMT",
+  imageUrl: "https://res.cloudinary.com/dnwfyqslx/image/upload/v1706385647/jddpb30yh9c6wovx07jh.jpg"
+};
+
 const AnimalList = () => {
   return (
     <div className='container d-flex flex-column my-4'>
@@ -71,7 +79,7 @@ const AnimalList = () => {
             {
               Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
                 return (
-                  <CardAnimal />
+                  <CardAnimal key={index} animal={animalOne} />
                 )
               })
             }
