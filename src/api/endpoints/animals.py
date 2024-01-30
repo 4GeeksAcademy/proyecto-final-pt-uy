@@ -183,6 +183,9 @@ def get_animal(animal_id):
 
     # Obtener solo las URL de las imágenes
     image_urls = [image.image_url for image in images_query]
+    # Si el animal no tiene al menos una imagen, se envía una imagen con el logo
+    if image_urls.len < 1:
+        image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
 
     # Agregar las URLs al objeto del animal
     serialized_animal['image_urls'] = image_urls
