@@ -81,14 +81,9 @@ export const addAnimal = async (formData, token) => {
 
 
 // Get all animals
-export const getAnimalList = async (token) => {
+export const getAnimalList = async (requestParams) => {
     try {
-        const response = await fetch(`${apiUrlBase}/animales`, {
-            method: "GET",
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-        });
+        const response = await fetch(`${apiUrlBase}/animales?${requestParams}`);
 
         if (!response.ok) {
             const errorData = await response.json();

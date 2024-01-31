@@ -16,14 +16,14 @@ const storeInitialState = {
     sizes: {small: true, medium: true, large: true, undefined: true}
   },
   sorting: {
-    sortOrder: null,
-    sortBy: null
+    sortOrder: "desc",
+    sortBy: "id"
   },
   pagination: {
     limit: 12,
     offset: 0,
-    totalPages: 0,
-    currentPage: 0,
+    totalPages: 1,
+    currentPage: 1,
     totalAnimals: 0
   },
   isLoading: false,
@@ -90,6 +90,40 @@ export function AnimalsContextProvider({ children }) {
           }))
         },
         setAnimals: async () => {
+          const page = store.pagination.currentPage;
+          const perPage = store.pagination.limit;
+          const sortBy = store.sorting.sortBy;
+          const sortOrder = store.sorting.sortOrder;
+          const typesArray = [];
+          for (const type in store.filters.types) {
+            if (store.filters.types[type]) {
+              typesArray.push(type)
+            }
+          }
+          const gendersArray = [];
+          for (const gender in store.filters.genders) {
+            if (store.filters.genders[gender]) {
+              gendersArray.push(gender)
+            }
+          }
+          const sizesArray = [];
+          for (const size in store.filters.sizes) {
+            if (store.filters.sizes[size]) {
+              sizesArray.push(size)
+            }
+          }
+
+          let requestParams = `page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`;
+          if (typesArray.length > 0) {
+            requestParams = requestParams + `&types=${typesArray.join()}`
+          }
+          if (gendersArray.length > 0) {
+            requestParams = requestParams + `&genders=${gendersArray.join()}`
+          }
+          if (sizesArray.length > 0) {
+            requestParams = requestParams + `&sizes=${sizesArray.join()}`
+          }
+
           setStore(prevState => ({ 
             ...prevState, 
             error: "",
@@ -97,7 +131,7 @@ export function AnimalsContextProvider({ children }) {
           }));
     
           try {
-            const data = await getAnimalList();
+            const data = await getAnimalList(requestParams);
             setStore(prevState => ({ 
               ...prevState, 
               animals: data.result,
