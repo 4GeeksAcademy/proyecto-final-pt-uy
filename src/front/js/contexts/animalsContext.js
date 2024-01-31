@@ -21,7 +21,7 @@ const storeInitialState = {
     sortBy: "publication_date", // posibles valores: "id", "name", "birth_date", "publication_date"
   },
   pagination: {
-    limit: 2,
+    limit: 12,
     offset: 0,
     totalPages: 1,
     currentPage: 1,
