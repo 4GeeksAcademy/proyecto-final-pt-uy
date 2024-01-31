@@ -9,10 +9,11 @@ export default function CardAnimal({ animal = {} }) {
     if (animal.gender) {
         switch (animal.gender) {
             case "female":
-                sex = "Hembra"
+                sex = "Hembra";
                 break;
             case "male":
-                sex = "Macho"
+                sex = "Macho";
+                break;
             default:
                 sex = "s. d."
                 break;
