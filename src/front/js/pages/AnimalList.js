@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { useAnimalsContext } from '../contexts/animalsContext';
 
 import AnimalListLeftPanel from '../component/animalListLeftPanel';
 import CardAnimal from '../component/cardAnimal';
 
-const animalOne = {
-  id: 12,
-  identificationCode: "RD0012",
-  name: "Lola",
-  gender: "female",
-  birthDate: "Tue, 12 Dec 2023 00:00:00 GMT",
-  imageUrl: "https://res.cloudinary.com/dnwfyqslx/image/upload/v1706385647/jddpb30yh9c6wovx07jh.jpg"
-};
 
 const AnimalList = () => {
+  const {store: {animals, pagination, isLoading, error}, actions: {setAnimals}} = useAnimalsContext();
+
+  useEffect(() => {
+    setAnimals();
+    
+  }, []);
+
   return (
     <div className='container d-flex flex-column my-4'>
       {/* Banner */}
@@ -36,7 +37,7 @@ const AnimalList = () => {
           </div>
 
           <AnimalListLeftPanel />
-          
+
         </div>
 
 
@@ -49,7 +50,7 @@ const AnimalList = () => {
                 <i className="fa-solid fa-filter"></i> Filtrar
               </button>
 
-              <p className='d-none d-md-flex fs-7 fw-semibold text-neutral-40 m-0'>X peluditos</p>
+              <p className='d-none d-md-flex fs-7 fw-semibold text-neutral-40 m-0'>{`${pagination.totalAnimals} peluditos`}</p>
             </div>
 
             <nav className="d-flex justify-content-start justify-content-md-end flex-grow-1 fw-medium">
@@ -72,15 +73,16 @@ const AnimalList = () => {
 
           {/* Cantidad de peluditos (visible en Mobile) */}
           <div className='d-flex d-md-none w-100 my-2'>
-            <p className='fs-7 fw-semibold text-neutral-40 m-0'>X peluditos</p>
+            <p className='fs-7 fw-semibold text-neutral-40 m-0'>{`${pagination.totalAnimals} peluditos`}</p>
           </div>
 
           {/* Listado de cards */}
           <div className="d-flex flex-wrap justify-content-center align-items-start gap-3 gap-lg-4 my-4">
             {
-              Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
+              animals &&
+              animals.map((animal) => {
                 return (
-                  <CardAnimal key={index} animal={animalOne} />
+                  <CardAnimal key={animal.id} animal={animal} />
                 )
               })
             }

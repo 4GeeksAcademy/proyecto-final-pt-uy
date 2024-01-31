@@ -20,8 +20,8 @@ export default function CardAnimal({ animal = {} }) {
     }
 
     let age = "s. d."; // "s. d." significa "sin datos"
-    if (animal.birthDate) {
-        const birthDateObj = new Date(animal.birthDate);
+    if (animal.birth_date) {
+        const birthDateObj = new Date(animal.birth_date);
         const timeDifference = Date.now() - birthDateObj.getTime();
 
         const weeks = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
@@ -45,7 +45,6 @@ export default function CardAnimal({ animal = {} }) {
     return (
         <div className="animal-card bg-white rounded-3 p-2" onClick={() => navigate(`/animal-profile/${animal.id}`)}>
             <figure className="rounded-3">
-                {/* TO-DO: Agregar imagen por defecto para casos donde no tenga imagen */}
                 <img src={animal.image_urls[0]} />
             </figure>
             <p className="fw-semibold fs-5 mb-1">{`${animal.identification_code} ${animal.name}`}</p>
