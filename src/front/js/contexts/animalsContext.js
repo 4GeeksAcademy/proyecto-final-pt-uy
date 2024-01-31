@@ -41,10 +41,40 @@ export function AnimalsContextProvider({ children }) {
     // =============== ACTIONS ================= //
     // Contiene las funciones que modifican el store.
     const actions = {
-        setFilters: (filters) => {
+        setTypes: (payload) => {
           return setStore(prevState => ({ 
             ...prevState, 
-            filters: filters 
+            filters: {
+              ...prevState.filters,
+              types: {
+                ...prevState.filters.types,
+                ...payload
+              }
+            }
+          }))
+        },
+        setGenders: (payload) => {
+          return setStore(prevState => ({ 
+            ...prevState, 
+            filters: {
+              ...prevState.filters,
+              genders: {
+                ...prevState.filters.genders,
+                ...payload
+              }
+            }
+          }))
+        },
+        setSizes: (payload) => {
+          return setStore(prevState => ({ 
+            ...prevState, 
+            filters: {
+              ...prevState.filters,
+              sizes: {
+                ...prevState.filters.sizes,
+                ...payload
+              }
+            }
           }))
         },
         setSorting: (sorting) => {

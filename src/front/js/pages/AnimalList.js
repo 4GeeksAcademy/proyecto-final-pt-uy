@@ -114,7 +114,7 @@ const AnimalList = () => {
               })
             }
 
-            {/* Si no está esperando respuesta, no recibió error y NO hay animales en el store */}
+            {/* Si no está esperando respuesta, no recibió error y la lista de animales del store está vacía */}
             {
               !isLoading && !error && !animals && 
               <div className='d-flex flex-column w-100 align-items-center'>
