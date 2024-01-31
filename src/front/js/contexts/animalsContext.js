@@ -18,7 +18,7 @@ const storeInitialState = {
   },
   sorting: {
     sortOrder: "desc",
-    sortBy: "id"
+    sortBy: "publication_date", // posibles valores: "id", "name", "birth_date", "publication_date"
   },
   pagination: {
     limit: 12,
@@ -78,16 +78,16 @@ export function AnimalsContextProvider({ children }) {
         }
       }))
     },
-    setSorting: (sorting) => {
+    setSorting: (payload) => {
       return setStore(prevState => ({
         ...prevState,
-        sorting: sorting
+        sorting: payload
       }))
     },
-    setPagination: (pagination) => {
+    setPagination: (payload) => {
       return setStore(prevState => ({
         ...prevState,
-        pagination: pagination
+        pagination: payload
       }))
     },
     setAnimals: async () => {

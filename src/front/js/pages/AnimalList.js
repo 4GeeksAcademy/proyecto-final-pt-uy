@@ -11,7 +11,7 @@ import notFoundImg from '../../img/notFound.png'
 
 
 const AnimalList = () => {
-  const { store: { animals, filters, pagination, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
+  const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setSorting } } = useAnimalsContext();
 
   useEffect(() => {
     setAnimals();
@@ -19,7 +19,7 @@ const AnimalList = () => {
 
   useEffect(() => {
     setAnimals();
-  }, [filters]);
+  }, [filters, sorting]);
   
 
   return (
@@ -69,9 +69,12 @@ const AnimalList = () => {
                       Ordenar
                     </button>
                     <ul className="dropdown-menu">
-                      <li><a className="dropdown-item" href="#">Action</a></li>
-                      <li><a className="dropdown-item" href="#">Another action</a></li>
-                      <li><a className="dropdown-item" href="#">Something else here</a></li>
+                      <li><p className="dropdown-item" onClick={() => setSorting({sortOrder: "desc", sortBy: "publication_date"})} >Últimos publicados</p></li>
+                      <li><p className="dropdown-item" onClick={() => setSorting({sortOrder: "asc", sortBy: "publication_date"})} >Primeros publicados</p></li>
+                      <li><p className="dropdown-item" onClick={() => setSorting({sortOrder: "desc", sortBy: "birth_date"})} >Por edad (menor a mayor)</p></li>
+                      <li><p className="dropdown-item" onClick={() => setSorting({sortOrder: "asc", sortBy: "birth_date"})} >Por edad (mayor a menor)</p></li>
+                      <li><p className="dropdown-item" onClick={() => setSorting({sortOrder: "asc", sortBy: "name"})} >Por nombre (A-Z) </p></li>
+                      <li><p className="dropdown-item" onClick={() => setSorting({sortOrder: "desc", sortBy: "name"})} >Por nombre (Z-A) </p></li>
                     </ul>
                   </div>
                 </li>
