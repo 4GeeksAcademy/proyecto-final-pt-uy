@@ -11,12 +11,16 @@ import notFoundImg from '../../img/notFound.png'
 
 
 const AnimalList = () => {
-  const { store: { animals, pagination, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
+  const { store: { animals, filters, pagination, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
 
   useEffect(() => {
     setAnimals();
-
   }, []);
+
+  useEffect(() => {
+    setAnimals();
+  }, [filters]);
+  
 
   return (
     <div className='container d-flex flex-column my-4'>
