@@ -45,7 +45,10 @@ export default function CardAnimal({ animal = {} }) {
     return (
         <div className="animal-card bg-white rounded-3 p-2" onClick={() => navigate(`/animal-profile/${animal.id}`)}>
             <figure className="rounded-3">
-                <img src={animal.image_urls[0]} />
+                {
+                    animal.image_urls &&
+                        <img src={animal.image_urls[0]} />
+                }
             </figure>
             <p className="fw-semibold fs-5 mb-1">{`${animal.identification_code} ${animal.name}`}</p>
 

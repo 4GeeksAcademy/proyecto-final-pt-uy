@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import backgrondColors_image from "../../img/backgroundColors_image.png"
@@ -6,18 +6,22 @@ import home_image from "../../img/home_image.png"
 import home_banner_bg from "../../img/homeBanner_background.png"
 import home_banner_img from "../../img/homeBanner_image.png"
 import paw_image from "../../img/pawBanner_image.png"
+import loadingImg from '../../img/loading.gif';
+import errorImg from '../../img/error.png';
+import notFoundImg from '../../img/notFound.png';
+
+import { useAnimalsContext } from "../contexts/animalsContext";
 
 import CardAnimal from '../component/cardAnimal';
 
-const animalOne = {
-	identificationCode: "RD0012",
-	name: "Lola",
-	gender: "female",
-	birthDate: "Tue, 12 Dec 2023 00:00:00 GMT",
-	imageUrl: "https://res.cloudinary.com/dnwfyqslx/image/upload/v1706385647/jddpb30yh9c6wovx07jh.jpg"
-};
 
 export const Home = () => {
+	const { store: { animals, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
+
+	useEffect(() => {
+		setAnimals();
+	}, []);
+
 
 	return (
 		<div className="mb-5">
@@ -52,16 +56,51 @@ export const Home = () => {
 
 				{/*4 dogs cards*/}
 				<div className="d-flex flex-wrap justify-content-evenly align-items-start gap-3 gap-lg-4 my-4">
+					{/* Mientras espera la respuesta del backend */}
 					{
-						Array.from({ length: 8 }, (v, i) => i).map((card, index) => {
+						isLoading &&
+						<div className='d-flex flex-column w-100 align-items-center'>
+							<figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "250px" }}>
+								<img className='w-100' src={loadingImg} />
+							</figure>
+							<p className='fw-semibold'>Cargando...</p>
+						</div>
+					}
+
+					{/* Si se recibió un error de parte del backend */}
+					{
+						!isLoading && error &&
+						<div className='d-flex flex-column w-100 align-items-center'>
+							<figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
+								<img className='w-100' src={errorImg} />
+							</figure>
+							<p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
+						</div>
+					}
+
+					{/* Si no está esperando respuesta, no recibió error y hay animales en el store */}
+					{
+						!isLoading && !error && animals &&
+						animals.filter((animal, index) => index < 8).map((animal) => {
 							return (
-								<CardAnimal key={index} animal={animalOne} />
+								<CardAnimal key={animal.id} animal={animal} />
 							)
 						})
 					}
+
+					{/* Si no está esperando respuesta, no recibió error y la lista de animales del store está vacía */}
+					{
+						!isLoading && !error && animals.length === 0 &&
+						<div className='d-flex flex-column w-100 align-items-center'>
+							<figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "200px" }}>
+								<img className='w-100' src={notFoundImg} />
+							</figure>
+							<p className='fw-semibold text-center'>No hay peluditos que mostrar en este momento.</p>
+						</div>
+					}
 				</div>
 				{/*4 cats cards*/}
-				
+
 
 				<Link to="/animal-list" className="text-decoration-none d-grid">
 					<button className="btn btn-outline-primary rounded-pill px-4 py-2 mt-3">Ver Más <i className="ms-2 fa-solid fa-angle-right"></i></button>
@@ -99,7 +138,7 @@ export const Home = () => {
 					{
 						Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
 							return (
-								<CardAnimal key={index} animal={animalOne} />
+								<CardAnimal key={index} animal={animals[0]} />
 							)
 						})
 					}
