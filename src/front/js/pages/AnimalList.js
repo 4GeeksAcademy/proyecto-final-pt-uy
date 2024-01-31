@@ -6,6 +6,7 @@ import AnimalListLeftPanel from '../component/animalListLeftPanel';
 import CardAnimal from '../component/cardAnimal';
 
 import loadingImg from '../../img/loading.gif';
+import errorImg from '../../img/error.png';
 
 
 const AnimalList = () => {
@@ -83,7 +84,7 @@ const AnimalList = () => {
             {
               isLoading &&
               <div className='d-flex flex-column w-100 align-items-center'>
-                <figure className='d-flex justify-content-center overflow-hidden' style={{width: "220px"}}>
+                <figure className='d-flex justify-content-center overflow-hidden w-100' style={{maxWidth: "250px"}}>
                   <img className='w-100' src={loadingImg} />
                 </figure>
                 <p className='fw-semibold'>Cargando...</p>
@@ -91,13 +92,24 @@ const AnimalList = () => {
             }
 
             {
-              animals && !isLoading &&
+              !isLoading && error && 
+              <div className='d-flex flex-column w-100 align-items-center'>
+                <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{maxWidth: "280px"}}>
+                  <img className='w-100' src={errorImg} />
+                </figure>
+                <p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
+              </div>
+            }
+
+            {
+              !isLoading && !error && animals && 
               animals.map((animal) => {
                 return (
                   <CardAnimal key={animal.id} animal={animal} />
                 )
               })
             }
+
           </div>
 
           {/* Paginado */}
