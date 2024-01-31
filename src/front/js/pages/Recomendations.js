@@ -14,7 +14,7 @@ const Recomendations = () => {
     <div className=''>
       <div>
         {/*Intro*/}
-        <div className="mb-5" style={{ backgroundImage: `url(${backgrondColors_image})`, backgroundPosition: "center top" }}>
+        <div className="mb-5" style={{ backgroundImage: `url(${backgrondColors_image})`, backgroundPosition: "center top", backgroundSize: "cover" }}>
           <div className="container d-flex flex-column flex-lg-row pt-5">
             <div className="col-lg-6 mb-3">
               <h1 className="fw-light mb-0">Salvar Una Vida</h1>
