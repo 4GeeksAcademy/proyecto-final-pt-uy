@@ -1,4 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+import { useUserContext } from '../contexts/userContext';
+import { getAnimalList } from '../../client-API/backendAPI';
+
 
 // Crear el contexto para el store
 export const AnimalsContext = createContext(null);
@@ -6,7 +10,6 @@ export const AnimalsContext = createContext(null);
 // Estado inicial del store
 const storeInitialState = {
   animals: [],
-  animalDetails: {},
   filters: {
     types: {dog: true, cat: true},
     genders: {male: true, female: true},
@@ -22,39 +25,50 @@ const storeInitialState = {
     totalPages: 0,
     currentPage: 0,
     totalAnimals: 0
-  }
+  },
+  isLoading: false,
+  error: ""
 };
 
 // =============== PROVEEDOR DEL CONTEXTO ================ //
 export function AnimalsContextProvider({ children }) {
+    const { store: {token} } = useUserContext();
+
     // ================== STORE ================== //
     // Contiene los datos del Contexto.
     const [store, setStore] = useState(storeInitialState);
-  
    
     // =============== ACTIONS ================= //
     // Contiene las funciones que modifican el store.
     const actions = {
-        setAnimals: (animals) => {
+        setFilters: (filters) => {
           return setStore(prevState => ({ 
             ...prevState, 
-            animals: animals 
+            filters: filters 
           }))
         },
-        setAnimalDetails: (animalDetails) => {
-          return setStore(prevState => ({
+        setSorting: (sorting) => {
+          return setStore(prevState => ({ 
             ...prevState, 
-            animalDetails: animalDetails
+            sorting: sorting 
           }))
         },
-        // TO-DO: crear actions para gestionar filtrado, ordenamiento y paginado
+        setPagination: (pagination) => {
+          return setStore(prevState => ({ 
+            ...prevState, 
+            pagination: pagination 
+          }))
+        },
     }
+
+
   
     return (
       <AnimalsContext.Provider value={{ store, actions }}>
         {children}
       </AnimalsContext.Provider>
     );
+
   };
   
   
