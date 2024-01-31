@@ -192,6 +192,23 @@ body {
     background-color: #EBEEEF;
 }
 
+.scroll-bar::-webkit-scrollbar {
+    display: block;
+    overflow: auto;
+    width: 6px;
+    height: 8px;
+    background-color: white;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb {
+    background: #003459;
+    border-radius: 6px;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb:active {
+    background-color: #EEC77E;
+}
+
 
 @media screen and (min-width: 768px) {
     .image-panel {
