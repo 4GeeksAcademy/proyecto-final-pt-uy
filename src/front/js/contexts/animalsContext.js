@@ -59,6 +59,35 @@ export function AnimalsContextProvider({ children }) {
             pagination: pagination 
           }))
         },
+        setAnimals: async () => {
+          setStore(prevState => ({ 
+            ...prevState, 
+            error: "",
+            isLoading: true
+          }));
+    
+          try {
+            const data = await getAnimalList();
+            setStore(prevState => ({ 
+              ...prevState, 
+              animals: data.result,
+              pagination: {
+                ...prevState.pagination,
+                totalAnimals: data.total_animals,
+              },
+              error: "",
+              isLoading: false
+            }));
+            
+          } catch (error) {
+            console.error("Error fetching animals: ", error);
+            setStore(prevState => ({ 
+              ...prevState, 
+              error: error.message,
+              isLoading: false
+            }));
+          }
+        }
     }
 
 
