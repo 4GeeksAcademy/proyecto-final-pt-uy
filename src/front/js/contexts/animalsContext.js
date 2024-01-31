@@ -12,8 +12,8 @@ const storeInitialState = {
   animals: [],
   filters: {
     types: {dog: true, cat: true},
-    genders: {male: true, female: true},
-    sizes: {small: true, medium: true, large: true}
+    genders: {male: true, female: true, undefined: true},
+    sizes: {small: true, medium: true, large: true, undefined: true}
   },
   sorting: {
     sortOrder: null,

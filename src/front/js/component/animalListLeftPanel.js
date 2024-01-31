@@ -74,6 +74,19 @@ export default function AnimalListLeftPanel() {
                     Hembra
                 </label>
                 </div>
+
+                <div className="form-check">
+                <input 
+                    className="form-check-input" 
+                    type="checkbox" 
+                    id="genderUndefined" 
+                    checked={filters.genders.undefined} 
+                    onChange={() => setGenders({undefined: !filters.genders.undefined})}
+                />
+                <label className="form-check-label" htmlFor="genderUndefined">
+                    Sin datos
+                </label>
+                </div>
             </div>
 
             {/* Size section */}
@@ -117,6 +130,19 @@ export default function AnimalListLeftPanel() {
                 <label className="form-check-label" htmlFor="large">
                     Grande
                 </label>
+                </div>
+
+                <div className="form-check">
+                    <input 
+                        className="form-check-input" 
+                        type="checkbox" 
+                        id="sizeUndefined" 
+                        checked={filters.sizes.undefined} 
+                        onChange={() => setSizes({undefined: !filters.sizes.undefined})}
+                    />
+                    <label className="form-check-label" htmlFor="sizeUndefined">
+                        Sin datos
+                    </label>
                 </div>
             </div>
         </div>
