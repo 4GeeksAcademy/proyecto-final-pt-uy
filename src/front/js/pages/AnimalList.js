@@ -7,6 +7,7 @@ import CardAnimal from '../component/cardAnimal';
 
 import loadingImg from '../../img/loading.gif';
 import errorImg from '../../img/error.png';
+import notFoundImg from '../../img/notFound.png'
 
 
 const AnimalList = () => {
@@ -81,6 +82,7 @@ const AnimalList = () => {
 
           {/* Listado de cards */}
           <div className="d-flex flex-wrap justify-content-center align-items-start gap-3 gap-lg-4 my-4">
+            {/* Mientras espera la respuesta del backend */}
             {
               isLoading &&
               <div className='d-flex flex-column w-100 align-items-center'>
@@ -91,6 +93,7 @@ const AnimalList = () => {
               </div>
             }
 
+            {/* Si se recibió un error de parte del backend */}
             {
               !isLoading && error && 
               <div className='d-flex flex-column w-100 align-items-center'>
@@ -101,6 +104,7 @@ const AnimalList = () => {
               </div>
             }
 
+            {/* Si no está esperando respuesta, no recibió error y hay animales en el store */}
             {
               !isLoading && !error && animals && 
               animals.map((animal) => {
@@ -108,6 +112,17 @@ const AnimalList = () => {
                   <CardAnimal key={animal.id} animal={animal} />
                 )
               })
+            }
+
+            {/* Si no está esperando respuesta, no recibió error y NO hay animales en el store */}
+            {
+              !isLoading && !error && !animals && 
+              <div className='d-flex flex-column w-100 align-items-center'>
+                <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{maxWidth: "200px"}}>
+                  <img className='w-100' src={notFoundImg} />
+                </figure>
+                <p className='fw-semibold text-center'>No encontramos peluditos <br/>según los filtros activos.</p>
+              </div>
             }
 
           </div>
