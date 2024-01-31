@@ -1,6 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function CardAnimal({animal={}}) {
+
+export default function CardAnimal({ animal = {} }) {
+    const navigate = useNavigate();
+
     let sex = "s. d." // "s. d." significa "sin datos"
     if (animal.gender) {
         switch (animal.gender) {
@@ -16,14 +20,14 @@ export default function CardAnimal({animal={}}) {
     }
 
     let age = "s. d."; // "s. d." significa "sin datos"
-    if (animal.birthDate) {
-        const birthDateObj = new Date(animal.birthDate);
+    if (animal.birth_date) {
+        const birthDateObj = new Date(animal.birth_date);
         const timeDifference = Date.now() - birthDateObj.getTime();
 
         const weeks = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
         const months = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 30));
         const years = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 365));
-        
+
         if (years > 1) {
             age = `${years} años`;
         } else if (years === 1) {
@@ -39,12 +43,11 @@ export default function CardAnimal({animal={}}) {
 
 
     return (
-        <div className="animal-card bg-white rounded-3 p-2">
+        <div className="animal-card bg-white rounded-3 p-2" onClick={() => navigate(`/animal-profile/${animal.id}`)}>
             <figure className="rounded-3">
-                {/* TO-DO: Agregar imagen por defecto para casos donde no tenga imagen */}
-                <img src={animal.imageUrl} /> 
+                <img src={animal.image_urls[0]} />
             </figure>
-            <p className="fw-semibold fs-5 mb-1">{`${animal.identificationCode} ${animal.name}`}</p>
+            <p className="fw-semibold fs-5 mb-1">{`${animal.identification_code} ${animal.name}`}</p>
 
             <div className="d-flex flex-column flex-xl-row w-100 align-items-center mb-2">
                 <p className="text-neutral-40 fs-7 text-center w-100 mb-0">Sexo:

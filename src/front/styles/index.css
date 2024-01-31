@@ -185,6 +185,13 @@ body {
     max-width: 75vw;
 }
 
+.dropdown-item {
+    cursor: pointer;
+}
+.dropdown-item:hover {
+    background-color: #EBEEEF;
+}
+
 .scroll-bar::-webkit-scrollbar {
     display: block;
     overflow: auto;
@@ -196,9 +203,9 @@ body {
 .scroll-bar::-webkit-scrollbar-thumb {
     background: #003459;
     border-radius: 6px;
-  }
+}
 
-  .scroll-bar::-webkit-scrollbar-thumb:active {
+.scroll-bar::-webkit-scrollbar-thumb:active {
     background-color: #EEC77E;
 }
 

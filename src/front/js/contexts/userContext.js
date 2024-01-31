@@ -1,7 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import {} from "../../client-API/backendAPI";
-
 // Crear el contexto para el store
 export const UserContext = createContext(null);
 
@@ -13,7 +11,6 @@ const storeInitialState = {
     role: "",
   },
   token: "",
-  animals: [],
 };
 
 // =============== PROVEEDOR DEL CONTEXTO ================ //
@@ -26,7 +23,6 @@ export function UserContextProvider({ children }) {
     // =============== ACTIONS ================= //
     // Contiene las funciones que modifican el store.
     const actions = {
-        setAnimals: (animals) => setStore(prevState => ({ ...prevState, animals: animals })),
         setToken: (token) => setStore(prevState => ({ ...prevState, token: token })),
         setUser: (userInfo) => {
           return setStore(prevState => ({ 
@@ -38,23 +34,7 @@ export function UserContextProvider({ children }) {
             }
           }))
         },
-        synkWithLocalStorage: () => {
-          const storedUser = localStorage.getItem("user");
-          const storedToken = localStorage.getItem("token");
-
-          if (storedUser && storedToken) {
-            setStore(prevState => ({ ...prevState, user: JSON.parse(storedUser), token: storedToken }));
-          }
-        }
     }
-  
-  
-    // Sincronizar el estado global con los datos del localstorage si este tiene datos
-    useEffect(() => {
-      if (localStorage.getItem("user") && localStorage.getItem("token")) {
-        actions.synkWithLocalStorage();
-      }
-    }, []); 
     
   
     return (

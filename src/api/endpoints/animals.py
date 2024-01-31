@@ -1,3 +1,4 @@
+from operator import or_
 from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_cors import CORS
@@ -118,48 +119,98 @@ def register_animal():
 
 
 
-# =============== Get All Animals ================== #
+# # =============== Get All Animals ================== #
 @animals_bp.route('/', methods=['GET'])
-@jwt_required()
 def get_animals():
     """
     /animales
 
-    Devuelve todos los registros de la tabla Animales.   
+    Devuelve todos los registros de la tabla Animales con opciones de filtrado, ordenamiento y paginado.
     """
 
-    animals_query = Animals.query.all()
+    # Obtener parámetros de consulta
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=12, type=int)
+    sort_by = request.args.get('sort_by', default='id', type=str)
+    sort_order = request.args.get('sort_order', default='asc', type=str)
+
+    # Filtrado por estado, tipo, género y tamaño
+    statuses = request.args.get('statuses')
+    types = request.args.get('types')
+    genders = request.args.get('genders')
+    sizes = request.args.get('sizes')
+
+    # Convertir cadenas separadas por comas en listas
+    statuses = statuses.split(',') if statuses else []
+    types = types.split(',') if types else []
+    genders = genders.split(',') if genders else []
+    sizes = sizes.split(',') if sizes else []
+
+    # Considerar "undefined" como None
+    genders = [None if gender == 'undefined' else gender for gender in genders]
+    sizes = [None if size == 'undefined' else size for size in sizes]
+
+    # Construir la consulta base
+    query = Animals.query
+
+    # Filtrar por estado
+    if statuses:
+        query = query.filter(Animals.status.in_(statuses))
+
+    # Filtrar por tipo
+    if types:
+        query = query.filter(Animals.type.in_(types))
+
+    # Filtrar por género
+    if genders:
+        if None in genders:
+            query = query.filter(or_(Animals.gender.in_(genders), Animals.gender.is_(None)))
+        else:
+            query = query.filter(Animals.gender.in_(genders))
+
+    # Filtrar por tamaño
+    if sizes: 
+        if None in sizes:
+            query = query.filter(or_(Animals.size.in_(sizes), Animals.size.is_(None)))
+        else:
+            query = query.filter(Animals.size.in_(sizes))
+
+    # Ordenar
+    if sort_by and sort_order:
+        if sort_order.lower() == 'asc':
+            query = query.order_by(getattr(Animals, sort_by).asc())
+        elif sort_order.lower() == 'desc':
+            query = query.order_by(getattr(Animals, sort_by).desc())
+
+    # Paginar
+    paginated_query = query.paginate(page=page, per_page=per_page)
+
+    # Serializar los resultados
     serialized_animals = []
-
-    for animal in animals_query:
-        # Serializar el animal
+    for animal in paginated_query.items:
         serialized_animal = animal.serialize()
-
-        # Obtener las imágenes asociadas al animal
         images_query = Animals_images.query.filter_by(animal_id=animal.id).all()
-
-        # Obtener solo las URL de las imágenes
         image_urls = [image.image_url for image in images_query]
-
-        # Agregar las URLs al objeto del animal
+        if not image_urls:
+            image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
         serialized_animal['image_urls'] = image_urls
-
-        # Agregar el animal serializado a la lista resultante
         serialized_animals.append(serialized_animal)
 
+    # Construir la respuesta
     response_body = {
-         "msg": "ok",
-         "total_animals": len(serialized_animals),
-         "result": serialized_animals
-     }
-    
+        "msg": "ok",
+        "total_animals": paginated_query.total,
+        "total_pages": paginated_query.pages,
+        "current_page": paginated_query.page,
+        "result": serialized_animals
+    }
+
     return jsonify(response_body), 200
 
 
 
 # =============== Get One Animal by Id ================== #
 @animals_bp.route('/animal/<int:animal_id>', methods=['GET'])
-@jwt_required()
 def get_animal(animal_id):
     """
     /animales/animal/22 (por ejemplo)
@@ -180,11 +231,15 @@ def get_animal(animal_id):
 
     # Obtener solo las URL de las imágenes
     image_urls = [image.image_url for image in images_query]
+    # Si el animal no tiene al menos una imagen, se envía una imagen con el logo
+    if len(image_urls) < 1:
+        image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
 
     # Agregar las URLs al objeto del animal
     serialized_animal['image_urls'] = image_urls
 
     return jsonify(serialized_animal), 200
+
 
 
 # ================== Eliminar Animal (Solo para Administradores) ================== #
@@ -221,6 +276,7 @@ def delete_animal(animal_id):
     db.session.commit()
 
     return jsonify({"msg": "Peludito eliminado exitosamente"}), 200
+
 
 
 # ================== Actualizar Animal (Solo para Administradores) ================== #
@@ -281,3 +337,47 @@ def update_animal(animal_id):
     }
 
     return jsonify(response_body), 200
+
+
+
+
+# # =============== Get All Animals ================== #
+# (versión sin parámetros de filtrado, paginado u ordenamiento)
+
+# @animals_bp.route('/', methods=['GET'])
+# def get_animals():
+#     """
+#     /animales
+
+#     Devuelve todos los registros de la tabla Animales.   
+#     """
+
+#     animals_query = Animals.query.all()
+#     serialized_animals = []
+
+#     for animal in animals_query:
+#         # Serializar el animal
+#         serialized_animal = animal.serialize()
+
+#         # Obtener las imágenes asociadas al animal
+#         images_query = Animals_images.query.filter_by(animal_id=animal.id).all()
+
+#         # Obtener solo las URL de las imágenes
+#         image_urls = [image.image_url for image in images_query]
+#         # Si el animal no tiene al menos una imagen, se envía una imagen con el logo
+#         if len(image_urls) < 1:
+#             image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
+
+#         # Agregar las URLs al objeto del animal
+#         serialized_animal['image_urls'] = image_urls
+
+#         # Agregar el animal serializado a la lista resultante
+#         serialized_animals.append(serialized_animal)
+
+#     response_body = {
+#          "msg": "ok",
+#          "total_animals": len(serialized_animals),
+#          "result": serialized_animals
+#      }
+    
+#     return jsonify(response_body), 200

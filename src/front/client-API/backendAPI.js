@@ -8,8 +8,8 @@ export const login = async (email, password) => {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({email, password}),
+            },
+            body: JSON.stringify({ email, password }),
         });
 
         if (!response.ok) {
@@ -18,7 +18,7 @@ export const login = async (email, password) => {
         }
 
         const data = await response.json();
-        return {token: data.token, user: data.user};
+        return { token: data.token, user: data.user };
 
     } catch (error) {
         console.error('Error fetching token:', error);
@@ -28,14 +28,14 @@ export const login = async (email, password) => {
 
 
 // Register user
-export const registerUser = async ({name, last_name, username, email, password}) => {
+export const registerUser = async ({ name, last_name, username, email, password }) => {
     try {
         const response = await fetch(`${apiUrlBase}/auth/register`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({name, last_name, username, email, password}),
+            },
+            body: JSON.stringify({ name, last_name, username, email, password }),
         });
 
         if (!response.ok) {
@@ -69,14 +69,35 @@ export const addAnimal = async (formData, token) => {
             const errorData = data;
             throw new Error(errorData.msg);
         }
-        
+
         // Returns the registered animal
         return data.result;
 
     } catch (error) {
         console.error('Error trying to register an animal', error);
-        throw error; 
+        throw error;
     }
 }
+
+
+// Get all animals
+export const getAnimalList = async (requestParams) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales?${requestParams}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching animal list:', error);
+        throw error;
+    }
+}
+
 
 
