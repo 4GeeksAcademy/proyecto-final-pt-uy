@@ -134,12 +134,14 @@ def get_animals():
     sort_by = request.args.get('sort_by', default='id', type=str)
     sort_order = request.args.get('sort_order', default='asc', type=str)
 
-    # Filtrado por tipo, género y tamaño
+    # Filtrado por estado, tipo, género y tamaño
+    statuses = request.args.get('statuses')
     types = request.args.get('types')
     genders = request.args.get('genders')
     sizes = request.args.get('sizes')
 
     # Convertir cadenas separadas por comas en listas
+    statuses = statuses.split(',') if statuses else []
     types = types.split(',') if types else []
     genders = genders.split(',') if genders else []
     sizes = sizes.split(',') if sizes else []
@@ -150,6 +152,10 @@ def get_animals():
 
     # Construir la consulta base
     query = Animals.query
+
+    # Filtrar por estado
+    if statuses:
+        query = query.filter(Animals.status.in_(statuses))
 
     # Filtrar por tipo
     if types:
