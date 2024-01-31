@@ -5,13 +5,15 @@ import { useAnimalsContext } from '../contexts/animalsContext';
 import AnimalListLeftPanel from '../component/animalListLeftPanel';
 import CardAnimal from '../component/cardAnimal';
 
+import loadingImg from '../../img/loading.gif';
+
 
 const AnimalList = () => {
-  const {store: {animals, pagination, isLoading, error}, actions: {setAnimals}} = useAnimalsContext();
+  const { store: { animals, pagination, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
 
   useEffect(() => {
     setAnimals();
-    
+
   }, []);
 
   return (
@@ -79,7 +81,17 @@ const AnimalList = () => {
           {/* Listado de cards */}
           <div className="d-flex flex-wrap justify-content-center align-items-start gap-3 gap-lg-4 my-4">
             {
-              animals &&
+              isLoading &&
+              <div className='d-flex flex-column w-100 align-items-center'>
+                <figure className='d-flex justify-content-center overflow-hidden' style={{width: "220px"}}>
+                  <img className='w-100' src={loadingImg} />
+                </figure>
+                <p className='fw-semibold'>Cargando...</p>
+              </div>
+            }
+
+            {
+              animals && !isLoading &&
               animals.map((animal) => {
                 return (
                   <CardAnimal key={animal.id} animal={animal} />
