@@ -12,8 +12,9 @@ import notFoundImg from '../../img/notFound.png';
 
 import { useAnimalsContext } from "../contexts/animalsContext";
 
-import CardAnimal from '../component/cardAnimal';
 import RandomAnimalsList from "../component/randomAnimalsList";
+import CardAnimal from '../component/cardAnimal';
+import CardTestimony from "../component/cardTestimony";
 
 
 export const Home = () => {
@@ -94,7 +95,7 @@ export const Home = () => {
 					{
 						Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
 							return (
-								<CardAnimal key={index} animal={animals[0]} />
+								<CardTestimony />
 							)
 						})
 					}
