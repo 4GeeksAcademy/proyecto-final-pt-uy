@@ -136,9 +136,9 @@ def get_testimonials():
 
         # Obtener información del usuario asociado a la adopción
         user_info = {
-            "user_id": user.id,
-            "user_name": user.user_name,
-            "user_email": user.email
+            "id": user.id,
+            "name": user.name,
+            "last_name": user.last_name
         }
 
         serialized_testimony['user_info'] = user_info
@@ -170,9 +170,9 @@ def get_testimony(testimony_id):
 
     # Obtener información del usuario asociado a la adopción
     user_info = {
-        "user_id": testimony.User.id,
-        "user_name": testimony.User.user_name,
-        "user_last_name": testimony.User.last_name
+        "id": testimony.User.id,
+        "name": testimony.User.name,
+        "last_name": testimony.User.last_name
     }
 
     # Serializar el testimonio junto con la información del usuario
