@@ -5,23 +5,23 @@ import Carousel from '../component/carrousel';
 
 
 const animalDetails = {
-  name:'Felix',
+  name: 'Felix',
   identificationCode: "#9274928",
   sexo: "Macho",
   edad: "2 años",
   tamano: "Mediana",
   vacunado: "si",
-  desparasitado: "Sí", 
-  microchip: "Sí", 
-  castrado: "Sí", 
+  desparasitado: "Sí",
+  microchip: "Sí",
+  castrado: "Sí",
   fechaNacimiento: "Tue, 12 Dec 2023 00:00:00 GMT",
   fechaPublicacion: "Tue, 01 Feb 2024 12:00:00 GMT",
   informacionAdicional: "Información adicional sobre el anima 34gg 4 g4gwgw wg w4gerth5 th te ",
-  imagen1:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
-  imagen2:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
-  imagen3:"https://www.timeoutdubai.com/cloud/timeoutdubai/2021/09/11/hfpqyV7B-IMG-Dubai-UAE.jpg",
-  imagen4:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
-  imagen5:"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
+  imagen1: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
+  imagen2: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
+  imagen3: "https://www.timeoutdubai.com/cloud/timeoutdubai/2021/09/11/hfpqyV7B-IMG-Dubai-UAE.jpg",
+  imagen4: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
+  imagen5: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
 };
 
 
@@ -33,7 +33,7 @@ const AnimalProfile = () => {
 
         <div className='col animal-img'>
           <div className=' '>
-            <Carousel img1={animalDetails.imagen1} img2={animalDetails.imagen2} img3={animalDetails.imagen3} img4={animalDetails.imagen4} img5={animalDetails.imagen5}/>
+            <Carousel img1={animalDetails.imagen1} img2={animalDetails.imagen2} img3={animalDetails.imagen3} img4={animalDetails.imagen4} img5={animalDetails.imagen5} />
           </div>
           <div className='compartir text-center  p-5'>
             <p className='fw-semibold '>
@@ -111,20 +111,37 @@ const AnimalProfile = () => {
       </div>
 
       <div className='row testimony'>
-      <h2 className=" p-0 text-center">Testimonios</h2>
+        {/* Testimonies */}
+        <div className="my-5 container">
+          {/*testimonies.length == 0 ?
+					<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
+					:
+				*/}
+          <h2 className=" p-0 text-center">Testimonios</h2>
+          <div className="px-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
+
+            {
+              Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
+                return (
+                  <CardAnimal key={index} animal={animalDetails} />
+                )
+              })
+            }
+          </div>
+        </div>
+
       </div>
 
 
       <div className='row related-animals mb-5'>
-        <h2 className=" p-0 text-center">Peluditos Similares</h2>
+        <h2 className="p-0 text-center">Peluditos Similares</h2>
         {/* Listado de cards */}
-        <div className="d-flex flex-wrap justify-content-center align-items-start gap-3 gap-lg-4">
+        <div className="d-flex flex-nowrap overflow-auto justify-content-start gap-3 gap-lg-4">
+          {/* Agregar la clase "flex-nowrap" y "overflow-auto" para evitar el ajuste automático */}
           {
-            Array.from({ length: 4 }, (v, i) => i).map((card, index) => {
-              return (
-                <CardAnimal key={index} animal={animalDetails} />
-              )
-            })
+            Array.from({ length: 5 }, (v, i) => i).map((card, index) => (
+              <CardAnimal key={index} animal={animalDetails} />
+            ))
           }
         </div>
       </div>
