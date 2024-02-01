@@ -1,9 +1,9 @@
 from flask import Flask, request, jsonify, Blueprint
-from api.models import Adoption_Users, db, Testimony
+from api.models import Adoption_Users, User, db, Testimony
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy.orm import joinedload
 from cloudinary import config as cloudinary_config, uploader
-
 from dotenv import load_dotenv
 import os
 
@@ -47,7 +47,7 @@ def register_adoption_testimony():
     Parámetros de la Solicitud (multipart/form-data):
         - testimony_text: Texto del testimonio (máximo 400 caracteres, requerido).
         - image: Archivo de imagen adjunto (opcional).
-        - animal_id: ID del animal adoptado (requerido).
+        - adoption_id: ID de la adopción para la cual se desea registrar un testimonio (requerido).
 
     Cabeceras:
         - Authorization: Token JWT del usuario logeado.
@@ -64,18 +64,16 @@ def register_adoption_testimony():
     data = request.form
     testimony_text = data.get('testimony_text')
     image_file = request.files.get('image')
-    animal_id = data.get('animal_id')
+    adoption_id = data.get('adoption_id')
 
     # Validar que los campos requeridos estén presentes en la solicitud
-    if not testimony_text:
-        return jsonify({"msg": "El texto del testimonio es requerido"}), 400
+    if not testimony_text or not adoption_id:
+        return jsonify({"msg": "El texto del testimonio y el ID de adopción son requeridos"}), 400
     if len(testimony_text) > 400:
         return jsonify({"msg": "El texto del testimonio es demasiado largo (máximo permitido: 400 caracteres)"}), 400
-    if not animal_id:
-        return jsonify({"msg": "Se id del animal adoptado es requerido"}), 400
 
     # Verificar que el usuario logeado haya adoptado al animal especificado
-    adoption = Adoption_Users.query.filter_by(user_id=current_user_id, animal_id=animal_id).first()
+    adoption = Adoption_Users.query.filter_by(user_id=current_user_id, id=adoption_id).first()
 
     if not adoption:
         return jsonify({"msg": "El usuario no ha adoptado al animal especificado"}), 403
@@ -99,16 +97,52 @@ def register_adoption_testimony():
 
 
 
-# ================= Get all testimonials ================== #
+# ================= Get testimonials list ================== #
 @testimonials_bp.route('/', methods=['GET'])
-@jwt_required()
 def get_testimonials():
-    testimonials_query = Testimony.query.all()
+    """
+    Devuelve una lista de testimonios de adopción.
+    
+    Endpoint:
+        GET /testimonios
 
+    Parámetros de consulta opcionales:
+        - limit: Número máximo de registros a devolver (por defecto, 8).
+        - status: Estado o estados de los testimonios a incluir en la respuesta (por defecto, 'approved').
+    """
+    # Obtener parámetros de consulta
+    limit = request.args.get('limit', default=8, type=int)
+    status = request.args.get('status', default='approved', type=str)
+
+    # Validar el parámetro 'status'
+    valid_statuses = ['approved', 'pending', 'rejected']
+    if status not in valid_statuses:
+        return jsonify({"error": "El parámetro 'status' debe ser 'approved', 'pending' o 'rejected'"}), 400
+
+    # Obtener testimonios según los parámetros
+    testimonials_query = (
+        db.session.query(Testimony, Adoption_Users, User)
+        .join(Adoption_Users, Adoption_Users.id == Testimony.adoption_id)
+        .join(User, User.id == Adoption_Users.user_id)
+        .filter(Testimony.status == status)
+        .limit(limit)
+        .all()
+    )
+
+    # Serializar los resultados
     serialized_testimonials = []
-    for testimony in testimonials_query:
-        testimony_serialized = testimony.serialize()
-        serialized_testimonials.append(testimony_serialized)
+    for testimony, adoption, user in testimonials_query:
+        serialized_testimony = testimony.serialize()
+
+        # Obtener información del usuario asociado a la adopción
+        user_info = {
+            "user_id": user.id,
+            "user_name": user.user_name,
+            "user_email": user.email
+        }
+
+        serialized_testimony['user_info'] = user_info
+        serialized_testimonials.append(serialized_testimony)
 
     response_body = {
         "msg": "ok",
@@ -123,11 +157,29 @@ def get_testimonials():
 # ================= Get one testimony by id ================== #
 @testimonials_bp.route('/testimonio/<int:testimony_id>', methods=['GET'])
 def get_testimony(testimony_id):
-    testimony = Testimony.query.get(testimony_id)
+    testimony = (
+        db.session.query(Testimony, Adoption_Users, User)
+        .filter(Testimony.id == testimony_id)
+        .join(Adoption_Users, Adoption_Users.id == Testimony.adoption_id)
+        .join(User, User.id == Adoption_Users.user_id)
+        .first()
+    )
+
     if testimony is None:
         return jsonify({"msg": "Testimonio no encontrado"}), 404
-    
-    return jsonify(testimony.serialize()), 200
+
+    # Obtener información del usuario asociado a la adopción
+    user_info = {
+        "user_id": testimony.User.id,
+        "user_name": testimony.User.user_name,
+        "user_last_name": testimony.User.last_name
+    }
+
+    # Serializar el testimonio junto con la información del usuario
+    serialized_testimony = testimony.Testimony.serialize()
+    serialized_testimony['user_info'] = user_info
+
+    return jsonify(serialized_testimony), 200
 
 
 
