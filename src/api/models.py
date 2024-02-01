@@ -133,6 +133,28 @@ class Animals_images(db.Model):
         }
 
 
+
+class Adoption_Users(db.Model):
+    __tablename__ = "adoption_users"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    user_relationship = db.relationship(User)
+    animal_id = db.Column(db.Integer, db.ForeignKey("animals.id"), unique=True, nullable=False)
+    animal_relationship = db.relationship(Animals)
+    testimony_relationship = db.relationship('Testimony', backref='adoption', uselist=False)
+
+    def __repr__(self):
+        return 'User with id {} has adopted an animal with id {}'.format(self.user_id, self.animal_id)
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "user_id": self.user_id,
+            "animal_id": self.animal_id,
+        }
+    
+
+
 class Testimony(db.Model):
     __tablename__ = "testimony"
     id = db.Column(db.Integer, primary_key=True)
@@ -151,26 +173,4 @@ class Testimony(db.Model):
             "image_url": self.image_url,
             "status": self.status,
             "adoption_id": self.adoption_id
-        }
-
-
-class Adoption_Users(db.Model):
-    __tablename__ = "adoption_users"
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    user_relationship = db.relationship(User)
-    animal_id = db.Column(db.Integer, db.ForeignKey("animals.id"), unique=True, nullable=False)
-    animal_relationship = db.relationship(Animals)
-    testimony_id = db.Column(db.Integer, db.ForeignKey("testimony.id"), unique=True)
-    testimony_relationship = db.relationship(Testimony, backref="adoption_users", uselist=False, foreign_keys=[testimony_id])
-
-    def __repr__(self):
-        return 'User with id {} has adopted an animal with id {} and wrote a testiomny with id {}'.format(self.user_id, self.animal_id, self.testimony_id)
-
-    def serialize(self):
-        return {
-            "id": self.id,
-            "user_id": self.user_id,
-            "animal_id": self.animal_id,
-            "testimony_id": self.testimony_id
         }
