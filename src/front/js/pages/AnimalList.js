@@ -151,7 +151,7 @@ const AnimalList = () => {
               {
                 Array.from({ length: pagination.totalPages }, (value, index) => 1 + index).map((pageNum) => {
                   return (
-                    <li className="page-item">
+                    <li className="page-item" key={pageNum}>
                       <button 
                         className={`page-link ${pagination.currentPage === pageNum ? "active" : ""}`} 
                         onClick={() => setPagination({

@@ -100,4 +100,23 @@ export const getAnimalList = async (requestParams) => {
 }
 
 
+// Get random animals list
+export const getRandomAnimalsList = async (requestParams) => {
+    console.log(requestParams);
 
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/random?${requestParams}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching random animals list:', error);
+        throw error;
+    }
+}
