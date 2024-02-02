@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import { useAnimalsContext } from '../contexts/animalsContext';
 
@@ -8,7 +9,7 @@ import CardAnimal from '../component/cardAnimal';
 import loadingImg from '../../img/loading.gif';
 import errorImg from '../../img/error.png';
 import notFoundImg from '../../img/notFound.png'
-
+import animal_list_banner_img from "../../img/animalListBanner_img.png"
 
 const AnimalList = () => {
   const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setSorting, setPagination } } = useAnimalsContext();
@@ -24,9 +25,22 @@ const AnimalList = () => {
 
   return (
     <div className='container d-flex flex-column my-4'>
+
       {/* Banner */}
-      <div className='banner justify-content-center align-items-center bg-secondary rounded-3'>
-        <h2>Banner</h2>
+      <div className='container rounded-3 d-flex flex-lg-row justify-content-center animal-list-banner' >
+        <img src={animal_list_banner_img} alt="hand and paw" className="col-xl-5 col-xxl-6 d-none d-xl-block " />
+        <div className="col-xl-7 col-xxl-6 p-5 pe-lg-5 me-lg-5 mt-xl-3 mt-xxl-5 text-center text-xl-end">
+          <h2 className="fw-light mb-0 fs-0-2">Adopción Responsable</h2>
+          <h4 className="fw-medium">Una Nueva Oportunidad Para Ser Feliz!</h4>
+          <p className="mb-0 mt-4 fw-medium">¿Es tu hogar el hogar que un peludito necesita?</p>
+          <p className="fw-medium">Te contamos qué tener en cuenta antes de tomar tu decisión.</p>
+          <div>
+            <button className="btn btn-outline-primary btn-outline-css-biggerSize rounded-pill mt-3 px-4 py-2 me-3 fw-medium">Ver Video <i className="fa-solid fa-play ms-2"></i></button>
+            <Link to="/recomendations">
+              <button className="btn btn-primary btn-css-biggerSize rounded-pill px-4 py-2 mt-3 fw-medium">Más información</button>
+            </Link>
+         </div>
+        </div>
       </div>
 
       {/* Main */}
@@ -140,10 +154,10 @@ const AnimalList = () => {
               <li className={`page-item ${pagination.currentPage === 1 ? "disabled" : ""}`}>
                 <button
                   className='page-link'
-                onClick={() => setPagination({
-                  currentPage: pagination.currentPage - 1,
-                  offset: pagination.offset - pagination.limit
-                })}
+                  onClick={() => setPagination({
+                    currentPage: pagination.currentPage - 1,
+                    offset: pagination.offset - pagination.limit
+                  })}
                 >
                   Anterior
                 </button>
@@ -152,8 +166,8 @@ const AnimalList = () => {
                 Array.from({ length: pagination.totalPages }, (value, index) => 1 + index).map((pageNum) => {
                   return (
                     <li className="page-item">
-                      <button 
-                        className={`page-link ${pagination.currentPage === pageNum ? "active" : ""}`} 
+                      <button
+                        className={`page-link ${pagination.currentPage === pageNum ? "active" : ""}`}
                         onClick={() => setPagination({
                           currentPage: pageNum,
                           offset: (pagination.limit * pageNum) - pagination.limit
@@ -168,10 +182,10 @@ const AnimalList = () => {
               <li className={`page-item ${pagination.currentPage === pagination.totalPages ? "disabled" : ""}`}>
                 <button
                   className='page-link'
-                onClick={() => setPagination({
-                  currentPage: pagination.currentPage + 1,
-                  offset: pagination.offset + pagination.limit
-                })}
+                  onClick={() => setPagination({
+                    currentPage: pagination.currentPage + 1,
+                    offset: pagination.offset + pagination.limit
+                  })}
                 >
                   Siguiente
                 </button>
