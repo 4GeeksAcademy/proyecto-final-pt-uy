@@ -9,7 +9,7 @@ import errorImg from '../../img/error.png';
 import notFoundImg from '../../img/notFound.png'
 
 
-export default function AnimalDetail({id}) {
+export default function AnimalDetail({id, setAnimalType}) {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
 	const [animal, setAnimal] = useState(null);
@@ -29,6 +29,12 @@ export default function AnimalDetail({id}) {
 		fetchAnimal();
         
 	}, [])
+
+    useEffect(() => {
+        if(animal) {
+            setAnimalType(animal.type)
+        }
+    }, [animal])
 
 
     const fetchAnimal = async () => {
@@ -94,7 +100,7 @@ export default function AnimalDetail({id}) {
 
 
     return (
-        <>
+        <div className="container d-flex mb-5">
             {/* Mientras espera la respuesta del backend */}
             {
               isLoading &&
@@ -214,6 +220,6 @@ export default function AnimalDetail({id}) {
             }
 
             
-		</>
+		</div>
     );
 }

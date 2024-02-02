@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { getAnimal } from '../../client-API/backendAPI';
-
-import CardAnimal from '../component/cardAnimal';
 import AnimalDetail from '../component/animalDetail';
 import TestimonialsSection from '../component/testimonialsSection';
+import SimilarAnimalsSection from '../component/similarAnimalsSection';
 
 import loadingImg from '../../img/loading.gif';
 import errorImg from '../../img/error.png';
@@ -18,27 +16,14 @@ const AnimalProfile = () => {
 
 
   return (
-    <div className='container'>
-      <AnimalDetail id={id} />
+    <div className='container d-flex flex-column mb-5'>
+      <AnimalDetail id={id} setAnimalType={setAnimalType} />
       <TestimonialsSection />
-      
       {
-        // false &&
-        // <div className='row related-animals mb-5'>
-        //   <h2 className="p-0 text-center">Peluditos Similares</h2>
-        //   {/* Listado de cards */}
-        //   <div className="d-flex flex-nowrap overflow-auto justify-content-start gap-3 gap-lg-4">
-        //     {/* Agregar la clase "flex-nowrap" y "overflow-auto" para evitar el ajuste automático */}
-        //     {
-        //       Array.from({ length: 5 }, (v, i) => i).map((card, index) => (
-        //         <CardAnimal key={index} animal={animal} />
-        //       ))
-        //     }
-        //   </div>
-        // </div>
+        animalType &&
+        <SimilarAnimalsSection animalType={animalType}/>
+        
       }
-
-
     </div>
   )
 }
