@@ -220,6 +220,77 @@ body {
     color: #003459;
 }
 
+.testimony-card {
+    position: relative;
+    width: 250px;
+    min-width: 250px;
+    height: 400px;
+    background-color: #EBEEEF;
+    overflow: hidden;
+}
+
+.testimony-card input, 
+.testimony-card .toggle {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    bottom: 20px;
+    right: 20px;
+    outline: none;
+    z-index: 10;
+}
+
+.testimony-card input {
+    opacity: 0;
+}
+
+.testimony-card .toggle {
+    pointer-events: none;
+    border-radius: 50%;
+    background: #fff;
+    transition: 0.5s;
+    text-align: center;
+    line-height: 30px;
+    font-size: 36px;
+    box-shadow: 0 0 0 0px #EEC77E;
+}
+
+.testimony-card input:checked ~ .toggle {
+    box-shadow: 0 0 0 500px #EEC77E;
+    transform: rotate(225deg);
+}
+
+.imgBox {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.imgBox img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 85%;
+    z-index: 11;
+    overflow-y: scroll;
+    transition: 0.5s;
+    opacity: 0;
+}
+
+.testimony-card input:checked ~ .details {
+    opacity: 1;
+}
+
 @media screen and (min-width: 768px) {
     .image-panel {
         height: 100vh;

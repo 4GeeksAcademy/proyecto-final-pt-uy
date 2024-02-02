@@ -80,8 +80,28 @@ export const addAnimal = async (formData, token) => {
 }
 
 
-// Get all animals
-export const getAnimalList = async (requestParams) => {
+// Get animal by id
+export const getAnimal = async (id) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching animal details:', error);
+        throw error;
+    }
+}
+
+
+// Get animals list
+export const getAnimalList = async (requestParams = "") => {
     try {
         const response = await fetch(`${apiUrlBase}/animales?${requestParams}`);
 
@@ -100,4 +120,45 @@ export const getAnimalList = async (requestParams) => {
 }
 
 
+// Get random animals list
+export const getRandomAnimalsList = async (requestParams = "") => {
 
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/random?${requestParams}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching random animals list:', error);
+        throw error;
+    }
+}
+
+
+// get testimonials list
+export const getTestimonialsList = async (limit = 8, status = "approved") => {
+    const requestParams = `limit=${limit}&status=${status}`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/testimonios?${requestParams}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        console.log(data.result);
+        return data.result;
+
+    } catch (error) {
+        console.error('Error fetching testimonials list:', error);
+        throw error;
+    }
+}

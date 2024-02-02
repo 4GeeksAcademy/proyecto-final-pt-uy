@@ -1,17 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
-import { useAnimalsContext } from "../contexts/animalsContext";
-
-import CardAnimal from '../component/cardAnimal';
+import RandomAnimalsList from "../component/randomAnimalsList";
+import TestimonialsSection from "../component/testimonialsSection";
 
 
 export const Home = () => {
-	const { store: { animals, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
-
-	useEffect(() => {
-		setAnimals();
-	}, []);
 
 
 	return (
@@ -44,55 +38,8 @@ export const Home = () => {
 			<div className="container my-5">
 				<p className="m-0">¿Crees en el destino?</p>
 				<h5 className="fw-medium">Peluditos seleccionados aleatoriamente</h5>
-
-				{/*4 dogs cards*/}
-				<div className="d-flex flex-wrap justify-content-evenly align-items-start gap-3 gap-lg-4 my-4">
-					{/* Mientras espera la respuesta del backend */}
-					{
-						isLoading &&
-						<div className='d-flex flex-column w-100 align-items-center'>
-							<figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "250px" }}>
-								<img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif" />
-							</figure>
-							<p className='fw-semibold'>Cargando...</p>
-						</div>
-					}
-
-					{/* Si se recibió un error de parte del backend */}
-					{
-						!isLoading && error &&
-						<div className='d-flex flex-column w-100 align-items-center'>
-							<figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
-								<img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
-							</figure>
-							<p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
-						</div>
-					}
-
-					{/* Si no está esperando respuesta, no recibió error y hay animales en el store */}
-					{
-						!isLoading && !error && animals &&
-						animals.filter((animal, index) => index < 8).map((animal) => {
-							return (
-								<CardAnimal key={animal.id} animal={animal} />
-							)
-						})
-					}
-
-					{/* Si no está esperando respuesta, no recibió error y la lista de animales del store está vacía */}
-					{
-						!isLoading && !error && animals.length === 0 &&
-						<div className='d-flex flex-column w-100 align-items-center'>
-							<figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "200px" }}>
-								<img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
-							</figure>
-							<p className='fw-semibold text-center'>No hay peluditos que mostrar en este momento.</p>
-						</div>
-					}
-				</div>
-				{/*4 cats cards*/}
-
-
+				<RandomAnimalsList type="dog" limit={4} />
+				<RandomAnimalsList type="cat" limit={4} />
 				<Link to="/animal-list" className="text-decoration-none d-grid">
 					<button className="btn btn-outline-primary rounded-pill px-4 py-2 mt-3">Ver Más <i className="ms-2 fa-solid fa-angle-right"></i></button>
 				</Link>
@@ -118,23 +65,8 @@ export const Home = () => {
 				<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706902051/Site/homeBanner_image.png" alt="hand and paw" className="col-lg-6 d-none d-lg-block" />
 			</div>
 
-			{/* Testimonies */}
-			<div className="my-5 container">
-				<h5 className="fw-medium">Testimonios</h5>
-				{/*testimonies.length == 0 ?
-					<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
-					:
-				*/}
-				<div className="p-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
-					{
-						Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
-							return (
-								<CardAnimal key={index} animal={animals[0]} />
-							)
-						})
-					}
-				</div>
-			</div>
+			{/* Testimonials */}
+			<TestimonialsSection />
 		</div>
 	);
 };

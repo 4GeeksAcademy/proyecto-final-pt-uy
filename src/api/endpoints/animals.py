@@ -1,6 +1,7 @@
 from operator import or_
 from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy.sql.expression import func
 from flask_cors import CORS
 from cloudinary import config as cloudinary_config
 from cloudinary.uploader import upload
@@ -119,7 +120,7 @@ def register_animal():
 
 
 
-# # =============== Get All Animals ================== #
+# =============== Get All Animals ================== #
 @animals_bp.route('/', methods=['GET'])
 def get_animals():
     """
@@ -206,7 +207,6 @@ def get_animals():
     }
 
     return jsonify(response_body), 200
-
 
 
 # =============== Get One Animal by Id ================== #
@@ -334,6 +334,55 @@ def update_animal(animal_id):
     response_body = {
         "msg": "ok",
         "result": serialized_animal
+    }
+
+    return jsonify(response_body), 200
+
+
+
+# =============== Get a Random List of Animals ================== #
+@animals_bp.route('/random', methods=['GET'])
+def get_random_animals():
+    """
+    /animales/random
+
+    Devuelve una lista aleatoria de animales, ya sea gatos o perros, según el valor en el parámetro "type".
+    Se puede especificar la cantidad de animales a devolver mediante el parámetro "limit".
+    """
+
+    # Obtener parámetros de consulta
+    animal_type = request.args.get('type', default=None, type=str)
+    limit = request.args.get('limit', default=5, type=int)
+
+    # Verificar si el tipo de animal es válido
+    if animal_type not in ['cat', 'dog']:
+        return jsonify({"error": "El parámetro 'type' debe ser 'cat' o 'dog'"}), 400
+
+    # Obtener animales aleatorios del tipo especificado
+    random_animals = (
+        Animals.query
+        .filter_by(status='not_adopted', type=animal_type)
+        .order_by(func.random())
+        .limit(limit)
+        .all()
+    )
+
+    # Serializar los resultados
+    serialized_animals = []
+    for animal in random_animals:
+        serialized_animal = animal.serialize()
+        images_query = Animals_images.query.filter_by(animal_id=animal.id).all()
+        image_urls = [image.image_url for image in images_query]
+        if not image_urls:
+            image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
+        serialized_animal['image_urls'] = image_urls
+        serialized_animals.append(serialized_animal)
+
+    # Construir la respuesta
+    response_body = {
+        "msg": "ok",
+        "total_animals": len(serialized_animals),
+        "result": serialized_animals
     }
 
     return jsonify(response_body), 200
