@@ -3,9 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { useUserContext } from "../contexts/userContext";
 
-import logo from "../../img/el_refugio_logo.png";
-
-
 export const Navbar = () => {
 	const navigate = useNavigate();
 	const { store, actions } = useUserContext();
@@ -24,7 +21,7 @@ export const Navbar = () => {
 		<nav className="navbar navbar-expand-lg my-4">
 			<div className="container">
 				<Link to="/" className="logo-container me-4">
-					<img src={logo} alt="Logo" />
+					<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
 				</Link>
 
 				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">

@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import logo from "../../img/el_refugio_logo.png";
-
 export const Footer = () => (
 	<footer className="footer bg-linear mt-auto py-3">
 		{/* Footer information container */}
@@ -61,7 +59,7 @@ export const Footer = () => (
 					© 2024 El Refugio. Todos los derechos reservados.
 				</p>
 				<figure className="logo-container mx-auto">
-					<img src={logo} alt="Logo" />
+					<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
 				</figure>
 				<div className="mb-3 mb-lg-0">
 					<Link to="" className="me-4 text-decoration-none text-neutral-60">

@@ -1,8 +1,5 @@
 import React from 'react';
 
-import newPassword from "../../img/newPassword.jpg"
-import logo from "../../img/el_refugio_logo.png";
-
 const NewPassword = () => {
   return (
     <div className='d-flex flex-column-reverse flex-md-row-reverse min-vh-100'>
@@ -13,7 +10,7 @@ const NewPassword = () => {
 
           {/* Logo */}
           <figure className='logo-container mb-4 mb-md-5'>
-            <img src={logo} alt="Logo" />
+            <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
           </figure>
 
           {/* Text */}
@@ -44,7 +41,7 @@ const NewPassword = () => {
       </div>
 
       {/* Image Panel */}
-      <div className="d-flex w-100 w-md-50 image-panel" style={{backgroundImage: `url(${newPassword})`}}></div>
+      <div className="d-flex w-100 w-md-50 image-panel" style={{backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800993/Site/newPassword_myqrd1.jpg")`}}></div>
     </div>
   )
 }

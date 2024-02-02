@@ -1,14 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-import logo from "../../img/el_refugio_logo.png";
-
 export default function DashboardLeftPanel() {
 
     return (
         <div className="dash-left-panel">
             <figure className='logo-container mb-4 mb-md-5'>
-                <img src={logo} alt="Logo" />
+                <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
             </figure>
 
             <NavLink to={"/add-animal"} className="btn btn-secondary rounded-4 w-100">Ingresar Peludito</NavLink>

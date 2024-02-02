@@ -1,14 +1,10 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import { useAnimalsContext } from '../contexts/animalsContext';
 
 import AnimalListLeftPanel from '../component/animalListLeftPanel';
 import CardAnimal from '../component/cardAnimal';
-
-import loadingImg from '../../img/loading.gif';
-import errorImg from '../../img/error.png';
-import notFoundImg from '../../img/notFound.png'
-
 
 const AnimalList = () => {
   const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setSorting, setPagination } } = useAnimalsContext();
@@ -24,9 +20,22 @@ const AnimalList = () => {
 
   return (
     <div className='container d-flex flex-column my-4'>
+
       {/* Banner */}
-      <div className='banner justify-content-center align-items-center bg-secondary rounded-3'>
-        <h2>Banner</h2>
+      <div className='container rounded-3 d-flex flex-lg-row justify-content-center animal-list-banner' >
+        <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706899712/Site/animalListBanner_img.png" alt="hand and paw" className="col-xl-5 col-xxl-6 d-none d-xl-block " />
+        <div className="col-xl-7 col-xxl-6 p-5 pe-lg-5 me-lg-5 mt-xl-3 mt-xxl-5 text-center text-xl-end">
+          <h2 className="fw-light mb-0 fs-0-2">Adopción Responsable</h2>
+          <h4 className="fw-medium">Una Nueva Oportunidad Para Ser Feliz!</h4>
+          <p className="mb-0 mt-4 fw-medium">¿Es tu hogar el hogar que un peludito necesita?</p>
+          <p className="fw-medium">Te contamos qué tener en cuenta antes de tomar tu decisión.</p>
+          <div>
+            <button className="btn btn-outline-primary btn-outline-css-biggerSize rounded-pill mt-3 px-4 py-2 me-3 fw-medium">Ver Video <i className="fa-solid fa-play ms-2"></i></button>
+            <Link to="/recomendations">
+              <button className="btn btn-primary btn-css-biggerSize rounded-pill px-4 py-2 mt-3 fw-medium">Más información</button>
+            </Link>
+         </div>
+        </div>
       </div>
 
       {/* Main */}
@@ -94,7 +103,7 @@ const AnimalList = () => {
               isLoading &&
               <div className='d-flex flex-column w-100 align-items-center'>
                 <figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "250px" }}>
-                  <img className='w-100' src={loadingImg} />
+                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif" />
                 </figure>
                 <p className='fw-semibold'>Cargando...</p>
               </div>
@@ -105,7 +114,7 @@ const AnimalList = () => {
               !isLoading && error &&
               <div className='d-flex flex-column w-100 align-items-center'>
                 <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
-                  <img className='w-100' src={errorImg} />
+                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
                 </figure>
                 <p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
               </div>
@@ -126,7 +135,7 @@ const AnimalList = () => {
               !isLoading && !error && animals.length === 0 &&
               <div className='d-flex flex-column w-100 align-items-center'>
                 <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "200px" }}>
-                  <img className='w-100' src={notFoundImg} />
+                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
                 </figure>
                 <p className='fw-semibold text-center'>No encontramos peluditos <br />según los filtros activos.</p>
               </div>
@@ -140,10 +149,10 @@ const AnimalList = () => {
               <li className={`page-item ${pagination.currentPage === 1 ? "disabled" : ""}`}>
                 <button
                   className='page-link'
-                onClick={() => setPagination({
-                  currentPage: pagination.currentPage - 1,
-                  offset: pagination.offset - pagination.limit
-                })}
+                  onClick={() => setPagination({
+                    currentPage: pagination.currentPage - 1,
+                    offset: pagination.offset - pagination.limit
+                  })}
                 >
                   Anterior
                 </button>
@@ -168,10 +177,10 @@ const AnimalList = () => {
               <li className={`page-item ${pagination.currentPage === pagination.totalPages ? "disabled" : ""}`}>
                 <button
                   className='page-link'
-                onClick={() => setPagination({
-                  currentPage: pagination.currentPage + 1,
-                  offset: pagination.offset + pagination.limit
-                })}
+                  onClick={() => setPagination({
+                    currentPage: pagination.currentPage + 1,
+                    offset: pagination.offset + pagination.limit
+                  })}
                 >
                   Siguiente
                 </button>
