@@ -4,7 +4,7 @@ export default function CardTestimony({testimony: {testimony_text, image_url, us
     const userDisplayName = `${user_info.name} ${user_info.last_name.split("")[0]}.`;
 
     return (
-        <div className="testimony-card rounded-3">
+        <div className="testimony-card rounded-3 shadow-sm" >
             <input type="checkbox" name="" />
             <div className="toggle">+</div>
             <figure className="imgBox">

@@ -65,7 +65,7 @@ export default function TestimonialsSection() {
             {/* Si no está esperando respuesta, no recibió error y hay testimonios en la lista */}
             {
                 !isLoading && !errorMsg && testimonialsList.length > 0 &&
-                <div className="p-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
+                <div className="d-flex w-100" >
                     <TestimonialsScrollBar testimonialsList={testimonialsList} />
                 </div>
             }

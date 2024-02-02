@@ -5,7 +5,7 @@ import CardTestimony from "./cardTestimony";
 
 export default function TestimonialsScrollBar({ testimonialsList }) {
     return (
-        <div className="p-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
+        <div className="d-flex w-100 overflow-x-scroll gap-3 py-3 scroll-bar" >
             {
                 testimonialsList.map((testimony, index) => {
                     return (
