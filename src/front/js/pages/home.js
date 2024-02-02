@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import backgrondColors_image from "../../img/backgroundColors_image.png"
@@ -6,22 +6,12 @@ import home_image from "../../img/home_image.png"
 import home_banner_bg from "../../img/homeBanner_background.png"
 import home_banner_img from "../../img/homeBanner_image.png"
 import paw_image from "../../img/pawBanner_image.png"
-import loadingImg from '../../img/loading.gif';
-import errorImg from '../../img/error.png';
-import notFoundImg from '../../img/notFound.png';
 
-import { useAnimalsContext } from "../contexts/animalsContext";
-
-import CardAnimal from '../component/cardAnimal';
 import RandomAnimalsList from "../component/randomAnimalsList";
+import TestimonialsSection from "../component/testimonialsSection";
 
 
 export const Home = () => {
-	const { store: { animals, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
-
-	useEffect(() => {
-		setAnimals();
-	}, []);
 
 
 	return (
@@ -83,23 +73,8 @@ export const Home = () => {
 				<img src={home_banner_img} alt="hand and paw" className="col-lg-6 d-none d-lg-block" />
 			</div>
 
-			{/* Testimonies */}
-			<div className="my-5 container">
-				<h5 className="fw-medium">Testimonios</h5>
-				{/*testimonies.length == 0 ?
-					<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
-					:
-				*/}
-				<div className="p-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
-					{
-						Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
-							return (
-								<CardAnimal key={index} animal={animals[0]} />
-							)
-						})
-					}
-				</div>
-			</div>
+			{/* Testimonials */}
+			<TestimonialsSection />
 		</div>
 	);
 };
