@@ -105,7 +105,7 @@ const AnimalProfile = () => {
 
           <div className='col animal-img'>
             <div className=' '>
-              <Carousel img1={animal.image_urls[0]} img2={animal.image_urls[0]} img3={animal.image_urls[0]} img4={animal.image_urls[0]} img5={animal.image_urls[0]} />
+              <Carousel imgUrlsArray={animal.image_urls} />
             </div>
             <div className='compartir text-center  p-5'>
               <p className='fw-semibold '>
