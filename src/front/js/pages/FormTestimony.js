@@ -1,8 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import logo from "../../img/el_refugio_logo.png";
-
 const FormTestimony = () => {
   const navigate = useNavigate();
 
@@ -15,7 +13,7 @@ const FormTestimony = () => {
 
           {/* Logo */}
           <figure className='logo-container mt-3'>
-            <img src={logo} alt="Logo" />
+            <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
           </figure>
 
           {/* Text */}

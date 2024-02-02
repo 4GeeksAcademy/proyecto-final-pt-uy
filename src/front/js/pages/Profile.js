@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
+import { useUserContext } from '../contexts/userContext';
 
 const Profile = () => {
 
-  const [name, setName] = useState("user.name");
+  const apiUrlBase = process.env.BACKEND_URL;
+
+  const { store: { user } } = useUserContext();
+
   const [lastname, setLastname] = useState("user.lastname")
   const [userName, setUserName] = useState("user.user_name")
   const [email, setEmail] = useState("user.email");
@@ -12,9 +17,17 @@ const Profile = () => {
   const [backyard, setBackyard] = useState("no"); {/*user.backyard*/ }
   const [otherPets, setOtherPets] = useState("yes"); {/*user.other_pets*/ }
 
+  useEffect(() => {
+    fetch(`${apiUrlBase}/usuarios/usuario/1`)
+      .then(response => response.json())
+      .then((data) => console.log(data))
+      .catch(err => console.error(err))
+  }, []);
+
   return (
 
     <div className='container bg-linear-0 my-5 p-5'>
+      {console.log(user)}
 
       {/*Title: Perfil de Usuario*/}
       <h4 className='fw-semibold'>Perfil de Usuario</h4>
@@ -26,7 +39,7 @@ const Profile = () => {
       <div className='d-flex align-items-center my-5'>
         <div className='border_profile_img bg-white d-flex justify-content-center align-items-center shadow'>
           <figure className='circle_profile_img bg-secondary d-flex justify-content-center align-items-center fs-0-1 m-0'>
-            U
+            {user.name[0]}
           </figure>
         </div>
         <h5 className='ms-3 fw-medium my-0'>User_Name</h5>
@@ -39,7 +52,7 @@ const Profile = () => {
         <div className='d-flex flex-column flex-md-row'>
           <div className="mb-3 col-md-5 my-3">
             <label for="name" className="form-label fw-medium">Nombre</label>
-            <input type="text" className="form-control bg-white" id="name" value={name} disabled />
+            <input type="text" className="form-control bg-white" id="name" value={user.name} disabled />
           </div>
           <div className="mb-3 col-md-6 ms-md-auto my-3">
             <label for="lastname" className="form-label fw-medium">Apellidos</label>
@@ -85,7 +98,7 @@ const Profile = () => {
             <input type="text" className="form-control bg-white" id="address" value={address} disabled />
           </div>
         </div>
-        
+
         <div className='d-flex flex-column flex-md-row'>
           <div className="mb-3 col-md-5 my-3">
             <label for="name" className="form-label fw-medium">Patio</label>

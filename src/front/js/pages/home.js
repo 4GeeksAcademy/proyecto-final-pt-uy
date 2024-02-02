@@ -1,15 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 
-import backgrondColors_image from "../../img/backgroundColors_image.png"
-import home_image from "../../img/home_image.png"
-import home_banner_bg from "../../img/homeBanner_background.png"
-import home_banner_img from "../../img/homeBanner_image.png"
-import paw_image from "../../img/pawBanner_image.png"
-import loadingImg from '../../img/loading.gif';
-import errorImg from '../../img/error.png';
-import notFoundImg from '../../img/notFound.png';
-
 import { useAnimalsContext } from "../contexts/animalsContext";
 
 import CardAnimal from '../component/cardAnimal';
@@ -26,7 +17,7 @@ export const Home = () => {
 	return (
 		<div className="mb-5">
 			{/*Intro*/}
-			<div className="mb-5" style={{ backgroundImage: `url(${backgrondColors_image})`, backgroundPosition: "center top", backgroundSize: "cover" }}>
+			<div className="mb-5" style={{ backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900069/Site/backgroundColors_image.png")`, backgroundPosition: "center top", backgroundSize: "cover" }}>
 				<div className="container d-flex flex-column flex-lg-row pt-5">
 					<div className="col-lg-6 mb-3">
 						<h1 className="fw-light mb-0">Salvar Una Vida</h1>
@@ -43,7 +34,7 @@ export const Home = () => {
 					</div>
 					<div className="col-lg-6">
 						<figure className="m-0">
-							<img src={home_image} alt="home image" className="img-fluid" />
+							<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706901254/Site/home_image.png" alt="home image" className="img-fluid" />
 						</figure>
 					</div>
 				</div>
@@ -61,7 +52,7 @@ export const Home = () => {
 						isLoading &&
 						<div className='d-flex flex-column w-100 align-items-center'>
 							<figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "250px" }}>
-								<img className='w-100' src={loadingImg} />
+								<img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif" />
 							</figure>
 							<p className='fw-semibold'>Cargando...</p>
 						</div>
@@ -72,7 +63,7 @@ export const Home = () => {
 						!isLoading && error &&
 						<div className='d-flex flex-column w-100 align-items-center'>
 							<figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
-								<img className='w-100' src={errorImg} />
+								<img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
 							</figure>
 							<p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
 						</div>
@@ -93,7 +84,7 @@ export const Home = () => {
 						!isLoading && !error && animals.length === 0 &&
 						<div className='d-flex flex-column w-100 align-items-center'>
 							<figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "200px" }}>
-								<img className='w-100' src={notFoundImg} />
+								<img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
 							</figure>
 							<p className='fw-semibold text-center'>No hay peluditos que mostrar en este momento.</p>
 						</div>
@@ -108,11 +99,11 @@ export const Home = () => {
 			</div>
 
 			{/* Banner */}
-			<div className='container rounded-3 d-flex flex-lg-row justify-content-center' style={{ backgroundImage: `url(${home_banner_bg})`, backgroundPosition: "center top", backgroundSize: "cover" }}>
+			<div className='container rounded-3 d-flex flex-lg-row justify-content-center' style={{ backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706901469/Site/homeBanner_background.png")`, backgroundPosition: "center top", backgroundSize: "cover" }}>
 				<div className="col-lg-6 p-5 pe-lg-0 me-lg-0 mt-xl-3 mt-xxl-5">
 					<div className="d-flex">
 						<h2 className="fw-light mb-0 me-2">Un Nuevo Comienzo</h2>
-						<img src={paw_image} alt="paw" className="img-fluid align-self-end" style={{ maxHeight: "35px", width: "auto" }} />
+						<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706902742/Site/pawBanner_image.png" alt="paw" className="img-fluid align-self-end" style={{ maxHeight: "35px", width: "auto" }} />
 					</div>
 					<h2 className="fw-medium">Adopción Responsable</h2>
 					<p className="mb-0 mt-4 fw-medium">¿Es tu hogar el hogar que un peludito necesita?</p>
@@ -124,7 +115,7 @@ export const Home = () => {
 						<button className="btn btn-outline-primary rounded-pill mt-3 px-4 py-2">Ver Video <i className="fa-solid fa-play ms-2"></i></button>
 					</div>
 				</div>
-				<img src={home_banner_img} alt="hand and paw" className="col-lg-6 d-none d-lg-block" />
+				<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706902051/Site/homeBanner_image.png" alt="hand and paw" className="col-lg-6 d-none d-lg-block" />
 			</div>
 
 			{/* Testimonies */}
