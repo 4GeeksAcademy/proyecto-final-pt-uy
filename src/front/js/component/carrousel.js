@@ -8,7 +8,7 @@ const Carousel = ({imgUrlsArray}) => {
         {
           imgUrlsArray.map((url, index) => {
             return (
-              <div className={`carousel-item ${index === 0 ? "active" : ""}`}>
+              <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
                 <img src={url} className="d-block w-100 img-fluid rounded" alt={`Slide ${index + 1}`} />
               </div>
             )
@@ -31,7 +31,7 @@ const Carousel = ({imgUrlsArray}) => {
           {
             imgUrlsArray.map((url, index) => {
               return (
-                <div data-bs-target="#carouselExampleIndicators" data-bs-slide-to={index} className={index === 0 ? "active" : ""} style={{width: "65px"}}>
+                <div key={index} data-bs-target="#carouselExampleIndicators" data-bs-slide-to={index} className={index === 0 ? "active" : ""} style={{width: "65px"}}>
                   <img src={url} className="d-block w-100 img-thumbnail rounded" alt={`Indicator ${index}`} />
                 </div>
               )
