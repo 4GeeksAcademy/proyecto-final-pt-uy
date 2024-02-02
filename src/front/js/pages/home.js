@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import backgrondColors_image from "../../img/backgroundColors_image.png"
@@ -6,40 +6,13 @@ import home_image from "../../img/home_image.png"
 import home_banner_bg from "../../img/homeBanner_background.png"
 import home_banner_img from "../../img/homeBanner_image.png"
 import paw_image from "../../img/pawBanner_image.png"
-import loadingImg from '../../img/loading.gif';
-import errorImg from '../../img/error.png';
-import notFoundImg from '../../img/notFound.png';
-
-import { getTestimonialsList } from "../../client-API/backendAPI";
-import { useAnimalsContext } from "../contexts/animalsContext";
 
 import RandomAnimalsList from "../component/randomAnimalsList";
-import TestimonialsScrollBar from "../component/testimonialsScrollBar";
+import TestimonialsSection from "../component/testimonialsSection";
 
 
 export const Home = () => {
-	const [isLoading, setIsLoading] = useState(false);
-    const [errorMsg, setErrorMsg] = useState("");
-	const [testimonialsList, setTestimonialsList] = useState([]);
 
-	useEffect(() => {
-		fetchTestimonials();
-	}, [])
-
-	const fetchTestimonials = async () => {
-		setErrorMsg("");
-        setIsLoading(true);
-		
-		try {
-			const data = await getTestimonialsList();
-			setTestimonialsList(data);
-			setIsLoading(false);
-		} catch (error) {
-			console.error(`Error fetching testimonials list: `, error);
-            setErrorMsg(error.message);
-            setIsLoading(false);
-		}
-	}
 
 	return (
 		<div className="mb-5">
@@ -100,13 +73,8 @@ export const Home = () => {
 				<img src={home_banner_img} alt="hand and paw" className="col-lg-6 d-none d-lg-block" />
 			</div>
 
-			{/* Testimonies */}
-			<div className="my-5 container">
-				<h5 className="fw-medium">Testimonios</h5>
-				<div className="p-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
-					<TestimonialsScrollBar testimonialsList={testimonialsList} />
-				</div>
-			</div>
+			{/* Testimonials */}
+			<TestimonialsSection />
 		</div>
 	);
 };
