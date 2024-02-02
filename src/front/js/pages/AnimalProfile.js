@@ -5,10 +5,6 @@ import AnimalDetail from '../component/animalDetail';
 import TestimonialsSection from '../component/testimonialsSection';
 import SimilarAnimalsSection from '../component/similarAnimalsSection';
 
-import loadingImg from '../../img/loading.gif';
-import errorImg from '../../img/error.png';
-import notFoundImg from '../../img/notFound.png'
-
 
 const AnimalProfile = () => {
   const { id } = useParams();

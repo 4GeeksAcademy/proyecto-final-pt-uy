@@ -4,11 +4,6 @@ import { getRandomAnimalsList } from "../../client-API/backendAPI";
 
 import CardAnimal from "./cardAnimal";
 
-import loadingImg from '../../img/loading.gif';
-import errorImg from '../../img/error.png';
-import notFoundImg from '../../img/notFound.png'
-
-
 
 export default function RandomAnimalsList({type, limit = 5}) {
     const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +37,7 @@ export default function RandomAnimalsList({type, limit = 5}) {
                 isLoading &&
                 <div className='d-flex flex-column w-100 align-items-center'>
                     <figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "200px" }}>
-                        <img className='w-100' src={loadingImg} />
+                        <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif" />
                     </figure>
                     <p className='fw-semibold'>Cargando...</p>
                 </div>
@@ -53,7 +48,7 @@ export default function RandomAnimalsList({type, limit = 5}) {
                 !isLoading && errorMsg &&
                 <div className='d-flex flex-column w-100 align-items-center'>
                     <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "220px" }}>
-                        <img className='w-100' src={errorImg} />
+                        <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
                     </figure>
                     <p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
                 </div>
@@ -74,7 +69,7 @@ export default function RandomAnimalsList({type, limit = 5}) {
                 !isLoading && !errorMsg && randomAnimals.length === 0 &&
                 <div className='d-flex flex-column w-100 align-items-center'>
                     <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "150px" }}>
-                        <img className='w-100' src={notFoundImg} />
+                        <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
                     </figure>
                     <p className='fw-semibold text-center'>No hay peluditos que mostrar en este momento.</p>
                 </div>

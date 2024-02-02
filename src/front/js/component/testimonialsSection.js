@@ -4,10 +4,6 @@ import { getTestimonialsList } from "../../client-API/backendAPI";
 
 import TestimonialsScrollBar from "./testimonialsScrollBar";
 
-import loadingImg from '../../img/loading.gif';
-import errorImg from '../../img/error.png';
-import notFoundImg from '../../img/notFound.png'
-
 
 export default function TestimonialsSection() {
     const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +41,7 @@ export default function TestimonialsSection() {
               isLoading &&
               <div className='d-flex flex-column w-100 align-items-center'>
                 <figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "250px" }}>
-                  <img className='w-100' src={loadingImg} />
+                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif" />
                 </figure>
                 <p className='fw-semibold'>Cargando...</p>
               </div>
@@ -56,7 +52,7 @@ export default function TestimonialsSection() {
               !isLoading && errorMsg &&
               <div className='d-flex flex-column w-100 align-items-center'>
                 <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
-                  <img className='w-100' src={errorImg} />
+                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
                 </figure>
                 <p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
               </div>
@@ -75,7 +71,7 @@ export default function TestimonialsSection() {
               !isLoading && !errorMsg && testimonialsList.length === 0 &&
               <div className='d-flex flex-column w-100 align-items-center'>
                 <figure className='d-flex justify-content-center overflow-hidden w-100 my-4' style={{ maxWidth: "170px" }}>
-                  <img className='w-100' src={notFoundImg} />
+                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
                 </figure>
                 <p className='fw-semibold text-center'>No hay testimonios para mostrar en este momento.</p>
               </div>
