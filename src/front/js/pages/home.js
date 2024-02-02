@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import backgrondColors_image from "../../img/backgroundColors_image.png"
@@ -10,29 +10,36 @@ import loadingImg from '../../img/loading.gif';
 import errorImg from '../../img/error.png';
 import notFoundImg from '../../img/notFound.png';
 
+import { getTestimonialsList } from "../../client-API/backendAPI";
 import { useAnimalsContext } from "../contexts/animalsContext";
 
 import RandomAnimalsList from "../component/randomAnimalsList";
-import CardAnimal from '../component/cardAnimal';
 import CardTestimony from "../component/cardTestimony";
-
-const mockTestimony = {
-    testimony_text: "Excelente de ++",
-    image_url: "https://res.cloudinary.com/dnwfyqslx/image/upload/v1706828085/nxazjipweddkppkfaiq8.jpg",
-    user_info: {
-        name: "Mariana",
-        last_name: "Flores"
-    }
-}
 
 
 export const Home = () => {
-	const { store: { animals, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
+	const [isLoading, setIsLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+	const [testimonialsList, setTestimonialsList] = useState([]);
 
 	useEffect(() => {
-		setAnimals();
-	}, []);
+		fetchTestimonials();
+	}, [])
 
+	const fetchTestimonials = async () => {
+		setErrorMsg("");
+        setIsLoading(true);
+		
+		try {
+			const data = await getTestimonialsList();
+			setTestimonialsList(data);
+			setIsLoading(false);
+		} catch (error) {
+			console.error(`Error fetching testimonials list: `, error);
+            setErrorMsg(error.message);
+            setIsLoading(false);
+		}
+	}
 
 	return (
 		<div className="mb-5">
@@ -102,9 +109,9 @@ export const Home = () => {
 				*/}
 				<div className="p-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
 					{
-						Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
+						testimonialsList.map((testimony, index) => {
 							return (
-								<CardTestimony key={index} testimony={mockTestimony}/>
+								<CardTestimony key={index} testimony={testimony}/>
 							)
 						})
 					}
