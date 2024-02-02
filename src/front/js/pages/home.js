@@ -14,7 +14,7 @@ import { getTestimonialsList } from "../../client-API/backendAPI";
 import { useAnimalsContext } from "../contexts/animalsContext";
 
 import RandomAnimalsList from "../component/randomAnimalsList";
-import CardTestimony from "../component/cardTestimony";
+import TestimonialsScrollBar from "../component/testimonialsScrollBar";
 
 
 export const Home = () => {
@@ -103,18 +103,8 @@ export const Home = () => {
 			{/* Testimonies */}
 			<div className="my-5 container">
 				<h5 className="fw-medium">Testimonios</h5>
-				{/*testimonies.length == 0 ?
-					<div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div>
-					:
-				*/}
 				<div className="p-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
-					{
-						testimonialsList.map((testimony, index) => {
-							return (
-								<CardTestimony key={index} testimony={testimony}/>
-							)
-						})
-					}
+					<TestimonialsScrollBar testimonialsList={testimonialsList} />
 				</div>
 			</div>
 		</div>
