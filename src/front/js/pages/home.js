@@ -16,6 +16,15 @@ import RandomAnimalsList from "../component/randomAnimalsList";
 import CardAnimal from '../component/cardAnimal';
 import CardTestimony from "../component/cardTestimony";
 
+const mockTestimony = {
+    testimony_text: "Excelente de ++",
+    image_url: "https://res.cloudinary.com/dnwfyqslx/image/upload/v1706828085/nxazjipweddkppkfaiq8.jpg",
+    user_info: {
+        name: "Mariana",
+        last_name: "Flores"
+    }
+}
+
 
 export const Home = () => {
 	const { store: { animals, isLoading, error }, actions: { setAnimals } } = useAnimalsContext();
@@ -95,7 +104,7 @@ export const Home = () => {
 					{
 						Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
 							return (
-								<CardTestimony />
+								<CardTestimony key={index} testimony={mockTestimony}/>
 							)
 						})
 					}
