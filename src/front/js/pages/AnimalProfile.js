@@ -17,21 +17,23 @@ const AnimalProfile = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [animal, setAnimal] = useState(null);
 
-  let gender = "sin datos";
-  let age = "sin datos";
-  let size = "sin datos";
-  let vaccinated = "sin datos";
-  let dewormed = "sin datos";
-  let microchip = "sin datos";
-  let castrated = "sin datos";
-  let birthDate = "sin datos";
-  let publicationDate = "sin datos";
-  let additionalInfo = "";
+  let gender = animal?.gender === "male" ? "Macho" : "Hembra" || "sin datos";
+  let vaccinated = animal?.vaccinated ? "Sí" : "No" || "sin datos";
+  let dewormed = animal?.dewormed ? "Sí" : "No" || "sin datos";
+  let microchip = animal?.microchip ? "Sí" : "No" || "sin datos";
+  let castrated = animal?.castrated ? "Sí" : "No" || "sin datos";
+  let additionalInfo = animal?.additional_information || "";
+  let birthDate = animal?.birth_date?.substring(5,16) || "sin datos";
+  let publicationDate = animal?.publication_date?.substring(5,16) || "sin datos";
+  let age = calculateAge(animal) || "sin datos";
+  let size = translateSize(animal) || "sin datos";
+
 
 
   useEffect(() => {
     fetchAnimal();
   }, [])
+
 
   const fetchAnimal = async () => {
     setErrorMsg("");
@@ -47,6 +49,52 @@ const AnimalProfile = () => {
       setIsLoading(false);
     }
   }
+
+
+  function translateSize(animal) {
+    let translatedSize = "";
+    if ( animal && animal.size) {
+      switch (animal.size) {
+        case "small":
+          translatedSize = "Pequeño";
+          break;
+        case "medium":
+          translatedSize = "Mediano";
+          break;
+        default:
+          translatedSize = "Grande"
+          break;
+      }
+    }
+    return translatedSize;
+  }
+
+
+  function calculateAge(animal) {
+    let age = ""; 
+    if (animal && animal.birth_date) {
+      const birthDateObj = new Date(animal.birth_date);
+      const timeDifference = Date.now() - birthDateObj.getTime();
+
+      const weeks = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
+      const months = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 30));
+      const years = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 365));
+
+      if (years > 1) {
+          age = `${years} años`;
+      } else if (years === 1) {
+          age = "1 año";
+      } else if (months > 1) {
+          age = `${months} meses`;
+      } else if (months === 1) {
+          age = "1 mes";
+      } else {
+          age = `${weeks} sem.`;
+      }
+    }
+    return age;
+  }
+
 
 
   return (
@@ -71,12 +119,12 @@ const AnimalProfile = () => {
             </div>
           </div>
 
-          <div className='col animal-data '>
+          <div className='col animal-data pb-3'>
             <div className='pe-5'>
               <p>Inicio {'>'} Peluditos {'>'} {animal.name}</p><br />
               <p className='mb-1'>ref. <span className='fw-semibold'>{animal.identification_code}</span></p>
               <h1 className="fw-semibold">{animal.name}</h1>
-              <div className='mb-3'>
+              <div className='mb-4'>
                 <button className="btn btn-primary rounded-pill px-4 py-2 mt-3">Quiero Adoptarlo!</button>
                 <button className="btn btn-outline-primary rounded-pill  py-2 mt-3 ms-3"><i className="fa-regular fa-message me-2"></i>Contáctanos  </button>
               </div>
