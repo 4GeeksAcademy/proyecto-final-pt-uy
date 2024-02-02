@@ -4,28 +4,7 @@ import CardAnimal from '../component/cardAnimal';
 import Carousel from '../component/carrousel';
 
 
-const animalDetails = {
-  name: 'Felix',
-  identificationCode: "#9274928",
-  sexo: "Macho",
-  edad: "2 años",
-  tamano: "Mediana",
-  vacunado: "si",
-  desparasitado: "Sí",
-  microchip: "Sí",
-  castrado: "Sí",
-  fechaNacimiento: "Tue, 12 Dec 2023 00:00:00 GMT",
-  fechaPublicacion: "Tue, 01 Feb 2024 12:00:00 GMT",
-  informacionAdicional: "Información adicional sobre el anima 34gg 4 g4gwgw wg w4gerth5 th te ",
-  imagen1: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
-  imagen2: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
-  imagen3: "https://www.timeoutdubai.com/cloud/timeoutdubai/2021/09/11/hfpqyV7B-IMG-Dubai-UAE.jpg",
-  imagen4: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
-  imagen5: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1f/ad/7f/16/caption.jpg?w=1200&h=-1&s=1",
-};
-
-
-const AnimalProfile = () => {
+const AnimalProfile = ({animalDetails}) => {
   return (
     <div className='container'>
 
