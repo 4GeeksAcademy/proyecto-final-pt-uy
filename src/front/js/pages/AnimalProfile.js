@@ -5,6 +5,7 @@ import { getAnimal } from '../../client-API/backendAPI';
 
 import CardAnimal from '../component/cardAnimal';
 import AnimalDetail from '../component/animalDetail';
+import TestimonialsSection from '../component/testimonialsSection';
 
 import loadingImg from '../../img/loading.gif';
 import errorImg from '../../img/error.png';
@@ -19,32 +20,8 @@ const AnimalProfile = () => {
   return (
     <div className='container'>
       <AnimalDetail id={id} />
-
-      {
-        // false &&
-        // <div className='row testimony'>
-        //   {/* Testimonies */}
-        //   <div className="my-5 container">
-        //     {/*testimonies.length == 0 ?
-        //     <div className="spinner-border" role="status"><span className="visually-hidden">Loading...</span></div>
-        //     :
-        //   */}
-        //     <h2 className=" p-0 text-center">Testimonios</h2>
-        //     <div className="px-2 grid gap-3 d-flex flex-row row-cols-2 scroll-bar" style={{ overflowX: "scroll" }} >
-
-        //       {
-        //         Array.from({ length: 12 }, (v, i) => i).map((card, index) => {
-        //           return (
-        //             <CardAnimal key={index} animal={animal} />
-        //           )
-        //         })
-        //       }
-        //     </div>
-        //   </div>
-
-        // </div>
-      }
-
+      <TestimonialsSection />
+      
       {
         // false &&
         // <div className='row related-animals mb-5'>
