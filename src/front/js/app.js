@@ -22,9 +22,9 @@ import Recomendations from "./pages/Recomendations";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import NewPassword from "./pages/NewPassword.js";
-import TableAnimals from "./component/tableAnimals.js";
-import TableReviews from "./component/tableReviews.js";
-import TableUsers from "./component/tableUsers.js";
+import TableAnimals from "./component/admin/tableAnimals.js";
+import TableReviews from "./component/admin/tableTestimonials.js";
+import TableUsers from "./component/admin/tableUsers.js";
 
 import { BackendURL } from "./component/backendURL";
 
