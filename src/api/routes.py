@@ -1,7 +1,7 @@
 """
 Este módulo se encarga de iniciar el servidor API, cargar la base de datos y agregar los puntos finales.
 """
-from flask import Flask, request, jsonify, url_for, Blueprint
+from flask import Flask, request, jsonify, url_for, Blueprint, render_template
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from dotenv import load_dotenv
@@ -18,7 +18,7 @@ from smtplib import SMTPException
 
 def generate_token_password(email):
     expire = datetime.timedelta(hours=1)
-    token = create_access_token(identity=email, expire_delta=expire)
+    token = create_access_token(identity=email, expires_delta=expire)
     return token 
 
 
