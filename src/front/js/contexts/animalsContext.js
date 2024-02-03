@@ -78,6 +78,18 @@ export function AnimalsContextProvider({ children }) {
         }
       }))
     },
+    setStatuses: (payload) => {
+      return setStore(prevState => ({
+        ...prevState,
+        filters: {
+          ...prevState.filters,
+          statuses: {
+            ...prevState.filters.statuses,
+            ...payload
+          }
+        }
+      }))
+    },
     setSorting: (payload) => {
       return setStore(prevState => ({
         ...prevState,

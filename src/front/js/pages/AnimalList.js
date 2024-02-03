@@ -8,7 +8,7 @@ import Pagination from '../component/pagination';
 import CardAnimal from '../component/cardAnimal';
 
 const AnimalList = () => {
-  const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setSorting, setPagination } } = useAnimalsContext();
+  const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setSorting } } = useAnimalsContext();
 
   useEffect(() => {
     setAnimals();
