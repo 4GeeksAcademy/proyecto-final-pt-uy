@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '../contexts/userContext';
 
@@ -11,9 +11,9 @@ const Profile = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
-  const { store: { user, token } } = useUserContext();
+  const { store: { user, token }, actions} = useUserContext();
 
-  const [name, setName] = useState("")
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUser();
@@ -34,6 +34,16 @@ const Profile = () => {
       setIsLoading(false);
     }
   }
+
+  const handleLogout = () => {
+		actions.setToken("");
+		actions.setUser({
+			id: "",
+			name: "",
+			role: ""
+		});
+		navigate("/login");
+	}
 
   return (
     <div className='container bg-linear-0 my-5 p-5'>
@@ -221,7 +231,9 @@ const Profile = () => {
 
           {/*Buttons*/}
           <div className='d-flex mt-5'>
-            <button className='btn btn-outline-primary rounded-pill px-4 p-2 ms-auto me-3'>Cerrar sesión</button>
+            <button className='btn btn-outline-primary rounded-pill px-4 p-2 ms-auto me-3' onClick={handleLogout}>
+              Cerrar sesión
+            </button>
             <Link to="/edit-profile">
               <button className='btn btn-primary rounded-pill px-4 p-2'>Editar</button>
             </Link>
