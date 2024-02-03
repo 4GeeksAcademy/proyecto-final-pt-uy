@@ -1,6 +1,7 @@
 import React, {useEffect} from "react";
 
 import { useAnimalsContext } from "../../contexts/animalsContext";
+import { formatAnimalData } from "../../../utils/fromattingFunctions";
 
 import Pagination from '../pagination';
 
@@ -16,50 +17,6 @@ export default function TableAnimals() {
         setAnimals();
     }, [filters, pagination.currentPage]);
 
-
-    function translateSize(animal) {
-        let translatedSize = "";
-        if ( animal && animal.size) {
-          switch (animal.size) {
-            case "small":
-              translatedSize = "Pequeño";
-              break;
-            case "medium":
-              translatedSize = "Mediano";
-              break;
-            default:
-              translatedSize = "Grande"
-              break;
-          }
-        }
-        return translatedSize;
-      }
-    
-    
-      function calculateAge(animal) {
-        let age = ""; 
-        if (animal && animal.birth_date) {
-          const birthDateObj = new Date(animal.birth_date);
-          const timeDifference = Date.now() - birthDateObj.getTime();
-    
-          const weeks = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 7));
-          const months = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 30));
-          const years = Math.floor(timeDifference / (1000 * 60 * 60 * 24 * 365));
-    
-          if (years > 1) {
-              age = `${years} años`;
-          } else if (years === 1) {
-              age = "1 año";
-          } else if (months > 1) {
-              age = `${months} meses`;
-          } else if (months === 1) {
-              age = "1 mes";
-          } else {
-              age = `${weeks} sem.`;
-          }
-        }
-        return age;
-      }
     
 
     return (
@@ -168,25 +125,22 @@ export default function TableAnimals() {
                     <tbody>
                         {
                         animals.map((animal) => {
-                            let gender = animal?.gender === "male" ? "Macho" : "Hembra" || "sin datos";
-                            let publicationDate = animal?.publication_date?.substring(5,16) || "sin datos";
-                            let age = calculateAge(animal) || "sin datos";
-                            let size = translateSize(animal) || "sin datos";
+                            const formatedAnimal = formatAnimalData(animal);
 
                             return (
-                                <tr key={animal.id} onClick={() => { console.log("click en fila") }}>
+                                <tr key={formatedAnimal.id} onClick={() => { console.log("click en fila") }}>
                                     <td>
                                         <figure className="d-flex justify-content-center overflow-hidden rounded border-2 m-0" style={{ width: "50px", height: "50px" }}>
-                                            <img src={animal.image_urls[0]} />
+                                            <img src={formatedAnimal.image_urls[0]} />
                                         </figure>
                                     </td>
-                                    <td className="text-primary">{animal.identification_code}</td>
-                                    <td className="text-primary fw-semibold">{animal.name}</td>
-                                    <td className="d-none d-md-table-cell text-primary">{animal.type || "Sin datos"}</td>
-                                    <td className="d-none d-lg-table-cell text-primary">{gender}</td>
-                                    <td className="d-none d-lg-table-cell text-primary">{age}</td>
-                                    <td className="d-none d-lg-table-cell text-primary">{size}</td>
-                                    <td className="d-none d-xl-table-cell text-primary">{publicationDate}</td>
+                                    <td className="text-primary">{formatedAnimal.identification_code}</td>
+                                    <td className="text-primary fw-semibold">{formatedAnimal.name}</td>
+                                    <td className="d-none d-md-table-cell text-primary">{formatedAnimal.type}</td>
+                                    <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.gender}</td>
+                                    <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.age}</td>
+                                    <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.size}</td>
+                                    <td className="d-none d-xl-table-cell text-primary">{formatedAnimal.publication_date}</td>
                                     <td>
                                         <button className="btn text-neutral-60 edit-button">
                                             <i className="fa-regular fa-pen-to-square"></i>
