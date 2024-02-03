@@ -1,9 +1,10 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
 import { useAnimalsContext } from "../../contexts/animalsContext";
 import { formatAnimalData } from "../../../utils/fromattingFunctions";
 
 import Pagination from '../pagination';
+import IsLoadingMsg from "../isLoadingMsg";
 
 
 export default function TableAnimals() {
@@ -12,12 +13,12 @@ export default function TableAnimals() {
     useEffect(() => {
         setAnimals();
     }, []);
-    
+
     useEffect(() => {
         setAnimals();
     }, [filters, pagination.currentPage]);
 
-    
+
 
     return (
         <div>
@@ -80,95 +81,87 @@ export default function TableAnimals() {
 
             <div className='bg-white rounded-3 shadow-sm p-3 p-md-4 pb-5' >
                 {/* Mientras espera la respuesta del backend */}
-                {
-                isLoading &&
-                <div className='d-flex flex-column w-100 align-items-center align-self-center'>
-                    <figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "250px" }}>
-                    <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif" />
-                    </figure>
-                    <p className='fw-semibold'>Cargando...</p>
-                </div>
-                }
+                {isLoading && <IsLoadingMsg />}
 
                 {/* Si se recibió un error de parte del backend */}
                 {
-                !isLoading && error &&
-                <div className='d-flex flex-column w-100 align-items-center'>
-                    <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
-                    <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
-                    </figure>
-                    <p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
-                </div>
+                    !isLoading && error &&
+                    <div className='d-flex flex-column w-100 align-items-center'>
+                        <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
+                            <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
+                        </figure>
+                        <p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
+                    </div>
                 }
 
                 {/* Si no está esperando respuesta, no recibió error y hay animales en el store */}
                 {
-                !isLoading && !error && animals.length > 0 &&
-                <>
-                <table className="table table-hover align-middle mb-5">
-                    {/* Encabezados de la tabla */}
-                    <thead>
-                        <tr>
-                            <th scope="col" className="text-neutral-40 fw-medium" >Foto</th>
-                            <th scope="col" className="text-neutral-40 fw-medium" >Id_Cod</th>
-                            <th scope="col" className="text-neutral-40 fw-medium" >Nombre</th>
-                            <th scope="col" className="d-none d-md-table-cell text-neutral-40 fw-medium" >Especie</th>
-                            <th scope="col" className="d-none d-lg-table-cell text-neutral-40 fw-medium" >Sexo</th>
-                            <th scope="col" className="d-none d-lg-table-cell text-neutral-40 fw-medium" >Edad</th>
-                            <th scope="col" className="d-none d-lg-table-cell text-neutral-40 fw-medium" >Tamaño</th>
-                            <th scope="col" className="d-none d-xl-table-cell text-neutral-40 fw-medium" >Fecha Registro</th>
-                            <th scope="col" className="text-neutral-40 fw-medium" >Acciones</th>
-                        </tr>
-                    </thead>
-
-                    {/* Cuerpo de la tabla */}
-                    <tbody>
-                        {
-                        animals.map((animal) => {
-                            const formatedAnimal = formatAnimalData(animal);
-
-                            return (
-                                <tr key={formatedAnimal.id} onClick={() => { console.log("click en fila") }}>
-                                    <td>
-                                        <figure className="d-flex justify-content-center overflow-hidden rounded border-2 m-0" style={{ width: "50px", height: "50px" }}>
-                                            <img src={formatedAnimal.image_urls[0]} />
-                                        </figure>
-                                    </td>
-                                    <td className="text-primary">{formatedAnimal.identification_code}</td>
-                                    <td className="text-primary fw-semibold">{formatedAnimal.name}</td>
-                                    <td className="d-none d-md-table-cell text-primary">{formatedAnimal.type}</td>
-                                    <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.gender}</td>
-                                    <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.age}</td>
-                                    <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.size}</td>
-                                    <td className="d-none d-xl-table-cell text-primary">{formatedAnimal.publication_date}</td>
-                                    <td>
-                                        <button className="btn text-neutral-60 edit-button">
-                                            <i className="fa-regular fa-pen-to-square"></i>
-                                        </button>
-                                        <button className="btn text-neutral-60 delete-button">
-                                            <i className="fa-regular fa-trash-can"></i>
-                                        </button>
-                                    </td>
+                    !isLoading && !error && animals.length > 0 &&
+                    <>
+                        <table className="table table-hover align-middle mb-5">
+                            {/* Encabezados de la tabla */}
+                            <thead>
+                                <tr>
+                                    <th scope="col" className="text-neutral-40 fw-medium" >Foto</th>
+                                    <th scope="col" className="text-neutral-40 fw-medium" >Id_Cod</th>
+                                    <th scope="col" className="text-neutral-40 fw-medium" >Nombre</th>
+                                    <th scope="col" className="d-none d-md-table-cell text-neutral-40 fw-medium" >Especie</th>
+                                    <th scope="col" className="d-none d-lg-table-cell text-neutral-40 fw-medium" >Sexo</th>
+                                    <th scope="col" className="d-none d-lg-table-cell text-neutral-40 fw-medium" >Edad</th>
+                                    <th scope="col" className="d-none d-lg-table-cell text-neutral-40 fw-medium" >Tamaño</th>
+                                    <th scope="col" className="d-none d-xl-table-cell text-neutral-40 fw-medium" >Fecha Registro</th>
+                                    <th scope="col" className="text-neutral-40 fw-medium" >Acciones</th>
                                 </tr>
-                            )
-                        })
-                        }
-                    </tbody>
-                </table>
+                            </thead>
 
-                <Pagination />
-                </>
+                            {/* Cuerpo de la tabla */}
+                            <tbody>
+                                {
+                                    animals.map((animal) => {
+                                        const formatedAnimal = formatAnimalData(animal);
+
+                                        return (
+                                            <tr key={formatedAnimal.id} onClick={() => { console.log("click en fila") }}>
+                                                <td>
+                                                    <figure className="d-flex justify-content-center overflow-hidden rounded border-2 m-0" style={{ width: "50px", height: "50px" }}>
+                                                        <img src={formatedAnimal.image_urls[0]} />
+                                                    </figure>
+                                                </td>
+                                                <td className="text-primary">{formatedAnimal.identification_code}</td>
+                                                <td className="text-primary fw-semibold">{formatedAnimal.name}</td>
+                                                <td className="d-none d-md-table-cell text-primary">{formatedAnimal.type}</td>
+                                                <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.gender}</td>
+                                                <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.age}</td>
+                                                <td className="d-none d-lg-table-cell text-primary">{formatedAnimal.size}</td>
+                                                <td className="d-none d-xl-table-cell text-primary">{formatedAnimal.publication_date}</td>
+                                                <td>
+                                                    <button className="btn text-neutral-60 edit-button">
+                                                        <i className="fa-regular fa-pen-to-square"></i>
+                                                    </button>
+                                                    <button className="btn text-neutral-60 delete-button">
+                                                        <i className="fa-regular fa-trash-can"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
+
+                        <Pagination />
+                    </>
                 }
 
                 {/* Si no está esperando respuesta, no recibió error y la lista de animales del store está vacía */}
                 {
-                !isLoading && !error && animals.length === 0 &&
-                <div className='d-flex flex-column w-100 align-items-center'>
-                    <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "200px" }}>
-                    <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
-                    </figure>
-                    <p className='fw-semibold text-center'>No encontramos peluditos <br />según los filtros activos.</p>
-                </div>
+                    !isLoading && !error && animals.length === 0 &&
+                    <div className='d-flex flex-column w-100 align-items-center'>
+                        <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "200px" }}>
+                            <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
+                        </figure>
+                        <p className='fw-semibold text-center'>No encontramos peluditos <br />según los filtros activos.</p>
+                    </div>
                 }
             </div>
         </div>
