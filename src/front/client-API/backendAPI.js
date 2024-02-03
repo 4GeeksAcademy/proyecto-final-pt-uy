@@ -51,6 +51,31 @@ export const registerUser = async ({ name, last_name, username, email, password 
     }
 }
 
+// Get user by id
+export const getUser = async (user_id, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/usuarios/usuario/${user_id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error on getting user:', error);
+        throw error;
+    }
+}
+
+
 
 
 // Register animal
