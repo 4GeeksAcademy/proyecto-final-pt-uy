@@ -5,7 +5,7 @@ import { getRandomAnimalsList } from "../../client-API/backendAPI";
 import CardAnimal from "./cardAnimal";
 
 
-export default function RandomAnimalsList({type, limit = 5}) {
+export default function RandomAnimalsList({type, limit = 4}) {
     const [isLoading, setIsLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [randomAnimals, setRandomAnimals] = useState([]);
@@ -19,7 +19,7 @@ export default function RandomAnimalsList({type, limit = 5}) {
         setIsLoading(true);
 
         try {
-            const data = await getRandomAnimalsList(`type=${type}&limit=${limit}`);
+            const data = await getRandomAnimalsList(type, limit);
             setRandomAnimals(data.result);
             setIsLoading(false);
         } catch (error) {

@@ -94,10 +94,8 @@ export function AnimalsContextProvider({ children }) {
       }))
     },
     setAnimals: async () => {
-      const page = store.pagination.currentPage;
-      const perPage = store.pagination.limit;
-      const sortBy = store.sorting.sortBy;
-      const sortOrder = store.sorting.sortOrder;
+      const pagination = {page: store.pagination.currentPage, perPage: store.pagination.limit};
+      const sorting = {sortBy: store.sorting.sortBy, sortOrder: store.sorting.sortOrder};
 
       const statusesArray = [];
       for (const status in store.filters.statuses) {
@@ -123,20 +121,7 @@ export function AnimalsContextProvider({ children }) {
           sizesArray.push(size)
         }
       }
-
-      let requestParams = `page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`;
-      if (statusesArray.length > 0) {
-        requestParams = requestParams + `&statuses=${statusesArray.join()}`
-      }
-      if (typesArray.length > 0) {
-        requestParams = requestParams + `&types=${typesArray.join()}`
-      }
-      if (gendersArray.length > 0) {
-        requestParams = requestParams + `&genders=${gendersArray.join()}`
-      }
-      if (sizesArray.length > 0) {
-        requestParams = requestParams + `&sizes=${sizesArray.join()}`
-      }
+      const filtering = {statusesArray, typesArray, gendersArray, sizesArray}
 
       setStore(prevState => ({
         ...prevState,
@@ -145,7 +130,7 @@ export function AnimalsContextProvider({ children }) {
       }));
 
       try {
-        const data = await getAnimalList(requestParams);
+        const data = await getAnimalList(pagination, sorting, filtering);
         setStore(prevState => ({
           ...prevState,
           animals: data.result,
