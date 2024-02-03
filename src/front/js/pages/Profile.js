@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '../contexts/userContext';
 
-import { getUser } from '../../client-API/backendAPI';
+import { getUser, getAnimal } from '../../client-API/backendAPI';
+import CardAnimal from '../component/cardAnimal';
+
 
 const Profile = () => {
 
@@ -11,7 +13,11 @@ const Profile = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
-  const { store: { user, token }, actions} = useUserContext();
+  const [isLoadingAnimal, setIsLoadingAnimal] = useState(false);
+  const [errorMsgAnimal, setErrorMsgAnimal] = useState("");
+  const [animalDetails, setAnimalDetails] = useState(null);
+
+  const { store: { user, token }, actions } = useUserContext();
 
   const navigate = useNavigate();
 
@@ -20,6 +26,7 @@ const Profile = () => {
 
   }, [])
 
+  // Function to fetch user details
   const fetchUser = async () => {
     setErrorMsg("");
     setIsLoading(true);
@@ -35,19 +42,56 @@ const Profile = () => {
     }
   }
 
+  // Function to fetch details of adopted animals
+  const fetchAdoptedAnimalsDetails = async () => {
+    // Extract animal IDs from adopted animals relationships
+    const adoptedAnimalsIds = userInfo.adopted_animals.map(
+      (adoption_relationship) => adoption_relationship.animal_id
+    );
+
+    // Create an array of promises to fetch details for each adopted animal
+    const animalPromises = adoptedAnimalsIds.map((animalId) =>
+      getAnimal(animalId).catch((error) => {
+        // Handle error for this specific animal
+        console.error(`Error fetching details for animal ${animalId}: `, error);
+        return null; // Return null or handle error as needed
+      })
+    );
+
+    try {
+      // Resolve all promises at the same time
+      const animalInfo = await Promise.all(animalPromises);
+      setAnimalDetails(animalInfo);
+      setIsLoadingAnimal(false);
+    } catch (error) {
+      console.error('Error fetching adopted animals details: ', error);
+      setErrorMsgAnimal('Error fetching adopted animals details');
+      setIsLoadingAnimal(false);
+    }
+  };
+
+  // Fetch adopted animals details when user info changes
+  useEffect(() => {
+    if (userInfo?.adopted_animals.length > 0) {
+      setIsLoadingAnimal(true);
+      setErrorMsgAnimal('');
+      fetchAdoptedAnimalsDetails();
+    }
+  }, [userInfo]);
+
+  // Function to handle user logout
   const handleLogout = () => {
-		actions.setToken("");
-		actions.setUser({
-			id: "",
-			name: "",
-			role: ""
-		});
-		navigate("/login");
-	}
+    actions.setToken("");
+    actions.setUser({
+      id: "",
+      name: "",
+      role: ""
+    });
+    navigate("/login");
+  }
 
   return (
     <div className='container bg-linear-0 my-5 p-5'>
-      {console.log(userInfo)}
       {/* While waiting for the backend response */}
       {
         isLoading &&
@@ -199,7 +243,7 @@ const Profile = () => {
                         <label className="form-check-label opacity-100 ms-3" htmlFor="other_pets-no">No</label>
                       </div>
                     </div>
-                  ) : userInfo?.other_pets === "no"? (
+                  ) : userInfo?.other_pets === "no" ? (
                     <div>
                       <div className="form-check form-check-inline me-5">
                         <input className="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-yes" value="yes" disabled />
@@ -228,6 +272,39 @@ const Profile = () => {
           </form>
 
           <hr />
+
+          {/* Adopted animals section */}
+          {userInfo?.adopted_animals.length !== 0 ? (
+            // If the user has adopted animals
+            <div>
+              <h5 className='fw-medium'>Peluditos que ahora forman parte de tu familia</h5>
+              {/*While waiting for animal details to be loaded */}
+              {isLoadingAnimal ? (
+                <div className='d-flex flex-column w-100 align-items-center'>
+                  <figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: '250px' }}>
+                    <img
+                      className='w-100'
+                      src='https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif'
+                    />
+                  </figure>
+                  <p className='fw-semibold'>Cargando...</p>
+                </div>
+              ) : (
+                // When animal details are loaded
+                <div>
+                  <div className='d-flex flex-wrap align-items-start gap-3 gap-lg-4 my-4'>
+                    {animalDetails.map((animal) => (
+                      <CardAnimal key={animal.id} animal={animal} />
+                    ))}
+                  </div>
+                  <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar otro peludito</button>
+                </div>
+              )}
+            </div>
+          ) : (
+            // If the user hasn't adopted any animals
+            <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar!</button>
+          )}
 
           {/*Buttons*/}
           <div className='d-flex mt-5'>
