@@ -13,13 +13,7 @@ const Profile = () => {
 
   const { store: { user, token } } = useUserContext();
 
-  const [lastname, setLastname] = useState("user.lastname")
-  const [userName, setUserName] = useState("user.user_name")
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("user.phone_number");
-  const [address, setAddress] = useState("user.address");
-  const [backyard, setBackyard] = useState(""); {/*user.backyard*/ }
-  const [otherPets, setOtherPets] = useState("yes"); {/*user.other_pets*/ }
+  const [name, setName] = useState("")
 
   useEffect(() => {
     fetchUser();
@@ -43,7 +37,8 @@ const Profile = () => {
 
   return (
     <div className='container bg-linear-0 my-5 p-5'>
-      {/* Mientras espera la respuesta del backend */}
+      {console.log(userInfo)}
+      {/* While waiting for the backend response */}
       {
         isLoading &&
         <div className='d-flex flex-column w-100 align-items-center'>
@@ -54,7 +49,7 @@ const Profile = () => {
         </div>
       }
 
-      {/* Si se recibió un error de parte del backend */}
+      {/* If an unexpected error occurred in the backend */}
       {
         !isLoading && errorMsg &&
         <div className='d-flex flex-column w-100 align-items-center'>
@@ -65,7 +60,7 @@ const Profile = () => {
         </div>
       }
 
-      {/* Si no está esperando respuesta, no recibió error y el usuario no es null */}
+      {/* If it isn't waiting for an answer, didn't occurred any errors and the user is not null */}
       {
         !isLoading && !errorMsg && userInfo &&
         <div>
@@ -79,7 +74,7 @@ const Profile = () => {
           <div className='d-flex align-items-center my-5'>
             <div className='border_profile_img bg-white d-flex justify-content-center align-items-center shadow'>
               <figure className='circle_profile_img bg-secondary d-flex justify-content-center align-items-center fs-0-1 m-0'>
-                {user.name[0]}
+                {userInfo?.name[0]}
               </figure>
             </div>
             <h5 className='ms-3 fw-medium my-0'>{userInfo?.user_name}</h5>
@@ -143,7 +138,7 @@ const Profile = () => {
               <div className="mb-3 col-md-5 my-3">
                 <label htmlFor="name" className="form-label fw-medium">Patio</label>
                 <div className='ms-3'>
-                  {backyard === "yes" ?
+                  {userInfo?.backyard === "yes" ? (
                     <div>
                       <div className="form-check form-check-inline me-5">
                         <input className="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-yes" value="yes" checked disabled />
@@ -154,7 +149,7 @@ const Profile = () => {
                         <label className="form-check-label opacity-100 ms-3" htmlFor="backyard-no">No</label>
                       </div>
                     </div>
-                    :
+                  ) : userInfo?.backyard === "no" ? (
                     <div>
                       <div className="form-check form-check-inline me-5">
                         <input className="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-yes" value="yes" disabled />
@@ -165,14 +160,25 @@ const Profile = () => {
                         <label className="form-check-label opacity-100 ms-3" htmlFor="backyard-no">No</label>
                       </div>
                     </div>
-                  }
+                  ) : (
+                    <div>
+                      <div className="form-check form-check-inline me-5">
+                        <input className="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-yes" value="yes" disabled />
+                        <label className="form-check-label opacity-100 ms-3" htmlFor="backyard-yes">Sí</label>
+                      </div>
+                      <div className="form-check form-check-inline">
+                        <input className="form-check-input opacity-100" type="radio" name="backyard-inlineRadioOptions" id="backyard-no" value="no" disabled />
+                        <label className="form-check-label opacity-100 ms-3" htmlFor="backyard-no">No</label>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className="mb-3 col-md-6 ms-md-auto my-3">
                 <label htmlFor="name" className="form-label fw-medium">Mascotas</label>
                 <div className='ms-3'>
-                  {otherPets === "yes" ?
+                  {userInfo?.other_pets === "yes" ? (
                     <div>
                       <div className="form-check form-check-inline me-5">
                         <input className="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-yes" value="yes" checked disabled />
@@ -183,7 +189,7 @@ const Profile = () => {
                         <label className="form-check-label opacity-100 ms-3" htmlFor="other_pets-no">No</label>
                       </div>
                     </div>
-                    :
+                  ) : userInfo?.other_pets === "no"? (
                     <div>
                       <div className="form-check form-check-inline me-5">
                         <input className="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-yes" value="yes" disabled />
@@ -194,7 +200,18 @@ const Profile = () => {
                         <label className="form-check-label opacity-100 ms-3" htmlFor="other_pets-no">No</label>
                       </div>
                     </div>
-                  }
+                  ) : (
+                    <div>
+                      <div className="form-check form-check-inline me-5">
+                        <input className="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-yes" value="yes" disabled />
+                        <label className="form-check-label opacity-100 ms-3" htmlFor="other_pets-yes">Sí</label>
+                      </div>
+                      <div className="form-check form-check-inline">
+                        <input className="form-check-input opacity-100" type="radio" name="other_pets-inlineRadioOptions" id="other_pets-no" value="no" disabled />
+                        <label className="form-check-label opacity-100 ms-3" htmlFor="other_pets-no">No</label>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
