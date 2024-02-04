@@ -1,36 +1,47 @@
 import React, {useState, useEffect} from "react";
 
 import { getAnimal } from "../../client-API/backendAPI";
+import { formatAnimalData } from "../../utils/fromattingFunctions";
 
 import Carousel from './carrousel';
+import IsLoadingMsg from "./messages/isLoadingMsg";
+import ErrorMsg from "./messages/errorMsg";
+import NotFoundMsg from "./messages/notFoundMsg";
+
 
 
 export default function AnimalDetail({id, setAnimalType}) {
-    const [isLoading, setIsLoading] = useState(false);
-    const [errorMsg, setErrorMsg] = useState("");
-	const [animal, setAnimal] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [animal, setAnimal] = useState(null);
+  
+  let formattedAnimal = null;
 
-    let gender = animal?.gender === "male" ? "Macho" : "Hembra" || "sin datos";
-    let vaccinated = animal?.vaccinated ? "Sí" : "No" || "sin datos";
-    let dewormed = animal?.dewormed ? "Sí" : "No" || "sin datos";
-    let microchip = animal?.microchip ? "Sí" : "No" || "sin datos";
-    let castrated = animal?.castrated ? "Sí" : "No" || "sin datos";
-    let additionalInfo = animal?.additional_information || "";
-    let birthDate = animal?.birth_date?.substring(5,16) || "sin datos";
-    let publicationDate = animal?.publication_date?.substring(5,16) || "sin datos";
-    let age = calculateAge(animal) || "sin datos";
-    let size = translateSize(animal) || "sin datos";
+  let gender = animal?.gender === "male" ? "Macho" : "Hembra" || "sin datos";
+  let vaccinated = animal?.vaccinated ? "Sí" : "No" || "sin datos";
+  let dewormed = animal?.dewormed ? "Sí" : "No" || "sin datos";
+  let microchip = animal?.microchip ? "Sí" : "No" || "sin datos";
+  let castrated = animal?.castrated ? "Sí" : "No" || "sin datos";
+  let additionalInfo = animal?.additional_information || "";
+  let birthDate = animal?.birth_date?.substring(5,16) || "sin datos";
+  let publicationDate = animal?.publication_date?.substring(5,16) || "sin datos";
+  let age = calculateAge(animal) || "sin datos";
+  let size = translateSize(animal) || "sin datos";
 
-    useEffect(() => {
-		fetchAnimal();
+  useEffect(() => {
+    fetchAnimal();
+    if (animal) {
+      formattedAnimal = formatAnimalData(animal);
+    }
         
-	}, [])
+	}, []);
 
-    useEffect(() => {
-        if(animal) {
-            setAnimalType(animal.type)
-        }
-    }, [animal])
+  useEffect(() => {
+      if(animal) {
+          setAnimalType(animal.type);
+          formattedAnimal = formatAnimalData(animal);
+      }
+  }, [animal]);
 
 
     const fetchAnimal = async () => {
@@ -98,26 +109,10 @@ export default function AnimalDetail({id, setAnimalType}) {
     return (
         <div className="container d-flex mb-5">
             {/* Mientras espera la respuesta del backend */}
-            {
-              isLoading &&
-              <div className='d-flex flex-column w-100 align-items-center'>
-                <figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "250px" }}>
-                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif" />
-                </figure>
-                <p className='fw-semibold'>Cargando...</p>
-              </div>
-            }
+            {isLoading && <IsLoadingMsg />}
 
             {/* Si se recibió un error de parte del backend */}
-            {
-              !isLoading && errorMsg &&
-              <div className='d-flex flex-column w-100 align-items-center'>
-                <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
-                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
-                </figure>
-                <p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
-              </div>
-            }
+            {!isLoading && errorMsg && <ErrorMsg />}
 
             {/* Si no está esperando respuesta, no recibió error y el animal no es null */}
             {
@@ -205,17 +200,7 @@ export default function AnimalDetail({id, setAnimalType}) {
             }
 
             {/* Si no está esperando respuesta, no recibió error y el animal es null */}
-            {
-              !isLoading && !errorMsg && !animal &&
-              <div className='d-flex flex-column w-100 align-items-center'>
-                <figure className='d-flex justify-content-center overflow-hidden w-100 my-4' style={{ maxWidth: "200px" }}>
-                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
-                </figure>
-                <p className='fw-semibold text-center'>No encontramos datos de ese peludito.</p>
-              </div>
-            }
-
-            
-		</div>
+            {!isLoading && !errorMsg && !animal && <NotFoundMsg />}    
+		    </div>
     );
 }
