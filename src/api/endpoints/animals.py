@@ -307,29 +307,30 @@ def update_animal(animal_id):
     for field, value in new_animal_data.items():
         setattr(animal_to_update, field, value)
 
+    serialized_animal = animal_to_update.serialize()
+
     # Gestionar las imágenes y actualizarlas en Cloudinary (por ahora sustituye las anteriores por las nuevas)
     new_images = request.files.getlist('images')
 
-    # Eliminar todas las imágenes existentes del animal
-    Animals_images.query.filter_by(animal_id=animal_id).delete()
+    if len(new_images) > 0:
+        # Eliminar todas las imágenes existentes del animal
+        Animals_images.query.filter_by(animal_id=animal_id).delete()
 
-    # Subir y almacenar las nuevas imágenes en Cloudinary
-    image_urls = []  # Lista para almacenar las URLs de las imágenes
+        # Subir y almacenar las nuevas imágenes en Cloudinary
+        image_urls = []  # Lista para almacenar las URLs de las imágenes
 
-    for image in new_images:
-        upload_response = upload(image)  # Subir la imagen a Cloudinary
-        image_urls.append(upload_response['secure_url'])  # Obtener la URL y agregarla a la lista
+        for image in new_images:
+            upload_response = upload(image)  # Subir la imagen a Cloudinary
+            image_urls.append(upload_response['secure_url'])  # Obtener la URL y agregarla a la lista
 
-        # Almacenar la información de la imagen en la base de datos
-        animal_image = Animals_images(image_url=upload_response['secure_url'], public_id=upload_response['public_id'], animal_id=animal_id)
-        db.session.add(animal_image)
+            # Almacenar la información de la imagen en la base de datos
+            animal_image = Animals_images(image_url=upload_response['secure_url'], public_id=upload_response['public_id'], animal_id=animal_id)
+            db.session.add(animal_image)
+
+        # Agregar las nuevas URLs de las imágenes a la respuesta
+        serialized_animal['image_urls'] = image_urls
 
     db.session.commit()
-
-    serialized_animal = animal_to_update.serialize()
-
-    # Agregar las nuevas URLs de las imágenes a la respuesta
-    serialized_animal['image_urls'] = image_urls
 
     response_body = {
         "msg": "ok",
