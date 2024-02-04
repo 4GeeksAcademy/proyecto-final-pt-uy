@@ -1,4 +1,5 @@
 export function formatAnimalData(animal) {
+    const status = translateStatus(animal) || "sin datos";
     const type = translateType(animal) || "sin datos";
     const gender = translateGender(animal) || "sin datos";
     const publicationDate = animal.publication_date?.substring(5,16) || "sin datos";
@@ -12,6 +13,7 @@ export function formatAnimalData(animal) {
     const additionalInfo = animal.additional_information || "";
 
     const formatedAnimal = {...animal};
+    formatedAnimal.status = status;
     formatedAnimal.type = type;
     formatedAnimal.gender = gender;
     formatedAnimal.publication_date = publicationDate;
@@ -70,6 +72,27 @@ export function translateSize(animal) {
       }
     }
     return translatedSize;
+}
+
+export function translateStatus(animal) {
+    let translatedStatus = "";
+    if (animal.status) {
+      switch (animal.status) {
+        case "not_adopted":
+          translatedStatus = "No adoptado";
+          break;
+        case "adopted":
+          translatedStatus = "Adoptado";
+          break;
+        case "passed_away":
+          translatedStatus = "Fallecido";
+          break;
+        default:
+          translatedStatus = ""
+          break;
+      }
+    }
+    return translatedStatus;
 }
 
 

@@ -29,6 +29,10 @@ export default function AnimalInfoDetail({animal}) {
                             <td className='text-neutral-60'>: {formattedAnimal.id}</td>
                         </tr>
                         <tr>
+                        <td className='text-neutral-60'>Estado</td>
+                        <td className='text-neutral-60'>: {formattedAnimal.status}</td>
+                        </tr>
+                        <tr>
                         <td className='text-neutral-60'>Sexo</td>
                         <td className='text-neutral-60'>: {formattedAnimal.gender}</td>
                         </tr>
