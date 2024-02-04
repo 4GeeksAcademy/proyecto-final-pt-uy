@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAnimalsContext } from '../contexts/animalsContext';
 
 import AnimalListLeftPanel from '../component/animalListLeftPanel';
+import AnimalsListSorting from '../component/animalsListSorting';
 import Pagination from '../component/pagination';
 import CardAnimal from '../component/cardAnimal';
 import IsLoadingMsg from '../component/messages/isLoadingMsg';
@@ -78,19 +79,7 @@ const AnimalList = () => {
             <nav className="d-flex justify-content-start justify-content-md-end flex-grow-1 fw-medium">
               <ul className="nav m-0 p-0">
                 <li className="nav-item m-0 p-0">
-                  <div className="dropdown">
-                    <button className="btn btn-outline-primary rounded-4 dropdown-toggle fs-7" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ width: "206px" }}>
-                      Ordenar
-                    </button>
-                    <ul className="dropdown-menu">
-                      <li><p className="dropdown-item" onClick={() => setSorting({ sortOrder: "desc", sortBy: "publication_date" })} >Últimos publicados</p></li>
-                      <li><p className="dropdown-item" onClick={() => setSorting({ sortOrder: "asc", sortBy: "publication_date" })} >Primeros publicados</p></li>
-                      <li><p className="dropdown-item" onClick={() => setSorting({ sortOrder: "desc", sortBy: "birth_date" })} >Por edad (menor a mayor)</p></li>
-                      <li><p className="dropdown-item" onClick={() => setSorting({ sortOrder: "asc", sortBy: "birth_date" })} >Por edad (mayor a menor)</p></li>
-                      <li><p className="dropdown-item" onClick={() => setSorting({ sortOrder: "asc", sortBy: "name" })} >Por nombre (A-Z) </p></li>
-                      <li><p className="dropdown-item" onClick={() => setSorting({ sortOrder: "desc", sortBy: "name" })} >Por nombre (Z-A) </p></li>
-                    </ul>
-                  </div>
+                  <AnimalsListSorting />
                 </li>
               </ul>
             </nav>
