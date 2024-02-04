@@ -6,6 +6,11 @@ import { useAnimalsContext } from '../contexts/animalsContext';
 import AnimalListLeftPanel from '../component/animalListLeftPanel';
 import Pagination from '../component/pagination';
 import CardAnimal from '../component/cardAnimal';
+import IsLoadingMsg from '../component/messages/isLoadingMsg';
+import ErrorMsg from '../component/messages/errorMsg';
+import NotFoundMsg from '../component/messages/notFoundMsg';
+
+
 
 const AnimalList = () => {
   const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setSorting } } = useAnimalsContext();
@@ -55,7 +60,6 @@ const AnimalList = () => {
           </div>
 
           <AnimalListLeftPanel />
-
         </div>
 
 
@@ -100,30 +104,14 @@ const AnimalList = () => {
           {/* Listado de cards */}
           <div className="d-flex flex-wrap justify-content-center align-items-start gap-3 gap-lg-4 my-4">
             {/* Mientras espera la respuesta del backend */}
-            {
-              isLoading &&
-              <div className='d-flex flex-column w-100 align-items-center'>
-                <figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: "250px" }}>
-                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800965/Site/loading_mtemdl.gif" />
-                </figure>
-                <p className='fw-semibold'>Cargando...</p>
-              </div>
-            }
+            {isLoading && <IsLoadingMsg />}
 
             {/* Si se recibió un error de parte del backend */}
-            {
-              !isLoading && error &&
-              <div className='d-flex flex-column w-100 align-items-center'>
-                <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "280px" }}>
-                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800953/Site/error_pozpsi.png" />
-                </figure>
-                <p className='fw-semibold'>Lo sentimos, ha ocurrido un error inesperado.</p>
-              </div>
-            }
+            {!isLoading && error && <ErrorMsg />}
 
             {/* Si no está esperando respuesta, no recibió error y hay animales en el store */}
             {
-              !isLoading && !error && animals &&
+              !isLoading && !error && animals.length > 0 &&
               animals.map((animal) => {
                 return (
                   <CardAnimal key={animal.id} animal={animal} />
@@ -132,22 +120,13 @@ const AnimalList = () => {
             }
 
             {/* Si no está esperando respuesta, no recibió error y la lista de animales del store está vacía */}
-            {
-              !isLoading && !error && animals.length === 0 &&
-              <div className='d-flex flex-column w-100 align-items-center'>
-                <figure className='d-flex justify-content-center overflow-hidden w-100 mb-4' style={{ maxWidth: "200px" }}>
-                  <img className='w-100' src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800999/Site/notFound_a0yxua.png" />
-                </figure>
-                <p className='fw-semibold text-center'>No encontramos peluditos <br />según los filtros activos.</p>
-              </div>
-            }
-
+            {!isLoading && !error && animals.length === 0 && <NotFoundMsg />}
           </div>
 
           {/* Paginado */}
           <Pagination />
-        </div>
 
+        </div>
       </main>
     </div>
   )
