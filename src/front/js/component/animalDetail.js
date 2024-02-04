@@ -11,7 +11,7 @@ import NotFoundMsg from "./messages/notFoundMsg";
 
 
 
-export default function AnimalDetail({id, setAnimalType=null, socialSection=true}) {
+export default function AnimalDetail({id, setAnimalType=null}) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [animal, setAnimal] = useState(null);
@@ -60,20 +60,17 @@ export default function AnimalDetail({id, setAnimalType=null, socialSection=true
           {/* Si no está esperando respuesta, no recibió error y el animal no es null */}
           {
               !isLoading && !errorMsg && animal &&
-              <div className='row animal border  rounded-5 outline-primary pt-3'>
+              <div className='row border rounded-5 outline-primary p-2 pt-4 bg-white'>
 
-                  <div className='col animal-img'>
+                  <div className='col'>
                       <div className=' '>
-                      <Carousel imgUrlsArray={formattedAnimal.image_urls} />
+                        <Carousel imgUrlsArray={formattedAnimal.image_urls} />
                       </div>
-                      {
-                          socialSection && <SocialShare />
-                      }
+                      <SocialShare />
                   </div>
 
-                  <div className='col animal-data pb-3'>
+                  <div className='col pb-3'>
                       <div className='pe-5'>
-                      <p>Inicio {'>'} Peluditos {'>'} {formattedAnimal.name}</p><br />
                       <p className='mb-1'>ref. <span className='fw-semibold'>{formattedAnimal.identification_code}</span></p>
                       <h1 className="fw-semibold">{formattedAnimal.name}</h1>
                       <div className='mb-4'>
