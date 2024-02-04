@@ -91,6 +91,13 @@ export default function AnimalInfoDetail({animal}) {
                 >
                     Modificar
                 </button>
+
+                <button 
+                    className="btn btn-danger rounded-pill px-5 py-2"
+                    onClick={() => {}}
+                >
+                    Borrar
+                </button>
             </div>
         </div>
     );
