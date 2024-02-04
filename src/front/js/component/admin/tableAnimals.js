@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAnimalsContext } from "../../contexts/animalsContext";
 import { formatAnimalData } from "../../../utils/fromattingFunctions";
@@ -10,6 +11,7 @@ import NotFoundMsg from "../messages/notFoundMsg";
 
 
 export default function TableAnimals() {
+    const navigate = useNavigate();
     const { store: { filters, animals, pagination, isLoading, error }, actions: { setAnimals, setStatuses } } = useAnimalsContext();
 
     useEffect(() => {
@@ -115,7 +117,7 @@ export default function TableAnimals() {
                                         const formatedAnimal = formatAnimalData(animal);
 
                                         return (
-                                            <tr key={formatedAnimal.id} onClick={() => { console.log("click en fila") }}>
+                                            <tr key={formatedAnimal.id} onClick={() => { navigate(`/animal-info/${formatedAnimal.id}`) }}>
                                                 <td>
                                                     <figure className="d-flex justify-content-center overflow-hidden rounded border-2 m-0" style={{ width: "50px", height: "50px" }}>
                                                         <img src={formatedAnimal.image_urls[0]} />
