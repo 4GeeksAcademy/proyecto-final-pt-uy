@@ -81,6 +81,7 @@
 		"react-dom": "^16.8.4",
 		"react-hook-form": "^7.49.3",
 		"react-polyfills": "0.0.1",
-		"react-router-dom": "^6.3.0"
+		"react-router-dom": "^6.3.0",
+		"react-tooltip": "^5.26.0"
 	}
 }
