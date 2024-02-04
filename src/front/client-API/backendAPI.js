@@ -80,6 +80,35 @@ export const addAnimal = async (formData, token) => {
 }
 
 
+
+// Modify animal
+export const modifyAnimal = async (id, formData, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData,
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Returns the modified animal
+        return data.result;
+
+    } catch (error) {
+        console.error('Error trying to modify an animal', error);
+        throw error;
+    }
+}
+
+
+
 // Get animal by id
 export const getAnimal = async (id) => {
     try {
@@ -145,7 +174,7 @@ export const getAnimalList = async (pagination, sorting, filtering) => {
 
 
 // Get random animals list
-export const getRandomAnimalsList = async (type="", limit=4) => {
+export const getRandomAnimalsList = async (type = "", limit = 4) => {
     const requestParams = `type=${type}&limit=${limit}`
 
     try {
