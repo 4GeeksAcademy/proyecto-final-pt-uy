@@ -291,22 +291,18 @@ body {
     opacity: 1;
 }
 
-.edit-button:hover {
-    background-color: #00A7E7;
+.profile-button:hover {
+    background-color: #0078CD;
 }
-.edit-button:hover i {
+.profile-button:hover i {
     color: white;
 }
 
-.delete-button:hover {
-    background-color: #FF564F;
+.adoption-button:hover {
+    background-color: #EEC77E;
 }
-.delete-button:hover i {
-    color: white;
-}
-
-table.table-hover tbody tr {
-    cursor: pointer;
+.adoption-button:hover svg path {
+    fill: white;
 }
 
 

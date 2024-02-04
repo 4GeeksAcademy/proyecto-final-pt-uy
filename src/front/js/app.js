@@ -26,6 +26,7 @@ import TableReviews from "./component/admin/tableTestimonials.js";
 import TableUsers from "./component/admin/tableUsers.js";
 import AnimalInfo from "./component/admin/animalInfo.js";
 import FormModifyAnimal from "./component/Forms/FormModifyAnimal.js";
+import FormAddAdoption from "./component/Forms/FormAddAdoption.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -67,6 +68,7 @@ const App = () => {
 
                                 <Route element={<LayoutDashAdmin />} >
                                     <Route path="/add-animal" element={<FormAddAnimal />} />
+                                    <Route path="/add-adoption" element={<FormAddAdoption />} />
                                     <Route path="/table-animals" element={<TableAnimals />} />
                                     <Route path="/table-reviews" element={<TableReviews />} />
                                     <Route path="/table-users" element={<TableUsers />} />
