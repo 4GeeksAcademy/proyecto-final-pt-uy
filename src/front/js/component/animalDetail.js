@@ -4,13 +4,14 @@ import { getAnimal } from "../../client-API/backendAPI";
 import { formatAnimalData } from "../../utils/fromattingFunctions";
 
 import Carousel from './carrousel';
+import SocialShare from "./socialShare";
 import IsLoadingMsg from "./messages/isLoadingMsg";
 import ErrorMsg from "./messages/errorMsg";
 import NotFoundMsg from "./messages/notFoundMsg";
 
 
 
-export default function AnimalDetail({id, setAnimalType}) {
+export default function AnimalDetail({id, setAnimalType=null, socialSection=true}) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [animal, setAnimal] = useState(null);
@@ -23,8 +24,10 @@ export default function AnimalDetail({id, setAnimalType}) {
 
   useEffect(() => {
       if(animal) {
-          setAnimalType(animal.type);
-          setFormattedAnimal(formatAnimalData(animal));
+        if (setAnimalType) {
+            setAnimalType(animal.type); 
+        }
+        setFormattedAnimal(formatAnimalData(animal));
       }
   }, [animal]);
 
@@ -63,16 +66,9 @@ export default function AnimalDetail({id, setAnimalType}) {
                       <div className=' '>
                       <Carousel imgUrlsArray={formattedAnimal.image_urls} />
                       </div>
-                      <div className='compartir text-center  p-5'>
-                      <p className='fw-semibold '>
-                          <i className="fa-solid fa-share-nodes fa-xl px-2"></i>
-                          Comparte:
-                          <i className="fa-brands fa-facebook fa-xl px-2" style={{ color: '#808080' }}></i>
-                          <i className="fa-brands fa-twitter fa-xl px-2" style={{ color: '#808080' }}></i>
-                          <i className="fa-brands fa-instagram fa-xl px-2" style={{ color: '#808080' }}></i>
-                          <i className="fa-brands fa-youtube fa-xl px-2" style={{ color: '#808080' }}></i>
-                      </p>
-                      </div>
+                      {
+                          socialSection && <SocialShare />
+                      }
                   </div>
 
                   <div className='col animal-data pb-3'>
