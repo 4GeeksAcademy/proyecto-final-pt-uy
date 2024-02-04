@@ -14,7 +14,16 @@ import NotFoundMsg from '../component/messages/notFoundMsg';
 
 
 const AnimalList = () => {
-  const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setSorting } } = useAnimalsContext();
+  const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setStatuses } } = useAnimalsContext();
+
+  useEffect(() => {
+    // En este componente sólo se deben listar los animales con estado "not_adopted"
+    setStatuses({
+      not_adopted: true,
+      adopted: false,
+      passed_away: false
+    });
+  }, []);
 
   useEffect(() => {
     setAnimals();
