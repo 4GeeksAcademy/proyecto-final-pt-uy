@@ -25,6 +25,7 @@ import NewPassword from "./pages/NewPassword.js";
 import TableAnimals from "./component/admin/tableAnimals.js";
 import TableReviews from "./component/admin/tableTestimonials.js";
 import TableUsers from "./component/admin/tableUsers.js";
+import AnimalInfo from "./component/admin/animalInfo.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -70,6 +71,7 @@ const App = () => {
                                     <Route path="/table-animals" element={<TableAnimals />} />
                                     <Route path="/table-reviews" element={<TableReviews />} />
                                     <Route path="/table-users" element={<TableUsers />} />
+                                    <Route path="/animal-info/:id" element={<AnimalInfo />} />
                                 </Route>
                             </Routes>
                         </AnimalsContextProvider>  
