@@ -298,6 +298,7 @@ const FormModifyAnimal = () => {
             type='button'
             className='btn btn-outline-primary rounded-4 px-3 px-md-4'
             onClick={() => navigate('/table-animals')}
+            disabled={isSubmitting}
           >
             Cancelar
           </button>
