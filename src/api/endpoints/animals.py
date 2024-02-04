@@ -290,7 +290,7 @@ def delete_animal(animal_id):
     db.session.delete(animal_to_delete)
     db.session.commit()
 
-    return jsonify({"msg": "Peludito eliminado exitosamente"}), 200
+    return jsonify({"msg": "Registro borrado correctamente"}), 200
 
 
 

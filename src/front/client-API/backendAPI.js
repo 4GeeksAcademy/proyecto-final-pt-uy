@@ -133,6 +133,32 @@ export const modifyAnimal = async (id, formData, token) => {
 }
 
 
+// Delete animal
+export const deleteAnimal = async (id, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Returns the modified animal
+        return true;
+
+    } catch (error) {
+        console.error('Error trying to delete an animal', error);
+        throw error;
+    }
+}
+
+
 
 // Get animal by id
 export const getAnimal = async (id) => {
