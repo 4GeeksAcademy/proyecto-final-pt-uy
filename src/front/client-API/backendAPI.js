@@ -105,6 +105,35 @@ export const addAnimal = async (formData, token) => {
 }
 
 
+
+// Modify animal
+export const modifyAnimal = async (id, formData, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData,
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Returns the modified animal
+        return data.result;
+
+    } catch (error) {
+        console.error('Error trying to modify an animal', error);
+        throw error;
+    }
+}
+
+
+
 // Get animal by id
 export const getAnimal = async (id) => {
     try {
@@ -126,7 +155,31 @@ export const getAnimal = async (id) => {
 
 
 // Get animals list
-export const getAnimalList = async (requestParams = "") => {
+export const getAnimalList = async (pagination, sorting, filtering) => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+    const sortBy = sorting?.sortBy || "publication_date";
+    const sortOrder = sorting?.sortOrder || "desc";
+    const statusesArray = filtering?.statusesArray || [];
+    const typesArray = filtering?.typesArray || [];
+    const gendersArray = filtering?.gendersArray || [];
+    const sizesArray = filtering?.sizesArray || [];
+
+    let requestParams = `page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`;
+
+    if (statusesArray.length > 0) {
+        requestParams = requestParams + `&statuses=${statusesArray.join()}`;
+    }
+    if (typesArray.length > 0) {
+        requestParams = requestParams + `&types=${typesArray.join()}`;
+    }
+    if (gendersArray.length > 0) {
+        requestParams = requestParams + `&genders=${gendersArray.join()}`;
+    }
+    if (sizesArray.length > 0) {
+        requestParams = requestParams + `&sizes=${sizesArray.join()}`;
+    }
+
     try {
         const response = await fetch(`${apiUrlBase}/animales?${requestParams}`);
 
@@ -146,7 +199,8 @@ export const getAnimalList = async (requestParams = "") => {
 
 
 // Get random animals list
-export const getRandomAnimalsList = async (requestParams = "") => {
+export const getRandomAnimalsList = async (type = "", limit = 4) => {
+    const requestParams = `type=${type}&limit=${limit}`
 
     try {
         const response = await fetch(`${apiUrlBase}/animales/random?${requestParams}`);
@@ -179,7 +233,6 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
         }
 
         const data = await response.json();
-        console.log(data.result);
         return data.result;
 
     } catch (error) {

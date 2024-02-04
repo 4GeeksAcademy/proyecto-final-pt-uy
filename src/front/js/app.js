@@ -14,7 +14,6 @@ import AnimalList from "./pages/AnimalList";
 import AnimalProfile from "./pages/AnimalProfile";
 import ForgotPassword from "./pages/ForgotPassword";
 import FormAddAnimal from "./component/Forms/FormAddAnimal.js";
-import FormEditAnimals from "./pages/FormEditAnimals";
 import FormEditProfile from "./pages/FormEditProfile";
 import FormTestimony from "./pages/FormTestimony";
 import Profile from "./pages/Profile";
@@ -22,9 +21,12 @@ import Recomendations from "./pages/Recomendations";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import NewPassword from "./pages/NewPassword.js";
-import TableAnimals from "./component/tableAnimals.js";
-import TableReviews from "./component/tableReviews.js";
-import TableUsers from "./component/tableUsers.js";
+import TableAnimals from "./component/admin/tableAnimals.js";
+import TableReviews from "./component/admin/tableTestimonials.js";
+import TableUsers from "./component/admin/tableUsers.js";
+import AnimalInfo from "./component/admin/animalInfo.js";
+import FormModifyAnimal from "./component/Forms/FormModifyAnimal.js";
+import FormAddAdoption from "./component/Forms/FormAddAdoption.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -66,13 +68,15 @@ const App = () => {
 
                                 <Route element={<LayoutDashAdmin />} >
                                     <Route path="/add-animal" element={<FormAddAnimal />} />
-                                    <Route path="/edit-animals" element={<FormEditAnimals />} />
+                                    <Route path="/add-adoption" element={<FormAddAdoption />} />
                                     <Route path="/table-animals" element={<TableAnimals />} />
                                     <Route path="/table-reviews" element={<TableReviews />} />
                                     <Route path="/table-users" element={<TableUsers />} />
+                                    <Route path="/animal-info/:id" element={<AnimalInfo />} />
+                                    <Route path="/modify-animal/:id" element={<FormModifyAnimal />} />
                                 </Route>
                             </Routes>
-                        </AnimalsContextProvider>  
+                        </AnimalsContextProvider>
                     </UserContextProvider>
                 </BrowserRouter>
             </React.StrictMode>

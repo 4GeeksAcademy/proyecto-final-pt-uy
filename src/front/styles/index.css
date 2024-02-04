@@ -291,6 +291,24 @@ body {
     opacity: 1;
 }
 
+.profile-button:hover {
+    background-color: #0078CD;
+}
+.profile-button:hover i {
+    color: white;
+}
+
+.adoption-button:hover {
+    background-color: #EEC77E;
+}
+.adoption-button:hover svg path {
+    fill: white;
+}
+
+
+
+
+
 @media screen and (min-width: 768px) {
     .image-panel {
         height: 100vh;

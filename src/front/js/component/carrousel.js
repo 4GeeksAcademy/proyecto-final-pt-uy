@@ -3,7 +3,7 @@ import React from 'react';
 
 const Carousel = ({imgUrlsArray}) => {
   return (
-    <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
+    <div id="carouselExampleIndicators" className="carousel slide mb-4" data-bs-ride="carousel">
       <div className="carousel-inner">
         {
           imgUrlsArray.map((url, index) => {
@@ -26,12 +26,12 @@ const Carousel = ({imgUrlsArray}) => {
         </span>
         <span className="visually-hidden">Next</span>
       </button>
-      <div className="carousel-indicators">
+      <div className="carousel-indicators mb-4">
         <div className="d-flex">
           {
             imgUrlsArray.map((url, index) => {
               return (
-                <div key={index} data-bs-target="#carouselExampleIndicators" data-bs-slide-to={index} className={index === 0 ? "active" : ""} style={{width: "65px"}}>
+                <div key={index} data-bs-target="#carouselExampleIndicators" data-bs-slide-to={index} className={index === 0 ? "active" : ""} style={{width: "53px"}}>
                   <img src={url} className="d-block w-100 img-thumbnail rounded" alt={`Indicator ${index}`} />
                 </div>
               )
