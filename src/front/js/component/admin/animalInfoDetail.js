@@ -83,7 +83,7 @@ export default function AnimalInfoDetail({animal}) {
 
                 <button 
                     className="btn btn-secondary rounded-pill px-5 py-2"
-                    onClick={() => {}}
+                    onClick={() => {navigate(`/modify-animal/${formattedAnimal.id}`)}}
                 >
                     Modificar
                 </button>

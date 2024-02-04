@@ -5,10 +5,10 @@ export function formatAnimalData(animal) {
     const birthDate = animal.birth_date?.substring(5,16) || "sin datos";
     const age = calculateAge(animal) || "sin datos";
     const size = translateSize(animal) || "sin datos";
-    const vaccinated = animal?.vaccinated ? "Sí" : "No" || "sin datos";
-    const dewormed = animal.dewormed ? "Sí" : "No" || "sin datos";
-    const microchip = animal.microchip ? "Sí" : "No" || "sin datos";
-    const castrated = animal.castrated ? "Sí" : "No" || "sin datos";
+    const vaccinated = animal.vaccinated === "yes" ? "Sí" : "No" || "sin datos";
+    const dewormed = animal.dewormed === "yes" ? "Sí" : "No" || "sin datos";
+    const microchip = animal.microchip === "yes" ? "Sí" : "No" || "sin datos";
+    const castrated = animal.castrated === "yes" ? "Sí" : "No" || "sin datos";
     const additionalInfo = animal.additional_information || "";
 
     const formatedAnimal = {...animal};

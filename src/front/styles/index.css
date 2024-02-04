@@ -305,6 +305,14 @@ body {
     color: white;
 }
 
+table.table-hover tbody tr {
+    cursor: pointer;
+}
+
+
+
+
+
 @media screen and (min-width: 768px) {
     .image-panel {
         height: 100vh;
