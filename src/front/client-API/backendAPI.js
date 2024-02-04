@@ -179,7 +179,6 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
         }
 
         const data = await response.json();
-        console.log(data.result);
         return data.result;
 
     } catch (error) {
