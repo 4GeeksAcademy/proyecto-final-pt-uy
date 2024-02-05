@@ -267,7 +267,6 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
 }
 
 
-
 // Get users list
 export const getUsersList = async (pagination, token) => {
     const page = pagination?.page || 1;
@@ -354,3 +353,32 @@ export const getAdoptionsList = async (pagination, token) => {
         throw error;
     }
 }
+
+
+
+
+
+// Get all adoptions
+export const getAdoptions = async (token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error on getting adopctions:', error);
+        throw error;
+    }
+}
+

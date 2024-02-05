@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '../contexts/userContext';
 
-import { getUser, getAnimal } from '../../client-API/backendAPI';
+import { getUser, getAnimal, getTestimonialsList, getAdoptions } from '../../client-API/backendAPI';
+
 import CardAnimal from '../component/cardAnimal';
+import CardTestimony from "../component/cardTestimony";
 
 
 const Profile = () => {
@@ -17,14 +19,53 @@ const Profile = () => {
   const [errorMsgAnimal, setErrorMsgAnimal] = useState("");
   const [animalDetails, setAnimalDetails] = useState(null);
 
+  const [testimonies, setTestimonies] = useState(null);
+
+  const [adoptions, setAdoptions] = useState(null);
+
   const { store: { user, token }, actions } = useUserContext();
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchUser();
+    fetchAdoptions();
+  }, [user.id, token])
 
-  }, [])
+  useEffect(() => {
+    fetchTestimony();
+  }, [adoptions])
+
+  const fetchTestimony = async () => {
+    try {
+      const data = await getTestimonialsList();
+      const filteredTestimonies = data.filter((testimony) => testimony.user_info.id === user.id);
+
+      if (adoptions) {
+        filteredTestimonies.forEach((testimony) => {
+          const adoption = adoptions.find((adoption) => testimony.adoption_id === adoption.id);
+          if (adoption) {
+            testimony.animal_id = adoption.animal_id;
+          }
+        });
+      }
+      setTestimonies(filteredTestimonies);
+    } catch (error) {
+      console.error(`Error fetching testimony: `, error);
+    }
+  };
+
+  const fetchAdoptions = async () => {
+    try {
+      const data = await getAdoptions(token);
+      const adoptionsInfo = data.result;
+      const filteredAdoptions = adoptionsInfo.filter((adoption) => adoption.user_id === user.id);
+      setAdoptions(filteredAdoptions);
+    }
+    catch (error) {
+      console.log("Error fetching adoptions:", error);
+    }
+  }
 
   // Function to fetch user details
   const fetchUser = async () => {
@@ -42,7 +83,7 @@ const Profile = () => {
     }
   }
 
-  // Function to fetch details of adopted animals
+  // Function to fetch details of adopted animals including testimonials
   const fetchAdoptedAnimalsDetails = async () => {
     // Extract animal IDs from adopted animals relationships
     const adoptedAnimalsIds = userInfo.adopted_animals.map(
@@ -50,13 +91,25 @@ const Profile = () => {
     );
 
     // Create an array of promises to fetch details for each adopted animal
-    const animalPromises = adoptedAnimalsIds.map((animalId) =>
-      getAnimal(animalId).catch((error) => {
+    const animalPromises = adoptedAnimalsIds.map(async (animalId) => {
+      try {
+        const animalDetail = await getAnimal(animalId);
+        // Check if there is a testimony for this animal
+        const testimonyForAnimal = testimonies.find((testimony) => testimony.animal_id === animalId);
+
+        // If there is a testimony, add it to the animal details
+        if (testimonyForAnimal) {
+          animalDetail.testimony = testimonyForAnimal;
+        }
+
+        return animalDetail;
+      } catch (error) {
         // Handle error for this specific animal
         console.error(`Error fetching details for animal ${animalId}: `, error);
         return null; // Return null or handle error as needed
-      })
-    );
+      }
+    });
+
 
     try {
       // Resolve all promises at the same time
@@ -70,14 +123,14 @@ const Profile = () => {
     }
   };
 
-  // Fetch adopted animals details when user info changes
+  // Fetch adopted animals details when user info or testimonies change
   useEffect(() => {
     if (userInfo?.adopted_animals.length > 0) {
       setIsLoadingAnimal(true);
       setErrorMsgAnimal('');
       fetchAdoptedAnimalsDetails();
     }
-  }, [userInfo]);
+  }, [userInfo, testimonies]);
 
   // Function to handle user logout
   const handleLogout = () => {
@@ -294,7 +347,22 @@ const Profile = () => {
                 <div>
                   <div className='d-flex flex-wrap align-items-start gap-3 gap-lg-4 my-4'>
                     {animalDetails.map((animal) => (
-                      <CardAnimal key={animal.id} animal={animal} />
+                      <CardAnimal animal={animal} />
+                    ))}
+                  </div>
+                  <h5 className='fw-medium'>Tus Testimonios</h5>
+                  <div className='d-flex flex-wrap align-items-start gap-3 gap-lg-4 my-4'>
+                    {animalDetails.map((animal) => (
+                      <React.Fragment key={animal.id}>
+                        {animal.testimony &&
+                          <CardTestimony key={animal.id} testimony={animal.testimony} />
+                        }
+                        {!animal.testimony &&
+                          <Link to="/testimony">
+                            <button className="btn btn-secondary rounded-pill px-4 py-2 testimony-card bg-secondary">Contanos tu experiencia con {animal.name}!</button>
+                          </Link>
+                        }
+                      </React.Fragment>
                     ))}
                   </div>
                   <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar otro peludito</button>
