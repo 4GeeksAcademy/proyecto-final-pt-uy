@@ -137,6 +137,7 @@ class Animals_images(db.Model):
 class Adoption_Users(db.Model):
     __tablename__ = "adoption_users"
     id = db.Column(db.Integer, primary_key=True)
+    registration_date = db.Column(db.Date)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     user_relationship = db.relationship(User)
     animal_id = db.Column(db.Integer, db.ForeignKey("animals.id"), unique=True, nullable=False)
@@ -149,6 +150,7 @@ class Adoption_Users(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "registration_date": self.registration_date,
             "user_id": self.user_id,
             "animal_id": self.animal_id,
         }

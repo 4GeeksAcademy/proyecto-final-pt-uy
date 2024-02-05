@@ -3,7 +3,7 @@ import React from "react";
 export default function DateInput({ id, label, placeholder = "", register, validationSchema = {}, errors, ...rest }) {
 
   return (
-    <div className="mb-3">
+    <div className="mb-3 flex-grow-1">
       <label htmlFor={id} className="form-label">{label}</label>
       <input
         type="date"
