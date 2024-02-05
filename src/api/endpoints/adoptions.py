@@ -26,11 +26,13 @@ def register_adoption():
     Parámetros de la solicitud (JSON):
     - user_id: ID del usuario adoptante.
     - animal_id: ID del animal adoptado.
+    - registration_date: fecha de registro de la adopción
 
     Ejemplo de solicitud JSON:
     {
         "user_id": 123,
-        "animal_id": 456
+        "animal_id": 456,
+        "registration_date": "2024-01-30T12:30:00.000Z"
     }
 
     Respuestas posibles:
@@ -56,13 +58,14 @@ def register_adoption():
     data = request.json
 
     # Validar que los campos requeridos estén presentes en la solicitud
-    required_fields = ['user_id', 'animal_id']
+    required_fields = ['user_id', 'animal_id', 'registration_date']
     for field in required_fields:
         if field not in data:
             return jsonify({"msg": f"El campo {field} es requerido"}), 400
 
     user_id = data['user_id']
     animal_id = data['animal_id']
+    registration_date = data['registration_date']
 
     # Verificar si el usuario y el animal existen en la base de datos
     user = User.query.get(user_id)
@@ -79,7 +82,7 @@ def register_adoption():
         return jsonify({"msg": "Este animal ya tiene registrada una adopción"}), 409
 
     # Registrar la adopción
-    new_adoption = Adoption_Users(user_id=user_id, animal_id=animal_id)
+    new_adoption = Adoption_Users(user_id=user_id, animal_id=animal_id, registration_date=registration_date)
     db.session.add(new_adoption)
 
     # Actualizar el estado del animal a "adoptado"
