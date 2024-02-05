@@ -6,6 +6,7 @@ import { getUser} from "../../../client-API/backendAPI";
 import IsLoadingMsg from "../messages/isLoadingMsg";
 import ErrorMsg from "../messages/errorMsg";
 import NotFoundMsg from "../messages/notFoundMsg";
+import UnderConstructionMsg from "../messages/underConstructionMsg";
 
 
 export default function UserInfo() {
@@ -20,8 +21,9 @@ export default function UserInfo() {
             {/* Header */}
             <div className="d-flex justify-content-between align-items-end mb-3">
                 {/* Title */}
-                <h1 className='fs-4 fw-semibold m-0'>Usuario</h1>
+                <h1 className='fs-4 fw-semibold m-0'>Ficha de Usuario</h1>
             </div>
+            <UnderConstructionMsg />
         </div>
     );
 }

@@ -24,6 +24,7 @@ import NewPassword from "./pages/NewPassword.js";
 import TableAnimals from "./component/admin/tableAnimals.js";
 import TableReviews from "./component/admin/tableTestimonials.js";
 import TableUsers from "./component/admin/tableUsers.js";
+import TableAdoptions from "./component/admin/tableAdoptions.js";
 import AnimalInfo from "./component/admin/animalInfo.js";
 import FormModifyAnimal from "./component/Forms/FormModifyAnimal.js";
 import FormAddAdoption from "./component/Forms/FormAddAdoption.js";
@@ -73,6 +74,7 @@ const App = () => {
                                     <Route path="/table-animals" element={<TableAnimals />} />
                                     <Route path="/table-reviews" element={<TableReviews />} />
                                     <Route path="/table-users" element={<TableUsers />} />
+                                    <Route path="/table-adoptions" element={<TableAdoptions />} />
                                     <Route path="/animal-info/:id" element={<AnimalInfo />} />
                                     <Route path="/modify-animal/:id" element={<FormModifyAnimal />} />
                                     <Route path="/user-info/:id" element={<UserInfo />} />
