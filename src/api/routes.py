@@ -43,7 +43,7 @@ def handle_email_send(recipient, name):
 
         # creación del token de enlace de restablecimiento de contraseña
         generated_token = generate_token_password(recipient)
-        password_reset_url = f"https://miniature-space-goggles-v6vvvwg7g5jp37xr-3000.app.github.dev/new-password?token={generated_token}"
+        password_reset_url = f"https://zany-robot-4j7776g9gg6qh7x4g-3000.app.github.dev/new-password?token={generated_token}"
 
         # renderizar plantilla HTML
         html = render_template("email_template.html", name=name, password_reset_url=password_reset_url)

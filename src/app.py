@@ -104,18 +104,21 @@ def password_update():
         new_password = data["password"]
         current_user = get_jwt_identity()
 
-        user =user.query.filter_by("email=current_user").first
+        user = User.query.filter_by(email=current_user).first()
+
+
 
         if not user:
             return jsonify({"message":"user not found"})
         
-        user.password = bcrypt.generate_password.hash(new_password).decode('utf-8')
+        user.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
         db.session.commit()
         return jsonify({"message": "password update succesfully"}), 200
    
     except Exception as e:
-        db.session.rollback()
-        return jsonify({"message": "error updating password"})
+       print(f"Error: {e}")
+       db.session.rollback()
+    return jsonify({"message": "error updating password"}), 500
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
