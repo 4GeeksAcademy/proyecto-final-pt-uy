@@ -102,7 +102,7 @@ const FormAddAnimal = () => {
 
   return (
     <div>
-      <h1 className='fs-4'>Ingresar Peludito</h1>
+      <h1 className='fs-4 fw-semibold'>Registrar Peludito</h1>
       <form className='bg-white rounded-1 shadow-sm p-3 p-md-4 pb-5' onSubmit={handleSubmit(onSubmit)} >
 
         {/* SECCIÓN DATOS */}
@@ -233,6 +233,7 @@ const FormAddAnimal = () => {
             type='button'
             className='btn btn-outline-primary rounded-4 px-3 px-md-4'
             onClick={() => navigate('/table-animals')}
+            disabled={isSubmitting}
           >
             Cancelar
           </button>

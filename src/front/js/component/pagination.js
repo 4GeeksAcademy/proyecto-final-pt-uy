@@ -1,9 +1,6 @@
 import React from "react";
 
-import { useAnimalsContext } from "../contexts/animalsContext";
-
-export default function Pagination() {
-    const { store: { pagination }, actions: { setPagination } } = useAnimalsContext();
+export default function Pagination({pagination, setPagination}) {
 
     return (
         <nav className='my-4'>

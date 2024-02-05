@@ -24,10 +24,18 @@ load_dotenv()
 @users_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_users():
-    users_query = User.query.all()
+     # Obtener parámetros de consulta
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=12, type=int)
+
+    # Construir la consulta base
+    users_query = User.query
+
+    # Paginar
+    paginated_query = users_query.paginate(page=page, per_page=per_page)
 
     serialized_users = []
-    for user in users_query:
+    for user in paginated_query:
         # Obtener la lista de animales adoptados por el usuario
         adopted_animals = Adoption_Users.query.filter_by(user_id=user.id).all()
 
@@ -40,9 +48,12 @@ def get_users():
 
         serialized_users.append(user_info)
 
+    # Construir la respuesta
     response_body = {
         "msg": "ok",
-        "total_users": len(serialized_users),
+        "total_users": paginated_query.total,
+        "total_pages": paginated_query.pages,
+        "current_page": paginated_query.page,
         "result": serialized_users
     }
 

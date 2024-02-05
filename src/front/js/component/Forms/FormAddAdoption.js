@@ -6,6 +6,7 @@ import { DevTool } from "@hookform/devtools";
 import Select from './select.js';
 import Input from "./input.js";
 import DateInput from './dateInput.js';
+import UnderConstructionMsg from '../messages/underConstructionMsg.js';
 
 import { useUserContext } from "../../contexts/userContext.js";
 import { addAnimal } from '../../../client-API/backendAPI.js';
@@ -102,8 +103,8 @@ const FormAddAdoption = () => {
 
   return (
     <div>
-      <h1>Registrar Adopción</h1>
-      
+      <h1 className='fs-4 fw-semibold'>Registrar Adopción</h1>
+        <UnderConstructionMsg />
     </div>
   )
 }

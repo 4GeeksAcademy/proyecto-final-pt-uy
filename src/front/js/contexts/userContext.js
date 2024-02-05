@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
+import { getUsersList } from '../../client-API/backendAPI';
+
 // Crear el contexto para el store
 export const UserContext = createContext(null);
 
@@ -11,6 +13,16 @@ const storeInitialState = {
     role: "",
   },
   token: "",
+  users: [],
+  pagination: {
+    limit: 12,
+    offset: 0,
+    totalPages: 1,
+    currentPage: 1,
+    totalUsers: 0
+  },
+  isLoading: false,
+  error: ""
 };
 
 // =============== PROVEEDOR DEL CONTEXTO ================ //
@@ -34,6 +46,47 @@ export function UserContextProvider({ children }) {
         }
       }))
     },
+    setPagination: (payload) => {
+      return setStore(prevState => ({
+        ...prevState,
+        pagination: {
+          ...prevState.pagination,
+          ...payload
+        }
+      }))
+    },
+    setUsers: async () => {
+      const pagination = {page: store.pagination.currentPage, perPage: store.pagination.limit};
+
+      setStore(prevState => ({
+        ...prevState,
+        error: "",
+        isLoading: true
+      }));
+
+      try {
+        const data = await getUsersList(pagination, store.token);
+        setStore(prevState => ({
+          ...prevState,
+          users: data.result,
+          pagination: {
+            ...prevState.pagination,
+            totalUsers: data.total_users,
+            totalPages: data.total_pages,
+          },
+          error: "",
+          isLoading: false
+        }));
+
+      } catch (error) {
+        console.error("Error fetching users: ", error);
+        setStore(prevState => ({
+          ...prevState,
+          error: error.message,
+          isLoading: false
+        }));
+      }
+    }
   }
 
 

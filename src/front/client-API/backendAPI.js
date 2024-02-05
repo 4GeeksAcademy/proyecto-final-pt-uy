@@ -133,6 +133,32 @@ export const modifyAnimal = async (id, formData, token) => {
 }
 
 
+// Delete animal
+export const deleteAnimal = async (id, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Returns the modified animal
+        return true;
+
+    } catch (error) {
+        console.error('Error trying to delete an animal', error);
+        throw error;
+    }
+}
+
+
 
 // Get animal by id
 export const getAnimal = async (id) => {
@@ -241,6 +267,38 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
     }
 }
 
+
+// Get users list
+export const getUsersList = async (pagination, token) => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+
+    let requestParams = `page=${page}&per_page=${perPage}`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/usuarios?${requestParams}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching users list:', error);
+        throw error;
+    }
+}
+
+
+
 // Get all adoptions
 export const getAdoptions = async (token) => {
     try {
@@ -264,3 +322,6 @@ export const getAdoptions = async (token) => {
         throw error;
     }
 }
+
+
+
