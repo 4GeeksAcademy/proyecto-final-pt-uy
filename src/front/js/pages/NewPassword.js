@@ -3,6 +3,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 
+
 const NewPassword = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
 
