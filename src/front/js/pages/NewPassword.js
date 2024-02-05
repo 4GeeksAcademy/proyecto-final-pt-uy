@@ -2,8 +2,7 @@ import React from 'react';
 
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import newPassword from "../../img/newPassword.jpg";
-import logo from "../../img/el_refugio_logo.png";
+
 
 
 const NewPassword = () => {
