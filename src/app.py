@@ -89,6 +89,36 @@ def serve_any_other_file(path):
 
 
 
+@app.route('/password-update', methods=['POST'])
+@jwt_required()
+def password_update():
+    try:
+        data = request.get_json(silent=True)
+
+        if data is None:
+            return jsonify({"error":"No JSON data provided in the request"}), 400
+
+        if "password" not in data:
+            return jsonify({"message": "Required fields are missing."}), 400
+        
+        new_password = data["password"]
+        current_user = get_jwt_identity()
+
+        user = User.query.filter_by(email=current_user).first()
+
+
+
+        if not user:
+            return jsonify({"message":"user not found"})
+        
+        user.password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+        db.session.commit()
+        return jsonify({"message": "password update succesfully"}), 200
+   
+    except Exception as e:
+       print(f"Error: {e}")
+       db.session.rollback()
+    return jsonify({"message": "error updating password"}), 500
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
