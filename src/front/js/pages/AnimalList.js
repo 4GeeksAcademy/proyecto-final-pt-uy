@@ -14,7 +14,7 @@ import NotFoundMsg from '../component/messages/notFoundMsg';
 
 
 const AnimalList = () => {
-  const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setStatuses } } = useAnimalsContext();
+  const { store: { animals, filters, sorting, pagination, isLoading, error }, actions: { setAnimals, setStatuses, setPagination } } = useAnimalsContext();
 
   useEffect(() => {
     // En este componente sólo se deben listar los animales con estado "not_adopted"
@@ -122,7 +122,7 @@ const AnimalList = () => {
           </div>
 
           {/* Paginado */}
-          <Pagination />
+          <Pagination pagination={pagination} setPagination={setPagination}/>
 
         </div>
       </main>

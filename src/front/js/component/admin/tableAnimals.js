@@ -13,7 +13,7 @@ import NotFoundMsg from "../messages/notFoundMsg";
 
 export default function TableAnimals() {
     const navigate = useNavigate();
-    const { store: { filters, animals, pagination, isLoading, error }, actions: { setAnimals, setStatuses } } = useAnimalsContext();
+    const { store: { filters, animals, pagination, isLoading, error }, actions: { setAnimals, setStatuses, setPagination } } = useAnimalsContext();
 
     useEffect(() => {
         setAnimals();
@@ -132,10 +132,10 @@ export default function TableAnimals() {
                                                 <td className="d-none d-lg-table-cell text-primary">{formattedAnimal.size}</td>
                                                 <td className="d-none d-xl-table-cell text-primary">{formattedAnimal.publication_date}</td>
                                                 <td className="z-3">
-                                                    <button 
+                                                    <button
                                                         id="profile-button"
-                                                        className="btn text-neutral-60 profile-button fs-5" 
-                                                        onClick={() => { navigate(`/animal-info/${formattedAnimal.id}`)}}
+                                                        className="btn text-neutral-60 profile-button fs-5"
+                                                        onClick={() => { navigate(`/animal-info/${formattedAnimal.id}`) }}
                                                     >
                                                         <i className="fa-regular fa-file-lines"></i>
                                                     </button>
@@ -145,14 +145,14 @@ export default function TableAnimals() {
                                                         content="Ver ficha"
                                                     />
 
-                                                    <button 
+                                                    <button
                                                         id="adoption-button"
-                                                        className="btn text-neutral-60 adoption-button fs-5 px-2" 
-                                                        onClick={() => { navigate(`/add-adoption`)}}
+                                                        className="btn text-neutral-60 adoption-button fs-5 px-2"
+                                                        onClick={() => { navigate(`/add-adoption`) }}
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-house-heart" viewBox="0 0 16 16">
-                                                            <path d="M8 6.982C9.664 5.309 13.825 8.236 8 12 2.175 8.236 6.336 5.309 8 6.982"/>
-                                                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.707L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.646a.5.5 0 0 0 .708-.707L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z"/>
+                                                            <path d="M8 6.982C9.664 5.309 13.825 8.236 8 12 2.175 8.236 6.336 5.309 8 6.982" />
+                                                            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.707L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.646a.5.5 0 0 0 .708-.707L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5z" />
                                                         </svg>
                                                     </button>
                                                     <Tooltip
@@ -168,7 +168,7 @@ export default function TableAnimals() {
                             </tbody>
                         </table>
 
-                        <Pagination />
+                        <Pagination pagination={pagination} setPagination={setPagination} />
                     </>
                 }
 
