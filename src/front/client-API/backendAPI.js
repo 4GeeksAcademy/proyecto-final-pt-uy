@@ -149,7 +149,6 @@ export const deleteAnimal = async (id, token) => {
             throw new Error(errorData.msg);
         }
 
-        // Returns the modified animal
         return true;
 
     } catch (error) {
@@ -294,6 +293,33 @@ export const getUsersList = async (pagination, token) => {
 
     } catch (error) {
         console.error('Error fetching users list:', error);
+        throw error;
+    }
+}
+
+
+
+// Register adoption
+export const addAdoption = async (formData, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones/adopcion`, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData,
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error('Error trying to register an adoption', error);
         throw error;
     }
 }
