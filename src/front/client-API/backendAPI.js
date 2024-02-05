@@ -51,6 +51,31 @@ export const registerUser = async ({ name, last_name, username, email, password 
     }
 }
 
+// Get user by id
+export const getUser = async (user_id, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/usuarios/usuario/${user_id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error on getting user:', error);
+        throw error;
+    }
+}
+
+
 
 
 // Register animal
@@ -80,6 +105,60 @@ export const addAnimal = async (formData, token) => {
 }
 
 
+
+// Modify animal
+export const modifyAnimal = async (id, formData, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData,
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Returns the modified animal
+        return data.result;
+
+    } catch (error) {
+        console.error('Error trying to modify an animal', error);
+        throw error;
+    }
+}
+
+
+// Delete animal
+export const deleteAnimal = async (id, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error('Error trying to delete an animal', error);
+        throw error;
+    }
+}
+
+
+
 // Get animal by id
 export const getAnimal = async (id) => {
     try {
@@ -101,7 +180,31 @@ export const getAnimal = async (id) => {
 
 
 // Get animals list
-export const getAnimalList = async (requestParams = "") => {
+export const getAnimalList = async (pagination, sorting, filtering) => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+    const sortBy = sorting?.sortBy || "publication_date";
+    const sortOrder = sorting?.sortOrder || "desc";
+    const statusesArray = filtering?.statusesArray || [];
+    const typesArray = filtering?.typesArray || [];
+    const gendersArray = filtering?.gendersArray || [];
+    const sizesArray = filtering?.sizesArray || [];
+
+    let requestParams = `page=${page}&per_page=${perPage}&sort_by=${sortBy}&sort_order=${sortOrder}`;
+
+    if (statusesArray.length > 0) {
+        requestParams = requestParams + `&statuses=${statusesArray.join()}`;
+    }
+    if (typesArray.length > 0) {
+        requestParams = requestParams + `&types=${typesArray.join()}`;
+    }
+    if (gendersArray.length > 0) {
+        requestParams = requestParams + `&genders=${gendersArray.join()}`;
+    }
+    if (sizesArray.length > 0) {
+        requestParams = requestParams + `&sizes=${sizesArray.join()}`;
+    }
+
     try {
         const response = await fetch(`${apiUrlBase}/animales?${requestParams}`);
 
@@ -121,7 +224,8 @@ export const getAnimalList = async (requestParams = "") => {
 
 
 // Get random animals list
-export const getRandomAnimalsList = async (requestParams = "") => {
+export const getRandomAnimalsList = async (type = "", limit = 4) => {
+    const requestParams = `type=${type}&limit=${limit}`
 
     try {
         const response = await fetch(`${apiUrlBase}/animales/random?${requestParams}`);
@@ -154,7 +258,6 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
         }
 
         const data = await response.json();
-        console.log(data.result);
         return data.result;
 
     } catch (error) {
@@ -162,3 +265,120 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
         throw error;
     }
 }
+
+
+// Get users list
+export const getUsersList = async (pagination, token) => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+
+    let requestParams = `page=${page}&per_page=${perPage}`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/usuarios?${requestParams}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching users list:', error);
+        throw error;
+    }
+}
+
+
+
+// Register adoption
+export const addAdoption = async (user_id, animal_id, registration_date, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones/adopcion`, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_id, animal_id, registration_date })
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error('Error trying to register an adoption', error);
+        throw error;
+    }
+}
+
+
+// Get adoptions list
+export const getAdoptionsList = async (pagination, token) => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+
+    let requestParams = `page=${page}&per_page=${perPage}`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones?${requestParams}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching users list:', error);
+        throw error;
+    }
+}
+
+
+
+
+
+// Get all adoptions
+export const getAdoptions = async (token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error on getting adopctions:', error);
+        throw error;
+    }
+}
+

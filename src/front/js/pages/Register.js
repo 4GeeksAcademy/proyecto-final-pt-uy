@@ -5,10 +5,6 @@ import { useForm } from 'react-hook-form';
 
 import { registerUser } from '../../client-API/backendAPI';
 
-import signUpImage from "../../img/signup.jpg";
-import logo from "../../img/el_refugio_logo.png";
-
-
 const defaultValues = {
   name: "",
   lastname: "",
@@ -69,7 +65,7 @@ const Register = () => {
 
           {/* Logo */}
           <figure className='logo-container mb-4 mb-md-5'>
-            <img src={logo} alt="Logo" />
+            <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
           </figure>
 
           {/* Text */}
@@ -227,7 +223,7 @@ const Register = () => {
       </div>
 
       {/* Image Panel */}
-      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${signUpImage})`, backgroundPosition: "center top" }}></div>
+      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706903275/Site/signUp.jpg")`, backgroundPosition: "center top", backgroundSize: "cover" }}></div>
 
       {/* Modal */}
       {

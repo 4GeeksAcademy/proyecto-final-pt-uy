@@ -1,7 +1,5 @@
 import React from 'react';
 
-import aboutUs_image from "../../img/aboutUs_image.png"
-
 const AboutUs = () => {
   return (
     <div className='my-5'>
@@ -32,7 +30,7 @@ const AboutUs = () => {
             </div>
           </div>
           <div className='col-lg-5 d-flex mb-5'>
-            <img src={aboutUs_image} alt="About us image" className='img-fluid m-auto d-block' />
+            <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706896617/Site/aboutUs_image.png"alt="About us image" className='img-fluid m-auto d-block' />
           </div>
         </div>
       </div>

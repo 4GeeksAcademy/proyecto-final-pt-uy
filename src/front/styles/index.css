@@ -39,6 +39,10 @@ body {
     font-size: 65px;
 }
 
+.fs-0-2{
+    font-size: 50px;
+}
+
 .fs-7 {
     font-size: 14px;
 }
@@ -209,6 +213,13 @@ body {
     background-color: #EEC77E;
 }
 
+.animal-list-banner {
+    background-image: url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706897706/Site/animalListBanner_bg_smallerSize.png");
+    background-position: center top;
+    background-size: cover;
+    color: #003459;
+}
+
 .testimony-card {
     position: relative;
     width: 250px;
@@ -280,6 +291,34 @@ body {
     opacity: 1;
 }
 
+.profile-button:hover {
+    background-color: #0078CD;
+}
+.profile-button:hover i {
+    color: white;
+}
+
+.adoption-button:hover {
+    background-color: #EEC77E;
+}
+.adoption-button:hover svg path {
+    fill: white;
+}
+
+.floating {
+    animation: float 3s ease-out infinite;
+}
+
+@keyframes float {
+    50% {
+    transform: translate(0, 12px);
+    }
+}
+
+
+
+
+
 @media screen and (min-width: 768px) {
     .image-panel {
         height: 100vh;
@@ -314,8 +353,35 @@ body {
     }
 }
 
+@media screen and (min-width: 1200px) {
+    .animal-list-banner {
+        background-image: url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706897801/Site/animalListBanner_bg.png");
+        color: white;
+    }
+    .animal-list-banner .btn-outline-css-biggerSize {
+        color: white;
+        border-color: white;
+    }
+    .animal-list-banner .btn-outline-css-biggerSize:hover {
+        color: #003459;
+        border-color: white;
+        background-color: white;
+    }
+    .animal-list-banner .btn-css-biggerSize {
+        color: #003459;
+        border-color: white;
+        background-color: white;
+    }
+    .animal-list-banner .btn-css-biggerSize:hover {
+        color: #003459;
+        border-color: rgba(255, 255, 255, 0.929);
+        background-color: rgba(255, 255, 255, 0.929);
+    }
+}
+
 @media screen and (min-width: 1400px) {
     .animal-card {
         width: 23%;
     }
 }
+

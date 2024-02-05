@@ -1,8 +1,10 @@
 import React from 'react';
+
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import newPassword from "../../img/newPassword.jpg";
 import logo from "../../img/el_refugio_logo.png";
+
 
 const NewPassword = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
@@ -45,7 +47,7 @@ const NewPassword = () => {
         <div className="d-flex flex-column w-100" style={{ maxWidth: "470px" }}>
           {/* Logo */}
           <figure className='logo-container mb-4 mb-md-5'>
-            <img src={logo} alt="Logo" />
+            <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
           </figure>
 
           {/* Text */}
@@ -95,8 +97,9 @@ const NewPassword = () => {
         </div>
       </div>
 
-      {/* Image Panel */}
-      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${newPassword})` }}></div>
+
+      <div className="d-flex w-100 w-md-50 image-panel" style={{backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800993/Site/newPassword_myqrd1.jpg")`}}></div>
+
     </div>
   );
 };

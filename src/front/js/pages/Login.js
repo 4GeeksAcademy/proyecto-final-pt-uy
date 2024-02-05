@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-import loginImg from "../../img/login.jpg";
-import logo from "../../img/el_refugio_logo.png";
-
 import { login } from '../../client-API/backendAPI';
 import { useUserContext } from '../contexts/userContext';
 
@@ -57,7 +54,7 @@ const Login = () => {
 
           {/* Logo */}
           <figure className='logo-container mb-4 mb-md-5'>
-            <img src={logo} alt="Logo" />
+            <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
           </figure>
 
           {/* Text */}
@@ -158,7 +155,7 @@ const Login = () => {
       </div>
 
       {/* Image Panel */}
-      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${loginImg})` }}></div>
+      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800989/Site/login_ogewx1.jpg")` }}></div>
     </div>
   );
 };

@@ -1,31 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+
+import { useUserContext } from "../../contexts/userContext.js";
+import { modifyAnimal, getAnimal } from '../../../client-API/backendAPI.js';
+import { formatAnimalData } from '../../../utils/fromattingFunctions.js';
 
 import Select from './select.js';
 import Input from "./input.js";
 import DateInput from './dateInput.js';
 
-import { useUserContext } from "../../contexts/userContext.js";
-import { addAnimal } from '../../../client-API/backendAPI.js';
-
-// Valores por defecto para los campos del form
-const defaultValues = {
-  name: "",
-  type: "",
-  gender: "",
-  size: "",
-  vaccinated: "",
-  dewormed: "",
-  castrated: "",
-  microchip: "",
-  status: "",
-  birth_date: null,
-  publication_date: new Date().toISOString().substring(0, 10),
-  additional_information: "",
-  images: [],
-};
 
 // Opciones de los selects
 const typeOptions = [{ value: "dog", label: "Perro" }, { value: "cat", label: "Gato" }];
@@ -34,27 +19,38 @@ const sizeOptions = [{ value: "small", label: "Pequeño" }, { value: "medium", l
 const statusOptions = [{ value: "adopted", label: "Adoptado" }, { value: "not_adopted", label: "No adoptado" }, { value: "passed_away", label: "Fallecido" }];
 
 
-const FormAddAnimal = () => {
+const FormModifyAnimal = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
 
-  const form = useForm({ defaultValues, mode: "onBlur" });
-  const { register, control, formState, handleSubmit, reset, watch, getValues } = form;
+  const form = useForm({ 
+    defaultValues: async() => await fetchAnimalToForm(), 
+    mode: "onBlur" 
+  });
+  const { register, control, formState, handleSubmit, reset, watch, setValue } = form;
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
   const watchimages = watch("images");
-  const filesArray = Array.from(watchimages);
+  const filesArray = watchimages ? Array.from(watchimages) : [];
   const filesURL = filesArray.map(file => URL.createObjectURL(file));
 
-  const { store, actions } = useUserContext();
+  const { store } = useUserContext();
 
-  const [addAnimalError, setAddAnimalError] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [newAnimal, setNewAnimal] = useState(null);
+  const [actualPhotos, setActualPhotos] = useState([]);
+  const [modifiedAnimal, setModifiedAnimal] = useState(null);
+
 
 
   useEffect(() => {
+    fetchActualPhotos();
+  }, []);
+
+  useEffect(() => {
     // Si el formulario fue enviado exitosamente...
-    if (isSubmitSuccessful && !addAnimalError && newAnimal) {
+    if (isSubmitSuccessful && !errorMsg && modifiedAnimal) {
       // Mostrar el modal
       setShowSuccessModal(true);
       // Liberar los objetos URL creados para previsualizar las imagenes
@@ -62,11 +58,56 @@ const FormAddAnimal = () => {
       // Resetear el form
       reset();
     }
-  }, [isSubmitSuccessful, reset, newAnimal]);
+  }, [isSubmitSuccessful, reset, modifiedAnimal]);
+
+
+
+  const fetchAnimalToForm = async () => {
+      setErrorMsg("");
+
+      try {
+      const data = await getAnimal(id);
+      return {
+        name: data.name,
+        type: data.type,
+        gender: data.gender,
+        size: data.size,
+        vaccinated: data.vaccinated,
+        dewormed: data.dewormed,
+        castrated: data.castrated,
+        microchip: data.microchip,
+        status: data.status,
+        birth_date: new Date(data.birth_date).toISOString().substring(0, 10),
+        publication_date: new Date(data.publication_date).toISOString().substring(0, 10),
+        additional_information: data.additional_information,
+        images: [],
+      }
+
+      } catch (error) {
+      console.error(`Error fetching animal details: `, error);
+      setErrorMsg(error.message);
+      }
+  }
+
+
+  const fetchActualPhotos = async () => {
+    setErrorMsg("");
+    setIsLoading(true);
+
+    try {
+    const data = await getAnimal(id);
+    setActualPhotos(data.image_urls);
+    setIsLoading(false);
+    } catch (error) {
+    console.error(`Error fetching animal actual photos: `, error);
+    setErrorMsg(error.message);
+    setIsLoading(false);
+    }
+  }
 
 
   const onSubmit = async (data) => {
-    setAddAnimalError("");
+    setErrorMsg("");
     const formData = new FormData();
     // Agregar datos del formulario
     Object.keys(data).forEach((key) => {
@@ -91,23 +132,23 @@ const FormAddAnimal = () => {
 
     // Realizar la solicitud al endpoint mediante el client-API
     try {
-      const response = await addAnimal(formData, store.token);
-      setNewAnimal(response);
+      const response = await modifyAnimal(id, formData, store.token);
+      setModifiedAnimal(response);
     } catch (error) {
-      console.error("Error on animal register: ", error);
-      setAddAnimalError(error.message);
+      console.error("Error on animal modification: ", error);
+      setErrorMsg(error.message);
     }
   }
 
 
   return (
     <div>
-      <h1 className='fs-4 fw-semibold'>Registrar Peludito</h1>
+      <h1 className='fs-4'>Modificar Peludito</h1>
       <form className='bg-white rounded-1 shadow-sm p-3 p-md-4 pb-5' onSubmit={handleSubmit(onSubmit)} >
 
         {/* SECCIÓN DATOS */}
         <h2 className='fs-5 border-bottom border-neutral-10 pb-1'>Datos</h2>
-        <div className='d-flex flex-column w-100 mb-5'>
+        <div className='d-flex flex-column w-100 mb-4'>
           <div className='d-inline-flex flex-wrap column-gap-3 w-100'>
 
             {/* Nombre */}
@@ -171,8 +212,32 @@ const FormAddAnimal = () => {
           </div>
         </div>
 
-        {/* SECCIÓN FOTOS */}
-        <h2 className='fs-5 border-bottom border-neutral-10 pb-1'>Fotos</h2>
+        {/* SECCIÓN FOTOS ACTUALES */}
+        <h2 className='fs-5 border-bottom border-neutral-10 pb-1'>Fotos Actuales</h2>
+        <div className='d-inline-flex flex-wrap w-100 gap-3 mb-5'>
+          {/* Thumbnails */}
+          <div className='d-inline-flex flex-wrap flex-grow-1 gap-2 align-items-center justify-content-center justify-content-md-start'>
+            {
+              !isLoading && !errorMsg && actualPhotos && 
+              actualPhotos.map((preview, index) => (
+                <div key={index} className="d-flex justify-content-center overflow-hidden rounded-2 border border-3 border-white shadow-sm" style={{ maxWidth: "80px", height: "80px" }}>
+                  <img className="d-flex w-100 object-fit-cover" src={preview} alt="preview" />
+                  {/* TO-DO: implementar funcionalidad de eliminar la imagen */}
+                </div>
+              ))
+            }
+          </div>
+        </div>
+
+        {/* SECCIÓN FOTOS NUEVAS */}
+        <h2 className='fs-5 border-bottom border-neutral-10 pb-1'>Nuevas Fotos</h2>
+
+        <div className="alert alert-warning" role="alert">
+          <p className='m-0 p-0'>
+            <i className="fa-solid fa-triangle-exclamation"></i> Importante: si agregas nuevas fotos, las anteriores serán eliminadas.
+          </p>
+        </div>
+
         <div className='d-inline-flex flex-wrap w-100 gap-3 mb-5'>
           {/* Input */}
           <div className='d-flex flex-column'>
@@ -219,7 +284,7 @@ const FormAddAnimal = () => {
         }
 
         { // Errores generados por validaciones del backend
-          addAnimalError !== "" &&
+          errorMsg !== "" &&
           (
             <div className="alert alert-danger mt-3" role="alert">
               Hay errores en el servidor. Por favor contacte al soporte técnico.
@@ -240,10 +305,10 @@ const FormAddAnimal = () => {
 
           <button
             type='submit'
-            className="btn btn-primary rounded-4 px-4 px-md-5"
+            className="btn btn-secondary rounded-4 px-4 px-md-5"
             disabled={isSubmitting}
           >
-            Registrar Peludito
+            Guardar cambios
           </button>
 
           {/* Spinner es renderizado mientras llega la respuesta del backend */}
@@ -257,20 +322,20 @@ const FormAddAnimal = () => {
 
       {/* Modal */}
       {
-        newAnimal &&
+        modifiedAnimal &&
         <div className="modal" tabIndex="-1" role="dialog" style={{ display: showSuccessModal ? 'block' : 'none' }}>
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title">Registro exitoso</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => setShowSuccessModal(false)}></button>
+                <h5 className="modal-title">Modificación exitosa</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => navigate(`/animal-info/${modifiedAnimal.id}`)}></button>
               </div>
               <div className="modal-body">
-                <p>{`¡${newAnimal.name} ha sido registrado/a exitosamente!`}</p>
+                <p>{`¡Los datos de ${modifiedAnimal.name} se han modificado exitosamente!`}</p>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => navigate("/table-animals")}>Ver lista de peluditos</button>
-                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => navigate(`/animal-info/${newAnimal.id}`)}>{`Ver ficha de ${newAnimal.name}`}</button>
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={() => navigate(`/animal-info/${modifiedAnimal.id}`)}>{`Ver ficha de ${modifiedAnimal.name}`}</button>
               </div>
             </div>
           </div>
@@ -282,4 +347,4 @@ const FormAddAnimal = () => {
   )
 }
 
-export default FormAddAnimal;
+export default FormModifyAnimal;

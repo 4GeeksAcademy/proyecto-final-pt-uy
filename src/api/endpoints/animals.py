@@ -3,8 +3,7 @@ from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.sql.expression import func
 from flask_cors import CORS
-from cloudinary import config as cloudinary_config
-from cloudinary.uploader import upload
+from cloudinary import config as cloudinary_config, uploader
 from dotenv import load_dotenv
 import os
 
@@ -24,6 +23,16 @@ cloudinary_config(
     api_key=os.getenv('CLOUDINARY_API_KEY'),
     api_secret=os.getenv('CLOUDINARY_API_SECRET')
 )
+
+# Función para eliminar una imagen de Cloudinary
+def delete_image(image_url):
+    """
+    Parámetro:
+        - image_url: URL de la imagen en Cloudinary.
+    """
+    public_id = image_url.split("/")[-1].split(".")[0]
+    uploader.destroy(public_id)
+
 
 
 
@@ -98,7 +107,7 @@ def register_animal():
     image_urls = []  # Lista para almacenar las URLs de las imágenes
 
     for image in images:
-        upload_response = upload(image)  # Subir la imagen a Cloudinary
+        upload_response = uploader.upload(image)  # Subir la imagen a Cloudinary
         image_urls.append(upload_response['secure_url'])  # Obtener la URL y agregarla a la lista
 
         # Almacenar la información de la imagen en la base de datos
@@ -265,17 +274,24 @@ def delete_animal(animal_id):
 
     # Verificar si hay registros relacionados
     has_images = db.session.query(Animals_images).filter_by(animal_id=animal_id).count() > 0
-    has_testimonies = db.session.query(Testimony).filter_by(animal_id=animal_id).count() > 0
     has_adoptions = db.session.query(Adoption_Users).filter_by(animal_id=animal_id).count() > 0
 
-    if has_images or has_testimonies or has_adoptions:
+    # Eliminar imágenes relacionadas de Cloudinary y de la base de datos
+    if has_images:
+        images_to_delete = Animals_images.query.filter_by(animal_id=animal_id).all()
+        for image in images_to_delete:
+            delete_image(image.image_url)
+            db.session.delete(image)
+
+    if has_adoptions:
         return jsonify({"msg": "No se puede eliminar este peludito debido a registros relacionados"}), 400
 
     # Eliminar el animal de la base de datos
     db.session.delete(animal_to_delete)
     db.session.commit()
 
-    return jsonify({"msg": "Peludito eliminado exitosamente"}), 200
+    return jsonify({"msg": "Registro borrado correctamente"}), 200
+
 
 
 
@@ -307,29 +323,30 @@ def update_animal(animal_id):
     for field, value in new_animal_data.items():
         setattr(animal_to_update, field, value)
 
+    serialized_animal = animal_to_update.serialize()
+
     # Gestionar las imágenes y actualizarlas en Cloudinary (por ahora sustituye las anteriores por las nuevas)
     new_images = request.files.getlist('images')
 
-    # Eliminar todas las imágenes existentes del animal
-    Animals_images.query.filter_by(animal_id=animal_id).delete()
+    if len(new_images) > 0:
+        # Eliminar todas las imágenes existentes del animal
+        Animals_images.query.filter_by(animal_id=animal_id).delete()
 
-    # Subir y almacenar las nuevas imágenes en Cloudinary
-    image_urls = []  # Lista para almacenar las URLs de las imágenes
+        # Subir y almacenar las nuevas imágenes en Cloudinary
+        image_urls = []  # Lista para almacenar las URLs de las imágenes
 
-    for image in new_images:
-        upload_response = upload(image)  # Subir la imagen a Cloudinary
-        image_urls.append(upload_response['secure_url'])  # Obtener la URL y agregarla a la lista
+        for image in new_images:
+            upload_response = uploader.upload(image)  # Subir la imagen a Cloudinary
+            image_urls.append(upload_response['secure_url'])  # Obtener la URL y agregarla a la lista
 
-        # Almacenar la información de la imagen en la base de datos
-        animal_image = Animals_images(image_url=upload_response['secure_url'], public_id=upload_response['public_id'], animal_id=animal_id)
-        db.session.add(animal_image)
+            # Almacenar la información de la imagen en la base de datos
+            animal_image = Animals_images(image_url=upload_response['secure_url'], public_id=upload_response['public_id'], animal_id=animal_id)
+            db.session.add(animal_image)
+
+        # Agregar las nuevas URLs de las imágenes a la respuesta
+        serialized_animal['image_urls'] = image_urls
 
     db.session.commit()
-
-    serialized_animal = animal_to_update.serialize()
-
-    # Agregar las nuevas URLs de las imágenes a la respuesta
-    serialized_animal['image_urls'] = image_urls
 
     response_body = {
         "msg": "ok",

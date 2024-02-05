@@ -1,20 +1,13 @@
 import React from 'react';
 
-
-
-import recomenImgTwo from "../../img/recomendations 2.png";
-import recomenImgThree from "../../img/recomendations 3.png";
 import { Link } from "react-router-dom";
-
-import backgrondColors_image from "../../img/backgroundColors_image.png"
-import figure from "../../img/recomendations-figure.png"
 
 const Recomendations = () => {
   return (
     <div className=''>
       <div>
         {/*Intro*/}
-        <div className="mb-5" style={{ backgroundImage: `url(${backgrondColors_image})`, backgroundPosition: "center top" }}>
+        <div className="mb-5" style={{ backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900069/Site/backgroundColors_image.png")`, backgroundPosition: "center top", backgroundSize: "cover" }}>
           <div className="container d-flex flex-column flex-lg-row pt-5">
             <div className="col-lg-6 mb-3">
               <h1 className="fw-light mb-0">Salvar Una Vida</h1>
@@ -31,7 +24,7 @@ const Recomendations = () => {
             </div>
             <div className="col-lg-6">
               <figure className="m-0">
-                <img src={figure} alt="home image" className="img-fluid" />
+                <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706903149/Site/recomendations-figure.png" alt="home image" className="img-fluid" />
               </figure>
             </div>
           </div>
@@ -147,7 +140,7 @@ const Recomendations = () => {
         </div>
       </div>
 
-      <img className=" w-100" src={recomenImgTwo} alt="Descripción de la imagen"></img>
+      <img className=" w-100" src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706902909/Site/recomendations2.png" alt="Descripción de la imagen"></img>
 
 
       <div className='pt-5 mb-5 ' style={{ backgroundColor: '#FCEED5', backgroundPosition: "center top" }}>
@@ -366,7 +359,7 @@ const Recomendations = () => {
         </div>
       </div>
 
-      <img className=" w-100 mt-5" src={recomenImgThree}></img>
+      <img className=" w-100 mt-5" src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706903021/Site/recomendations3.png"></img>
 
     </div>
   )
