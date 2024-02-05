@@ -81,11 +81,12 @@ def password_reset_request():
 
     # verificar si el correo electrónico existe
     existing_user = User.query.filter_by(email = data['email']).first()
-    print(existing_user.serialize())
+    
     if existing_user:
         handle_email_send(existing_user.email, existing_user.name)
         return jsonify({"message": "Solicitud recibida. Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña"}), 200
-    return jsonify({"message": "Solicitud recibi Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña"}), 200
+    else :
+        return jsonify({"message": "Solicitud recibi Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña"}), 200
     
 
 @api.route('/hello', methods=['POST', 'GET'])

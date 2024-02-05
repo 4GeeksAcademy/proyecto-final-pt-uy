@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-
+import { Link } from 'react-router-dom';
 import newPassword from "../../img/newPassword.jpg";
 import logo from "../../img/el_refugio_logo.png";
 
@@ -24,11 +24,12 @@ const NewPassword = () => {
           password: data.password
         })
       });
-  
+
       // Verifica si la solicitud fue exitosa
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData); // Maneja la respuesta del servidor
+
       } else {
         console.error('Error en la solicitud:', response.statusText);
       }
@@ -41,7 +42,7 @@ const NewPassword = () => {
       {/* Form Panel */}
       <div className="d-flex flex-column justify-content-center align-items-center w-100 w-md-50 form-panel p-4">
         {/* Form Container */}
-        <div className="d-flex flex-column w-100" style={{maxWidth: "470px"}}>
+        <div className="d-flex flex-column w-100" style={{ maxWidth: "470px" }}>
           {/* Logo */}
           <figure className='logo-container mb-4 mb-md-5'>
             <img src={logo} alt="Logo" />
@@ -85,9 +86,9 @@ const NewPassword = () => {
             {/* Botones */}
             <div className="row g-0 justify-content-end">
               <div className="col">
-                <button type='submit' className="btn btn-primary rounded-4 w-100" disabled={isSubmitting}>
-                  {isSubmitting ? 'Enviando...' : 'Enviar'}
-                </button>
+              <button type='submit' className="btn btn-primary rounded-4 w-100" disabled={isSubmitting}>
+              {isSubmitting ? 'Enviando...' : 'Enviar'}
+            </button>
               </div>
             </div>
           </form>
@@ -95,7 +96,7 @@ const NewPassword = () => {
       </div>
 
       {/* Image Panel */}
-      <div className="d-flex w-100 w-md-50 image-panel" style={{backgroundImage: `url(${newPassword})`}}></div>
+      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url(${newPassword})` }}></div>
     </div>
   );
 };
