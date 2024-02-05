@@ -266,3 +266,29 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
         throw error;
     }
 }
+
+
+
+// Get users list
+export const getUsersList = async (pagination) => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+
+    let requestParams = `page=${page}&per_page=${perPage}`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/usuarios?${requestParams}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching users list:', error);
+        throw error;
+    }
+}
