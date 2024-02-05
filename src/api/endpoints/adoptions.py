@@ -105,16 +105,38 @@ def register_adoption():
 @adoptions_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_adoptions():
-    adoptions_query = Adoption_Users.query.all()
+    # Obtener parámetros de consulta
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=12, type=int)
+
+    # Construir la consulta base
+    adoptions_query = Adoption_Users.query
+
+    # Paginar
+    paginated_query = adoptions_query.paginate(page=page, per_page=per_page)
 
     serialized_adoptions = []
-    for adoption in adoptions_query:
-        adoption_serialized = adoption.serialize()
-        serialized_adoptions.append(adoption_serialized)
+    for adoption in paginated_query:
+        # Obtener datos del usuario y del animal
+        user = User.query.filter_by(id=adoption.user_id).first()
+        animal = Animals.query.filter_by(id=adoption.animal_id).first()
+
+        # Serializar la información
+        user_info = user.serialize()
+        animal_info = animal.serialize()
+        adoption_info = adoption.serialize()
+
+        # Agregar la info del usuario y del animal al diccionario de la adopción
+        adoption_info["user_info"] = user_info
+        adoption_info["animal_info"] = animal_info
+
+        serialized_adoptions.append(adoption_info)
 
     response_body = {
         "msg": "ok",
-        "total_adoptions": len(serialized_adoptions),
+        "total_adoptions": paginated_query.total,
+        "total_pages": paginated_query.pages,
+        "current_page": paginated_query.page,
         "result": serialized_adoptions
     }
     
@@ -126,7 +148,21 @@ def get_adoptions():
 @adoptions_bp.route('/adopcion/<int:adoption_id>', methods=['GET'])
 def get_adoption(adoption_id):
     adoption = Adoption_Users.query.get(adoption_id)
+
     if adoption is None:
         return jsonify({"msg": "Adopción no encontrada"}), 404
     
-    return jsonify(adoption.serialize()), 200
+    # Obtener datos del usuario y del animal
+    user = User.query.filter_by(id=adoption.user_id).first()
+    animal = Animals.query.filter_by(id=adoption.animal_id).first()
+
+    # Serializar la información
+    user_info = user.serialize()
+    animal_info = animal.serialize()
+    adoption_info = adoption.serialize()
+
+     # Agregar la info del usuario y del animal al diccionario de la adopción
+    adoption_info["user_info"] = user_info
+    adoption_info["animal_info"] = animal_info
+    
+    return jsonify(adoption_info), 200
