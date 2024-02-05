@@ -324,3 +324,33 @@ export const addAdoption = async (user_id, animal_id, registration_date, token) 
         throw error;
     }
 }
+
+
+// Get adoptions list
+export const getAdoptionsList = async (pagination, token) => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+
+    let requestParams = `page=${page}&per_page=${perPage}`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones?${requestParams}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching users list:', error);
+        throw error;
+    }
+}
