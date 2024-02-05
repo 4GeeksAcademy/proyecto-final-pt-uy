@@ -42,7 +42,7 @@ export default function AnimalInfo() {
             {/* Header */}
             <div className="d-flex justify-content-between align-items-end mb-3">
                 {/* Title */}
-                <h1 className='fs-4 fw-semibold m-0'>{animal?.name}</h1>
+                <h1 className='fs-4 fw-semibold m-0'>Ficha de {animal?.name}</h1>
             </div>
 
             <div className='bg-white rounded-3 shadow-sm p-3 p-md-4 pb-5' >
