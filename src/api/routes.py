@@ -37,13 +37,13 @@ def handle_email_send(recipient, name):
         print(recipient)
         # crear mensaje
         message = MIMEMultipart('alternative')
-        message["Subject"] = "Correo electrónico enviado desde Python"
+        message["Subject"] = "Correo Electronico desde ElRefugio"
         message["From"] = SMTP_USERNAME
         message["To"] = recipient
 
         # creación del token de enlace de restablecimiento de contraseña
         generated_token = generate_token_password(recipient)
-        password_reset_url = f"https://zany-robot-4j7776g9gg6qh7x4g-3000.app.github.dev/new-password?token={generated_token}"
+        password_reset_url = f"https://ominous-broccoli-7v999wr4rw97c7p5-3000.app.github.dev/new-password?token={generated_token}"
 
         # renderizar plantilla HTML
         html = render_template("email_template.html", name=name, password_reset_url=password_reset_url)

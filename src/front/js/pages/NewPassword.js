@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { useForm } from 'react-hook-form';
-
+import { useNavigate } from 'react-router-dom'; 
 
 
 const NewPassword = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
-
+  const navigate  = useNavigate();
   // Obtén el token JWT de la URL al cargar el componente
   const urlParams = new URLSearchParams(window.location.search);
   const authTokenFromURL = urlParams.get('token');
@@ -14,7 +14,7 @@ const NewPassword = () => {
   const onSubmit = async (data) => {
     try {
       // Realiza la solicitud al backend con el token obtenido de la URL
-      const response = await fetch('https://zany-robot-4j7776g9gg6qh7x4g-3001.app.github.dev/password-update', {
+      const response = await fetch('https://ominous-broccoli-7v999wr4rw97c7p5-3001.app.github.dev/password-update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,7 +29,8 @@ const NewPassword = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData); // Maneja la respuesta del servidor
-
+        
+        navigate('/login');
       } else {
         console.error('Error en la solicitud:', response.statusText);
       }

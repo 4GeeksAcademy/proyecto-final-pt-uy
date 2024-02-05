@@ -8,7 +8,7 @@ const ForgotPassword = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('https://zany-robot-4j7776g9gg6qh7x4g-3001.app.github.dev/api/password-reset-request', {
+      const response = await fetch('https://ominous-broccoli-7v999wr4rw97c7p5-3001.app.github.dev/api/password-reset-request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
