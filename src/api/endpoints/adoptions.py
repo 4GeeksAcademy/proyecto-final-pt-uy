@@ -26,11 +26,13 @@ def register_adoption():
     Parámetros de la solicitud (JSON):
     - user_id: ID del usuario adoptante.
     - animal_id: ID del animal adoptado.
+    - registration_date: fecha de registro de la adopción
 
     Ejemplo de solicitud JSON:
     {
         "user_id": 123,
-        "animal_id": 456
+        "animal_id": 456,
+        "registration_date": "2024-01-30T12:30:00.000Z"
     }
 
     Respuestas posibles:
@@ -45,6 +47,11 @@ def register_adoption():
         "msg": "Adopción registrada exitosamente"
     }
     """
+    body = request.get_json(silent=True)
+    print(body)
+    if body is None:
+        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
+    
     current_user_id = get_jwt_identity()
 
     # Verificar si el usuario logeado es un administrador
@@ -53,20 +60,25 @@ def register_adoption():
         return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
 
     # Obtener datos de la solicitud
-    data = request.json
+    # body = request.get_json(silent=True)
+    # print(body)
+    # if body is None:
+    #     return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
 
     # Validar que los campos requeridos estén presentes en la solicitud
-    required_fields = ['user_id', 'animal_id']
+    required_fields = ['user_id', 'animal_id', 'registration_date']
     for field in required_fields:
-        if field not in data:
-            return jsonify({"msg": f"El campo {field} es requerido"}), 400
+        if field not in body or body[field] is None:
+            return jsonify({'msg': f'El campo {field} es obligatorio'}), 400
 
-    user_id = data['user_id']
-    animal_id = data['animal_id']
+    adoption = Adoption_Users()
+    adoption.user_id = body['user_id']
+    adoption.animal_id = body['animal_id']
+    adoption.registration_date = body['registration_date']
 
     # Verificar si el usuario y el animal existen en la base de datos
-    user = User.query.get(user_id)
-    animal = Animals.query.get(animal_id)
+    user = User.query.get(adoption.user_id)
+    animal = Animals.query.get(adoption.animal_id)
 
     if not user:
         return jsonify({"msg": "Usuario no encontrado"}), 404
@@ -74,13 +86,12 @@ def register_adoption():
         return jsonify({"msg": "Animal no encontrado"}), 404
 
     # Verificar si ya existe una adopción para este animal
-    existing_adoption = Adoption_Users.query.filter_by(animal_id=animal_id).first()
+    existing_adoption = Adoption_Users.query.filter_by(animal_id=adoption.animal_id).first()
     if existing_adoption:
         return jsonify({"msg": "Este animal ya tiene registrada una adopción"}), 409
 
     # Registrar la adopción
-    new_adoption = Adoption_Users(user_id=user_id, animal_id=animal_id)
-    db.session.add(new_adoption)
+    db.session.add(adoption)
 
     # Actualizar el estado del animal a "adoptado"
     animal.status = StatusEnum.ADOPTED
@@ -94,16 +105,38 @@ def register_adoption():
 @adoptions_bp.route('/', methods=['GET'])
 @jwt_required()
 def get_adoptions():
-    adoptions_query = Adoption_Users.query.all()
+    # Obtener parámetros de consulta
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=12, type=int)
+
+    # Construir la consulta base
+    adoptions_query = Adoption_Users.query
+
+    # Paginar
+    paginated_query = adoptions_query.paginate(page=page, per_page=per_page)
 
     serialized_adoptions = []
-    for adoption in adoptions_query:
-        adoption_serialized = adoption.serialize()
-        serialized_adoptions.append(adoption_serialized)
+    for adoption in paginated_query:
+        # Obtener datos del usuario y del animal
+        user = User.query.filter_by(id=adoption.user_id).first()
+        animal = Animals.query.filter_by(id=adoption.animal_id).first()
+
+        # Serializar la información
+        user_info = user.serialize()
+        animal_info = animal.serialize()
+        adoption_info = adoption.serialize()
+
+        # Agregar la info del usuario y del animal al diccionario de la adopción
+        adoption_info["user_info"] = user_info
+        adoption_info["animal_info"] = animal_info
+
+        serialized_adoptions.append(adoption_info)
 
     response_body = {
         "msg": "ok",
-        "total_adoptions": len(serialized_adoptions),
+        "total_adoptions": paginated_query.total,
+        "total_pages": paginated_query.pages,
+        "current_page": paginated_query.page,
         "result": serialized_adoptions
     }
     
@@ -115,7 +148,21 @@ def get_adoptions():
 @adoptions_bp.route('/adopcion/<int:adoption_id>', methods=['GET'])
 def get_adoption(adoption_id):
     adoption = Adoption_Users.query.get(adoption_id)
+
     if adoption is None:
         return jsonify({"msg": "Adopción no encontrada"}), 404
     
-    return jsonify(adoption.serialize()), 200
+    # Obtener datos del usuario y del animal
+    user = User.query.filter_by(id=adoption.user_id).first()
+    animal = Animals.query.filter_by(id=adoption.animal_id).first()
+
+    # Serializar la información
+    user_info = user.serialize()
+    animal_info = animal.serialize()
+    adoption_info = adoption.serialize()
+
+     # Agregar la info del usuario y del animal al diccionario de la adopción
+    adoption_info["user_info"] = user_info
+    adoption_info["animal_info"] = animal_info
+    
+    return jsonify(adoption_info), 200

@@ -149,7 +149,6 @@ export const deleteAnimal = async (id, token) => {
             throw new Error(errorData.msg);
         }
 
-        // Returns the modified animal
         return true;
 
     } catch (error) {
@@ -299,6 +298,66 @@ export const getUsersList = async (pagination, token) => {
 
 
 
+// Register adoption
+export const addAdoption = async (user_id, animal_id, registration_date, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones/adopcion`, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_id, animal_id, registration_date })
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        return true;
+
+    } catch (error) {
+        console.error('Error trying to register an adoption', error);
+        throw error;
+    }
+}
+
+
+// Get adoptions list
+export const getAdoptionsList = async (pagination, token) => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+
+    let requestParams = `page=${page}&per_page=${perPage}`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones?${requestParams}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching users list:', error);
+        throw error;
+    }
+}
+
+
+
+
+
 // Get all adoptions
 export const getAdoptions = async (token) => {
     try {
@@ -322,6 +381,4 @@ export const getAdoptions = async (token) => {
         throw error;
     }
 }
-
-
 
