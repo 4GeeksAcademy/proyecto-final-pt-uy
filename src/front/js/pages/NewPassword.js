@@ -1,12 +1,12 @@
 import React from 'react';
 
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 
 const NewPassword = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
-  const navigate  = useNavigate();
+  const navigate = useNavigate();
   // Obtén el token JWT de la URL al cargar el componente
   const urlParams = new URLSearchParams(window.location.search);
   const authTokenFromURL = urlParams.get('token');
@@ -29,7 +29,7 @@ const NewPassword = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log(responseData); // Maneja la respuesta del servidor
-        
+
         navigate('/login');
       } else {
         console.error('Error en la solicitud:', response.statusText);
@@ -62,7 +62,13 @@ const NewPassword = () => {
                 className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                 id="password"
                 placeholder='Ingresa tu contraseña'
-                {...register('password', { required: 'Este campo es obligatorio' })}
+                {...register('password', {
+                  required: 'Este campo es obligatorio',
+                  minLength: {
+                    value: 8,
+                    message: 'La contraseña debe tener al menos 8 caracteres',
+                  },
+                })}
               />
               {errors.password && <div className="invalid-feedback">{errors.password.message}</div>}
             </div>
@@ -87,9 +93,9 @@ const NewPassword = () => {
             {/* Botones */}
             <div className="row g-0 justify-content-end">
               <div className="col">
-              <button type='submit' className="btn btn-primary rounded-4 w-100" disabled={isSubmitting}>
-              {isSubmitting ? 'Enviando...' : 'Enviar'}
-            </button>
+                <button type='submit' className="btn btn-primary rounded-4 w-100" disabled={isSubmitting}>
+                  {isSubmitting ? 'Enviando...' : 'Enviar'}
+                </button>
               </div>
             </div>
           </form>
@@ -97,7 +103,7 @@ const NewPassword = () => {
       </div>
 
 
-      <div className="d-flex w-100 w-md-50 image-panel" style={{backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800993/Site/newPassword_myqrd1.jpg")`}}></div>
+      <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800993/Site/newPassword_myqrd1.jpg")` }}></div>
 
     </div>
   );
