@@ -132,3 +132,64 @@ export function translateType(animal) {
     }
     return translatedType;
 }
+
+
+export function formatUserData(user) {
+  const status = translateUserStatus(user) || "sin datos";
+  const address = user.address || "sin datos";
+  const backyard = user.backyard || "sin datos";
+  const other_pets = user.other_pets || "sin datos";
+  const phone_number = user.phone_number || "sin datos";
+  const role = translateUserRole(user) || "sin datos";
+
+  const formattedUser = {...user};
+  formattedUser.status = status;
+  formattedUser.address = address;
+  formattedUser.backyard = backyard;
+  formattedUser.other_pets = other_pets;
+  formattedUser.phone_number = phone_number;
+  formattedUser.role = role;
+
+  return formattedUser;
+}
+
+
+export function translateUserStatus(user) {
+  let translatedStatus = "";
+  if (user.status) {
+    switch (user.status) {
+      case "active":
+        translatedStatus = "Activo";
+        break;
+      case "deleted":
+        translatedStatus = "Borrado";
+        break;
+      case "banned":
+        translatedStatus = "Bloqueado";
+        break;
+      default:
+        translatedStatus = ""
+        break;
+    }
+  }
+  return translatedStatus;
+}
+
+
+export function translateUserRole(user) {
+  let translatedRole = "";
+  if (user.role) {
+    switch (user.role) {
+      case "user":
+        translatedRole = "Usuario";
+        break;
+      case "admin":
+        translatedRole = "Admin.";
+        break;
+      default:
+        translatedRole = ""
+        break;
+    }
+  }
+  return translatedRole;
+}
