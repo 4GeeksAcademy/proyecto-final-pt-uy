@@ -2,8 +2,6 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 
 
-import forgot from "../../img/forgotPassword.jpg";
-import logo from "../../img/el_refugio_logo.png";
 
 const ForgotPassword = () => {
   const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
