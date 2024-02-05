@@ -300,14 +300,15 @@ export const getUsersList = async (pagination, token) => {
 
 
 // Register adoption
-export const addAdoption = async (formData, token) => {
+export const addAdoption = async (user_id, animal_id, registration_date, token) => {
     try {
         const response = await fetch(`${apiUrlBase}/adopciones/adopcion`, {
             method: "POST",
             headers: {
-                "Authorization": "Bearer " + token
+                "Authorization": "Bearer " + token,
+                'Content-Type': 'application/json',
             },
-            body: formData,
+            body: JSON.stringify({ user_id, animal_id, registration_date })
         });
         const data = await response.json();
 

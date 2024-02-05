@@ -47,6 +47,11 @@ def register_adoption():
         "msg": "Adopción registrada exitosamente"
     }
     """
+    body = request.get_json(silent=True)
+    print(body)
+    if body is None:
+        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
+    
     current_user_id = get_jwt_identity()
 
     # Verificar si el usuario logeado es un administrador
@@ -55,21 +60,25 @@ def register_adoption():
         return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
 
     # Obtener datos de la solicitud
-    data = request.json
+    # body = request.get_json(silent=True)
+    # print(body)
+    # if body is None:
+    #     return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
 
     # Validar que los campos requeridos estén presentes en la solicitud
     required_fields = ['user_id', 'animal_id', 'registration_date']
     for field in required_fields:
-        if field not in data:
-            return jsonify({"msg": f"El campo {field} es requerido"}), 400
+        if field not in body or body[field] is None:
+            return jsonify({'msg': f'El campo {field} es obligatorio'}), 400
 
-    user_id = data['user_id']
-    animal_id = data['animal_id']
-    registration_date = data['registration_date']
+    adoption = Adoption_Users()
+    adoption.user_id = body['user_id']
+    adoption.animal_id = body['animal_id']
+    adoption.registration_date = body['registration_date']
 
     # Verificar si el usuario y el animal existen en la base de datos
-    user = User.query.get(user_id)
-    animal = Animals.query.get(animal_id)
+    user = User.query.get(adoption.user_id)
+    animal = Animals.query.get(adoption.animal_id)
 
     if not user:
         return jsonify({"msg": "Usuario no encontrado"}), 404
@@ -77,13 +86,12 @@ def register_adoption():
         return jsonify({"msg": "Animal no encontrado"}), 404
 
     # Verificar si ya existe una adopción para este animal
-    existing_adoption = Adoption_Users.query.filter_by(animal_id=animal_id).first()
+    existing_adoption = Adoption_Users.query.filter_by(animal_id=adoption.animal_id).first()
     if existing_adoption:
         return jsonify({"msg": "Este animal ya tiene registrada una adopción"}), 409
 
     # Registrar la adopción
-    new_adoption = Adoption_Users(user_id=user_id, animal_id=animal_id, registration_date=registration_date)
-    db.session.add(new_adoption)
+    db.session.add(adoption)
 
     # Actualizar el estado del animal a "adoptado"
     animal.status = StatusEnum.ADOPTED
