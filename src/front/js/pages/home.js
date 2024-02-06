@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 
 import RandomAnimalsList from "../component/randomAnimalsList";
@@ -7,6 +7,16 @@ import TestimonialsSection from "../component/testimonialsSection";
 
 export const Home = () => {
 
+	const iframeRef = useRef(null);
+
+	const handleCloseModal = () => {
+		// Detener el video al cerrar el modal
+		if (iframeRef.current) {
+			const iframe = iframeRef.current;
+			const videoSrc = iframe.src;
+			iframe.src = videoSrc;
+		}
+	};
 
 	return (
 		<div className="mb-5">
@@ -17,10 +27,10 @@ export const Home = () => {
 						<h1 className="fw-light mb-0">Salvar Una Vida</h1>
 						<h2 className="fw-semibold">Puede Cambiar La Tuya</h2>
 						<p>
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+						En nuestro refugio, cada adopción es una oportunidad para hacer una diferencia. Al abrir tu corazón y hogar a un animal necesitado, no solo estás salvando una vida, sino también transformando la tuya. Descubre el amor incondicional que solo un compañero peludo puede brindar. ¡Adopta hoy y cambia dos vidas para siempre!"
 						</p>
 						<div>
-							<button className="btn btn-outline-primary rounded-pill me-3 mt-3 px-4 py-2">Ver Intro <i className="fa-solid fa-play ms-2"></i></button>
+							<button className="btn btn-outline-primary rounded-pill me-3 mt-3 px-4 py-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver Intro <i className="fa-solid fa-play ms-2"></i></button>
 							<Link to="/animal-list">
 								<button className="btn btn-primary rounded-pill px-4 py-2 mt-3">Encuentra tu amigo ideal</button>
 							</Link>
@@ -30,6 +40,21 @@ export const Home = () => {
 						<figure className="m-0">
 							<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706901254/Site/home_image.png" alt="home image" className="img-fluid" />
 						</figure>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade text-center" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-body p-0">
+							<div class="ratio text-center ratio-16x9">
+								<iframe ref={iframeRef} class="embed-responsive-item ratio-16x9  " src="https://www.youtube.com/embed/X9QxvAaf_kY?si=cs1zI3kBonUNLeO0" ></iframe>
+							</div>
+						</div>
+						<div className="modal-footer m-0 p-0">
+							<button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCloseModal}>volver</button>
+						</div>
 					</div>
 				</div>
 			</div>
