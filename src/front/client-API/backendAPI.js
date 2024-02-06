@@ -75,6 +75,34 @@ export const getUser = async (user_id, token) => {
     }
 }
 
+//Modify user
+export const modifyUser = async (id, formData, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/usuarios/usuario/${id}`, {
+            method: "PUT",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+        const data = await response.json();
+        console.log("usuario modificado desde modify user backend api", data)
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Returns the modified user
+        return data;
+
+    } catch (error) {
+        console.error('Error trying to modify an user', error);
+        throw error;
+    }
+}
+
 
 
 // Register animal
