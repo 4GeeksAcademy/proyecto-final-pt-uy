@@ -1,43 +1,47 @@
-import React from 'react';
-
-import { useForm } from 'react-hook-form';
+import React, {useState, useEffect} from 'react';
+import { set, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+
+import { updatePassRequest } from '../../client-API/backendAPI';
 
 
 const NewPassword = () => {
-  const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
   const navigate = useNavigate();
-  // Obtén el token JWT de la URL al cargar el componente
+  const { register, handleSubmit, formState, reset, watch } = useForm({mode: "onBlur" });
+  const { errors, isSubmitting, isSubmitSuccessful } = formState;
+
+  // Obtener el token JWT de la URL al cargar el componente
   const urlParams = new URLSearchParams(window.location.search);
   const authTokenFromURL = urlParams.get('token');
 
+  const [errorMsg, setErrorMsg] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [passIsChanged, setPassIsChanged] = useState(false);
+
+
+  useEffect(() => {
+    setShowSuccessModal(true);
+    reset();
+
+  }, [passIsChanged]);
+
+
   const onSubmit = async (data) => {
-    try {
-      // Realiza la solicitud al backend con el token obtenido de la URL
-      const response = await fetch('https://ominous-broccoli-7v999wr4rw97c7p5-3001.app.github.dev/password-update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${authTokenFromURL}`
-        },
-        body: JSON.stringify({
-          password: data.password
-        })
-      });
+      setErrorMsg("");
 
-      // Verifica si la solicitud fue exitosa
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log(responseData); // Maneja la respuesta del servidor
+      try {
+        const response = await updatePassRequest(data.password, authTokenFromURL);
+        if (response) {
+          setPassIsChanged(true);
+        }
 
-        navigate('/login');
-      } else {
-        console.error('Error en la solicitud:', response.statusText);
+      } catch (error) {
+        console.error(`Error on forgot password request: `, error);
+        setErrorMsg(error.message);
       }
-    } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
-    }
   };
+
+
   return (
     <div className='d-flex flex-column-reverse flex-md-row-reverse min-vh-100'>
       {/* Form Panel */}
@@ -90,7 +94,12 @@ const NewPassword = () => {
               {errors.confirmPassword && <div className="invalid-feedback">{errors.confirmPassword.message}</div>}
             </div>
 
-            {/* Botones */}
+            { // Errores generados por validaciones del backend
+              errorMsg !== "" &&
+                <div className="alert alert-danger mt-3" role="alert">Ha surgido un error inesperado. Por favor contacta con soporte.</div>
+            }
+
+            {/* Botón */}
             <div className="row g-0 justify-content-end">
               <div className="col">
                 <button type='submit' className="btn btn-primary rounded-4 w-100" disabled={isSubmitting}>
@@ -104,6 +113,25 @@ const NewPassword = () => {
 
 
       <div className="d-flex w-100 w-md-50 image-panel" style={{ backgroundImage: `url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706800993/Site/newPassword_myqrd1.jpg")` }}></div>
+
+      {/* Modal */}
+      {
+        passIsChanged &&
+        <div className="modal" tabIndex="-1" role="dialog" style={{ display: showSuccessModal ? 'block' : 'none' }}>
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Registro exitoso</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => navigate("/login")}></button>
+              </div>
+              <div className="modal-body">
+                <h2 className='f-5 fw-medium'>¡Felicidades!🥳</h2>
+                <p>Tu nueva contraseña se ha guardado y ya puedes loguearte.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
 
     </div>
   );

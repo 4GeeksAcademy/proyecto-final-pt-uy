@@ -1,31 +1,32 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 
+import { forgotPassRequest } from '../../client-API/backendAPI';
+import { useNavigate } from 'react-router-dom';
 
 
 const ForgotPassword = () => {
-  const { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
+  const navigate = useNavigate();
+  const { register, handleSubmit, formState, reset} = useForm({mode: "onBlur" });
+  const { errors, isSubmitting, isSubmitSuccessful } = formState;
+
+  const [errorMsg, setErrorMsg] = useState("");
+  const [successMsg, setSuccessMsg] = useState("");
+
+  useEffect(() => {
+    reset();
+
+  }, [successMsg]);
 
   const onSubmit = async (data) => {
-    try {
-      const response = await fetch('https://ominous-broccoli-7v999wr4rw97c7p5-3001.app.github.dev/api/password-reset-request', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: data.email,
-        }),
-      });
+    setErrorMsg("");
 
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log(responseData); // Manejar la respuesta del servidor, que podría incluir un mensaje de éxito
-      } else {
-        console.error('Error en la solicitud:', response.statusText);
-      }
+    try {
+      const response = await forgotPassRequest(data.email);
+      setSuccessMsg(response.message);
     } catch (error) {
-      console.error('Error al realizar la solicitud:', error);
+      console.error(`Error on forgot password request: `, error);
+      setErrorMsg(error.message);
     }
   };
 
@@ -46,6 +47,11 @@ const ForgotPassword = () => {
           <h1 className='fw-bold lh-1 mb-2 mb-md-3'>Olvidaste tu contraseña?</h1>
           <p className='fs-7 mb-4 mb-md-5'>Envía tu cuenta de email para restablecer la contraseña y crear una nueva.</p>
 
+          { // Feedback para el usuario cuando la petición fue recibida
+              successMsg !== "" &&
+              <div className="alert alert-success mt-3" role="alert">{successMsg}</div>
+          }
+
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className='d-flex flex-column w-100'>
             {/* Email */}
@@ -61,10 +67,22 @@ const ForgotPassword = () => {
               {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
             </div>
 
+            { // Errores generados por validaciones del backend
+              errorMsg !== "" &&
+                <div className="alert alert-danger mt-3" role="alert">Ha surgido un error inesperado. Por favor contacta con soporte.</div>
+            }
+
             {/* Buttons */}
             <div className="row g-0 justify-content-end">
               <div className="col me-2">
-                <button type='button' className='btn btn-outline-primary rounded-4 w-100'>Volver</button>
+                <button 
+                  type='button' 
+                  className='btn btn-outline-primary rounded-4 w-100'
+                  onClick={() => navigate("/")}
+                  disabled={isSubmitting}
+                >
+                  Volver
+                </button>
               </div>
               <div className="col">
                 <button type='submit' className="btn btn-primary rounded-4 w-100" disabled={isSubmitting}>{isSubmitting ? 'Enviando...' : 'Enviar'}</button>

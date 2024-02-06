@@ -24,26 +24,26 @@ def generate_token_password(email):
 
 def handle_email_send(recipient, name):
     try:
-        SMTP_SERVER = "smtp.gmail.com"
-        SMTP_PORT = 587
-        SMTP_USERNAME = "elproyectorefugio@gmail.com"
-        SMTP_PASSWORD = "mgnnmohigfdtuvsf" 
-        # pasar como variable luego a la hora de montar la página para que no quede en el GitHub
+        smtp_server = os.getenv('SMTP_SERVER')
+        smtp_port = os.getenv('SMTP_PORT')
+        smtp_username = os.getenv('SMTP_USERNAME')
+        smtp_password = os.getenv('SMTP_PASSWORD')
           
         # configuración del servidor SMTP
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+        server.login(smtp_username, smtp_password)
         print(recipient)
         # crear mensaje
         message = MIMEMultipart('alternative')
         message["Subject"] = "Correo Electronico desde ElRefugio"
-        message["From"] = SMTP_USERNAME
+        message["From"] = smtp_username
         message["To"] = recipient
 
         # creación del token de enlace de restablecimiento de contraseña
         generated_token = generate_token_password(recipient)
-        password_reset_url = f"https://ominous-broccoli-7v999wr4rw97c7p5-3000.app.github.dev/new-password?token={generated_token}"
+        frontend_url = os.getenv('FRONTEND_URL')
+        password_reset_url = f"{frontend_url}/new-password?token={generated_token}"
 
         # renderizar plantilla HTML
         html = render_template("email_template.html", name=name, password_reset_url=password_reset_url)
@@ -53,7 +53,7 @@ def handle_email_send(recipient, name):
         message.attach(html_part)
 
         # enviar el correo electrónico
-        server.sendmail(SMTP_USERNAME, recipient, message.as_string())
+        server.sendmail(smtp_username, recipient, message.as_string())
         return "Correo electrónico enviado exitosamente."
     except SMTPException as e:
         return f"Error al enviar el correo electrónico: {e}"
@@ -84,9 +84,9 @@ def password_reset_request():
     
     if existing_user:
         handle_email_send(existing_user.email, existing_user.name)
-        return jsonify({"message": "Solicitud recibida. Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña"}), 200
+        return jsonify({"message": "Solicitud recibida. Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña."}), 200
     else :
-        return jsonify({"message": "Solicitud recibi Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña"}), 200
+        return jsonify({"message": "Solicitud recibida. Si el correo electrónico está registrado, recibirás un enlace para restablecer tu contraseña."}), 200
     
 
 @api.route('/hello', methods=['POST', 'GET'])
