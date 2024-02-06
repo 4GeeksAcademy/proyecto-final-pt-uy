@@ -349,7 +349,7 @@ export const getAdoptionsList = async (pagination, token) => {
         return data;
 
     } catch (error) {
-        console.error('Error fetching users list:', error);
+        console.error('Error fetching adoptions list:', error);
         throw error;
     }
 }

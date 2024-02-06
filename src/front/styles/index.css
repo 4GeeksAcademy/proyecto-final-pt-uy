@@ -291,17 +291,20 @@ body {
     opacity: 1;
 }
 
-.profile-button:hover {
+.light-blue-button:hover {
     background-color: #0078CD;
 }
-.profile-button:hover i {
+.light-blue-button:hover i {
     color: white;
 }
 
-.adoption-button:hover {
+.yellow-button:hover {
     background-color: #EEC77E;
 }
-.adoption-button:hover svg path {
+.yellow-button:hover svg path {
+    fill: white;
+}
+.yellow-button:hover i {
     fill: white;
 }
 

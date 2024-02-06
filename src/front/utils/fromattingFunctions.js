@@ -156,7 +156,7 @@ export function formatUserData(user) {
 
 export function formatAdoptionData(adoption) {
   const adoptionId = adoption.id;
-  const registrationDate = adoption.registration_date;
+  const registrationDate = adoption.registration_date.substring(5,16);
   const adopterId = adoption.user_id;
   const adopterFullName = `${adoption.user_info?.name} ${adoption.user_info?.last_name}`;
   const animalId = adoption.animal_id;
@@ -164,7 +164,7 @@ export function formatAdoptionData(adoption) {
   const adopterEmail = adoption.user_info?.email;
   const adopterPhone = adoption.user_info?.phone_number || "sin datos";
   const testimonyId = adoption.testimony_id;
-  const testimonyStatus = translateTestimonyStatus(adoption.testimony_info) || "sin testimonio";
+  const testimonyStatus = adoption.testimony_info ? translateTestimonyStatus(adoption.testimony_info) : "sin testimonio";
 
   const formattedAdoption = {
     adoptionId, 
