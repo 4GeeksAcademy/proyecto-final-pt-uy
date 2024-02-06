@@ -77,7 +77,6 @@ export const getUser = async (user_id, token) => {
 
 
 
-
 // Register animal
 export const addAnimal = async (formData, token) => {
     try {
@@ -245,9 +244,13 @@ export const getRandomAnimalsList = async (type = "", limit = 4) => {
 }
 
 
-// get testimonials list
-export const getTestimonialsList = async (limit = 8, status = "approved") => {
-    const requestParams = `limit=${limit}&status=${status}`;
+
+// Get testimonials list
+export const getTestimonialsList = async (pagination, statuses = "approved") => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+
+    let requestParams = `statuses=${statuses}&page=${page}&per_page=${perPage}`;
 
     try {
         const response = await fetch(`${apiUrlBase}/testimonios?${requestParams}`);
@@ -258,13 +261,14 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
         }
 
         const data = await response.json();
-        return data.result;
+        return data;
 
     } catch (error) {
         console.error('Error fetching testimonials list:', error);
         throw error;
     }
 }
+
 
 
 // Get users list
@@ -325,6 +329,7 @@ export const addAdoption = async (user_id, animal_id, registration_date, token) 
 }
 
 
+
 // Get adoptions list
 export const getAdoptionsList = async (pagination, token) => {
     const page = pagination?.page || 1;
@@ -353,9 +358,6 @@ export const getAdoptionsList = async (pagination, token) => {
         throw error;
     }
 }
-
-
-
 
 
 // Get all adoptions
