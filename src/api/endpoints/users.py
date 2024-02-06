@@ -3,7 +3,7 @@ from api.models import RoleEnum, UserStatusEnum, db, User, Adoption_Users
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_bcrypt import Bcrypt
-
+from ..routes import handle_email_change_confirmation
 from dotenv import load_dotenv
 import os
 
@@ -103,6 +103,7 @@ def update_user(user_id):
     if 'user_name' in data:
         user.user_name = data['user_name']
     if 'email' in data:
+        old_email = user.email  # Guarda el correo electrónico antiguo antes de actualizarlo
         user.email = data['email']
     if 'role' in data:
         user.role = data['role']
@@ -120,6 +121,10 @@ def update_user(user_id):
         user.status = data['status']
 
     db.session.commit()
+
+    # Si se actualizó el correo electrónico, enviar correo de confirmación
+    if 'email' in data and data['email'] != old_email:
+        handle_email_change_confirmation(user.email, user.name)
 
     return jsonify({"msg": "User updated successfully"}), 200
 
