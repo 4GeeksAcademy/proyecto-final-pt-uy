@@ -181,7 +181,7 @@ const Profile = () => {
           <div className='d-flex align-items-center my-5'>
             <div className='border_profile_img bg-white d-flex justify-content-center align-items-center shadow'>
               <figure className='circle_profile_img bg-secondary d-flex justify-content-center align-items-center fs-0-1 m-0'>
-                {userInfo?.name[0]}
+                {userInfo?.user_name[0]}
               </figure>
             </div>
             <h5 className='ms-3 fw-medium my-0'>{userInfo?.user_name}</h5>
@@ -321,6 +321,7 @@ const Profile = () => {
                   )}
                 </div>
               </div>
+              
             </div>
           </form>
 
