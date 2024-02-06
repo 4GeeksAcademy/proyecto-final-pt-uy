@@ -121,7 +121,7 @@ export default function TableAdoptions() {
                                                     <button 
                                                         id="info-button"
                                                         className="btn text-neutral-60 light-blue-button fs-5" 
-                                                        onClick={() => {}}
+                                                        onClick={() => navigate(`/adoption-info/${adoptionId}`)}
                                                     >
                                                         <i className="fa-regular fa-file-lines"></i>
                                                     </button>
