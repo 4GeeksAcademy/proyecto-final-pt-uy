@@ -274,7 +274,7 @@ export const getTestimonialsList = async (pagination, statuses = "approved") => 
 // Get testimony by id
 export const getTestimony = async (id) => {
     try {
-        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`);
+        const response = await fetch(`${apiUrlBase}/testimonios/testimonio/${id}`);
 
         if (!response.ok) {
             const errorData = await response.json();
