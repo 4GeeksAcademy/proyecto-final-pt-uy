@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, Blueprint
-from api.models import Adoption_Users, User, db, Testimony
+from api.models import Adoption_Users, Animals, User, db, Testimony
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import joinedload
@@ -107,50 +107,59 @@ def get_testimonials():
         GET /testimonios
 
     Parámetros de consulta opcionales:
-        - limit: Número máximo de registros a devolver (por defecto, 8).
-        - status: Estado o estados de los testimonios a incluir en la respuesta (por defecto, 'approved').
+        - page : Página a devolver (por defecto, 1, es decir, la primera)
+        - per_page: Número máximo de registros a devolver (por defecto, 8).
+        - statuses: Estado o estados de los testimonios a incluir en la respuesta (por defecto, 'approved').
     """
+
     # Obtener parámetros de consulta
-    limit = request.args.get('limit', default=8, type=int)
-    status = request.args.get('status', default='approved', type=str)
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=12, type=int)
+    statuses = request.args.get('statuses', default='approved', type=str)
 
-    # Validar el parámetro 'status'
-    valid_statuses = ['approved', 'pending', 'rejected']
-    if status not in valid_statuses:
-        return jsonify({"error": "El parámetro 'status' debe ser 'approved', 'pending' o 'rejected'"}), 400
+    # Convertir cadenas separadas por comas en listas
+    statuses = statuses.split(',') if statuses else []
 
-    # Obtener testimonios según los parámetros
-    testimonials_query = (
-        db.session.query(Testimony, Adoption_Users, User)
-        .join(Adoption_Users, Adoption_Users.id == Testimony.adoption_id)
-        .join(User, User.id == Adoption_Users.user_id)
-        .filter(Testimony.status == status)
-        .limit(limit)
-        .all()
-    )
+    # Construir la consulta base
+    testimonials_query = Testimony.query
 
-    # Serializar los resultados
+     # Filtrar por estado
+    if statuses:
+        testimonials_query = testimonials_query.filter(Testimony.status.in_(statuses))
+
+    # Paginar
+    paginated_query = testimonials_query.paginate(page=page, per_page=per_page)
+
     serialized_testimonials = []
-    for testimony, adoption, user in testimonials_query:
-        serialized_testimony = testimony.serialize()
+    for testimony in paginated_query:
+        # Obtener datos del usuario, del animal y del testimonio
+        adoption = Adoption_Users.query.filter_by(id=testimony.adoption_id).first()
+        user = User.query.filter_by(id=adoption.user_id).first()
+        animal = Animals.query.filter_by(id=adoption.animal_id).first()
 
-        # Obtener información del usuario asociado a la adopción
-        user_info = {
-            "id": user.id,
-            "name": user.name,
-            "last_name": user.last_name
-        }
+        # Serializar la información
+        adoption_info = adoption.serialize()
+        user_info = user.serialize()
+        animal_info = animal.serialize()
+        testimony_info = testimony.serialize()
 
-        serialized_testimony['user_info'] = user_info
-        serialized_testimonials.append(serialized_testimony)
+        # Agregar la info de la adopción, del usuario y del animal al diccionario del testimonio
+        testimony_info["adoption_info"] = adoption_info
+        testimony_info["user_info"] = user_info
+        testimony_info["animal_info"] = animal_info
+
+        serialized_testimonials.append(testimony_info)
 
     response_body = {
         "msg": "ok",
-        "total_testimonials": len(serialized_testimonials),
+        "total_testimonials": paginated_query.total,
+        "total_pages": paginated_query.pages,
+        "current_page": paginated_query.page,
         "result": serialized_testimonials
     }
     
     return jsonify(response_body), 200
+
 
   
 
