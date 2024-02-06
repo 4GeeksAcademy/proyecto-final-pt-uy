@@ -114,7 +114,7 @@ def get_testimonials():
 
     # Obtener parámetros de consulta
     page = request.args.get('page', default=1, type=int)
-    per_page = request.args.get('per_page', default=12, type=int)
+    per_page = request.args.get('per_page', default=8, type=int)
     statuses = request.args.get('statuses', default='approved', type=str)
 
     # Convertir cadenas separadas por comas en listas
@@ -160,33 +160,34 @@ def get_testimonials():
     
     return jsonify(response_body), 200
 
-
   
 
 # ================= Get one testimony by id ================== #
 @testimonials_bp.route('/testimonio/<int:testimony_id>', methods=['GET'])
 def get_testimony(testimony_id):
+
     testimony = (
-        db.session.query(Testimony, Adoption_Users, User)
+        db.session.query(Testimony, Adoption_Users, User, Animals)
         .filter(Testimony.id == testimony_id)
         .join(Adoption_Users, Adoption_Users.id == Testimony.adoption_id)
         .join(User, User.id == Adoption_Users.user_id)
+        .join(Animals, Animals.id == Adoption_Users.animal_id)
         .first()
     )
 
     if testimony is None:
         return jsonify({"msg": "Testimonio no encontrado"}), 404
+    
 
-    # Obtener información del usuario asociado a la adopción
-    user_info = {
-        "id": testimony.User.id,
-        "name": testimony.User.name,
-        "last_name": testimony.User.last_name
-    }
-
-    # Serializar el testimonio junto con la información del usuario
+    # Serializar el testimonio junto con la información de la adopción, el usuario y el animal asociados
     serialized_testimony = testimony.Testimony.serialize()
-    serialized_testimony['user_info'] = user_info
+    serialized_adoption = testimony.Adoption_Users.serialize()
+    serialized_user = testimony.User.serialize()
+    serialized_animal = testimony.Animals.serialize()
+
+    serialized_testimony['adoption_info'] = serialized_adoption
+    serialized_testimony['user_info'] = serialized_user
+    serialized_testimony['animal_info'] = serialized_animal
 
     return jsonify(serialized_testimony), 200
 
