@@ -104,16 +104,19 @@ export default function TableAdoptions() {
                                 {
                                     adoptions.map((adoption) => {
                                         const formattedAdoption = formatAdoptionData(adoption);
+                                        const {adoptionId, adopterId, animalId, registrationDate, adopterFullName, animalName, adopterEmail, adopterPhone, testimonyStatus } = formattedAdoption;
 
                                         return (
-                                            <tr key={formattedAdoption.adoptionId}>
-                                                <td className="d-none d-xl-table-cell text-primary fw-semibold">{formattedAdoption.adoptionId}</td>
-                                                <td className="text-primary">{formattedAdoption.registrationDate}</td>
-                                                <td className="text-primary">{formattedAdoption.adopterFullName}</td>
-                                                <td className="d-none d-md-table-cell text-primary">{formattedAdoption.animalName}</td>
-                                                <td className="d-none d-lg-table-cell text-primary">{formattedAdoption.adopterEmail}</td>
-                                                <td className="d-none d-xl-table-cell text-primary">{formattedAdoption.adopterPhone}</td>
-                                                <td className="d-none d-lg-table-cell text-primary">{formattedAdoption.testimonyStatus}</td>
+                                            <tr key={adoptionId}>
+                                                <td className="d-none d-xl-table-cell text-primary fw-semibold">{adoptionId}</td>
+                                                <td className="text-primary">{registrationDate}</td>
+                                                <td className="text-primary">{adopterFullName}</td>
+                                                <td className="d-none d-md-table-cell text-primary">{animalName}</td>
+                                                <td className="d-none d-lg-table-cell text-primary">{adopterEmail}</td>
+                                                <td className="d-none d-xl-table-cell text-primary">{adopterPhone}</td>
+                                                <td className={`d-none d-lg-table-cell text-primary`}>
+                                                    <span className={testimonyStatus === "pendiente" ? "bg-pink-red px-2 py-1 rounded-3 text-white" : ""}>{testimonyStatus}</span>
+                                                </td>
                                                 <td className="z-3">
                                                     <button 
                                                         id="info-button"
