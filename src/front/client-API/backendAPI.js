@@ -77,7 +77,6 @@ export const getUser = async (user_id, token) => {
 
 
 
-
 // Register animal
 export const addAnimal = async (formData, token) => {
     try {
@@ -245,9 +244,13 @@ export const getRandomAnimalsList = async (type = "", limit = 4) => {
 }
 
 
-// get testimonials list
-export const getTestimonialsList = async (limit = 8, status = "approved") => {
-    const requestParams = `limit=${limit}&status=${status}`;
+
+// Get testimonials list
+export const getTestimonialsList = async (pagination, statuses = "approved") => {
+    const page = pagination?.page || 1;
+    const perPage = pagination?.perPage || 12;
+
+    let requestParams = `statuses=${statuses}&page=${page}&per_page=${perPage}`;
 
     try {
         const response = await fetch(`${apiUrlBase}/testimonios?${requestParams}`);
@@ -258,13 +261,36 @@ export const getTestimonialsList = async (limit = 8, status = "approved") => {
         }
 
         const data = await response.json();
-        return data.result;
+        return data;
 
     } catch (error) {
         console.error('Error fetching testimonials list:', error);
         throw error;
     }
 }
+
+
+
+// Get testimony by id
+export const getTestimony = async (id) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching testimony details:', error);
+        throw error;
+    }
+}
+
+
 
 
 // Get users list
@@ -325,6 +351,7 @@ export const addAdoption = async (user_id, animal_id, registration_date, token) 
 }
 
 
+
 // Get adoptions list
 export const getAdoptionsList = async (pagination, token) => {
     const page = pagination?.page || 1;
@@ -349,13 +376,10 @@ export const getAdoptionsList = async (pagination, token) => {
         return data;
 
     } catch (error) {
-        console.error('Error fetching users list:', error);
+        console.error('Error fetching adoptions list:', error);
         throw error;
     }
 }
-
-
-
 
 
 // Get all adoptions
@@ -382,3 +406,63 @@ export const getAdoptions = async (token) => {
     }
 }
 
+
+
+// Forgot password request
+export const forgotPassRequest = async (email) => {
+
+    try {
+        const response = await fetch(`${apiUrlBase}/api/password-reset-request`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email}),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error en la solicitud de cambio de contraseña:', response.statusText);
+            throw new Error(errorData.msg);
+        }
+
+        const responseData = await response.json();
+        console.log(responseData);
+        return responseData;
+
+      } catch (error) {
+        console.error('Error on forgot password request:', error);
+        throw error;
+      }
+}
+
+
+// Update password request
+export const updatePassRequest = async (password, authTokenFromURL) => {
+
+    try {
+        // Realiza la solicitud al backend con el token obtenido de la URL
+        const response = await fetch(`${apiUrlBase}/password-update`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authTokenFromURL}`
+          },
+          body: JSON.stringify({password})
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error en la solicitud de cambio de contraseña:', response.statusText);
+            throw new Error(errorData.msg);
+        }
+  
+        const responseData = await response.json();
+        console.log(responseData);
+        return responseData;
+        
+    } catch (error) {
+        console.error('Error on change password request:', error);
+        throw error;
+    }
+}

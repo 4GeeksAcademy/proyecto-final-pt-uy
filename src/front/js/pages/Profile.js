@@ -39,7 +39,7 @@ const Profile = () => {
   const fetchTestimony = async () => {
     try {
       const data = await getTestimonialsList();
-      const filteredTestimonies = data.filter((testimony) => testimony.user_info.id === user.id);
+      const filteredTestimonies = data.result.filter((testimony) => testimony.user_info.id === user.id);
 
       if (adoptions) {
         filteredTestimonies.forEach((testimony) => {

@@ -18,7 +18,8 @@ $custom-colors: (
   "neutral-10": #EBEEEF,
   "neutral-0": #FDFDFD,
   "linear": #FCEED5,
-  "linear-0": #FEF9F0,as
+  "linear-0": #FEF9F0,
+  "pink-red": #FF564F
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);

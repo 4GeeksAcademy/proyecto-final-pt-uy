@@ -154,6 +154,35 @@ export function formatUserData(user) {
 }
 
 
+export function formatAdoptionData(adoption) {
+  const adoptionId = adoption.id;
+  const registrationDate = adoption.registration_date.substring(5,16);
+  const adopterId = adoption.user_id;
+  const adopterFullName = `${adoption.user_info?.name} ${adoption.user_info?.last_name}`;
+  const animalId = adoption.animal_id;
+  const animalName = `${adoption.animal_info?.name}`;
+  const adopterEmail = adoption.user_info?.email;
+  const adopterPhone = adoption.user_info?.phone_number || "sin datos";
+  const testimonyId = adoption.testimony_id;
+  const testimonyStatus = adoption.testimony_info ? translateTestimonyStatus(adoption.testimony_info) : "sin testimonio";
+
+  const formattedAdoption = {
+    adoptionId, 
+    registrationDate,
+    adopterId,
+    adopterFullName,
+    animalId,
+    animalName,
+    adopterEmail,
+    adopterPhone,
+    testimonyId,
+    testimonyStatus
+  }
+
+  return formattedAdoption;
+}
+
+
 export function translateUserStatus(user) {
   let translatedStatus = "";
   if (user.status) {
@@ -192,4 +221,26 @@ export function translateUserRole(user) {
     }
   }
   return translatedRole;
+}
+
+
+export function translateTestimonyStatus(testimony) {
+  let translatedStatus = "";
+  if (testimony.status) {
+    switch (testimony.status) {
+      case "approved":
+        translatedStatus = "aprobado";
+        break;
+      case "pending":
+        translatedStatus = "pendiente";
+        break;
+      case "rejected":
+        translatedStatus = "rechazado";
+        break;
+      default:
+        translatedStatus = ""
+        break;
+    }
+  }
+  return translatedStatus;
 }

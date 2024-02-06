@@ -83,7 +83,7 @@ export default function TableUsers() {
                                                 <td className="z-3">
                                                     <button 
                                                         id="profile-button"
-                                                        className="btn text-neutral-60 profile-button fs-5" 
+                                                        className="btn text-neutral-60 light-blue-button fs-5" 
                                                         onClick={() => {navigate(`/user-info/${formattedUser.id}`)}}
                                                     >
                                                         <i className="fa-regular fa-file-lines"></i>
@@ -96,7 +96,7 @@ export default function TableUsers() {
 
                                                     <button 
                                                         id="adoption-button"
-                                                        className="btn text-neutral-60 adoption-button fs-5 px-2" 
+                                                        className="btn text-neutral-60 yellow-button fs-5 px-2" 
                                                         onClick={() => { navigate(`/add-adoption`)}}
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" className="bi bi-house-heart" viewBox="0 0 16 16">
