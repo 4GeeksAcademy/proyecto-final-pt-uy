@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, Blueprint
-from api.models import Adoption_Users, Animals, User, db, Testimony
+from api.models import Adoption_Users, Animals, Animals_images, User, db, Testimony
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import joinedload
@@ -141,6 +141,11 @@ def get_testimonials():
         adoption_info = adoption.serialize()
         user_info = user.serialize()
         animal_info = animal.serialize()
+        images_query = Animals_images.query.filter_by(animal_id=animal_info['id']).all()
+        image_urls = [image.image_url for image in images_query]
+        if not image_urls:
+            image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
+        animal_info['image_urls'] = image_urls
         testimony_info = testimony.serialize()
 
         # Agregar la info de la adopción, del usuario y del animal al diccionario del testimonio
