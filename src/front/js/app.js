@@ -30,6 +30,7 @@ import FormModifyAnimal from "./component/Forms/FormModifyAnimal.js";
 import FormAddAdoption from "./component/Forms/FormAddAdoption.js";
 import UserInfo from "./component/admin/userInfo.js";
 import AdoptionInfo from "./component/admin/adoptionInfo.js";
+import TestimonyInfo from "./component/admin/testimonyInfo.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -80,6 +81,7 @@ const App = () => {
                                     <Route path="/modify-animal/:id" element={<FormModifyAnimal />} />
                                     <Route path="/user-info/:id" element={<UserInfo />} />
                                     <Route path="/adoption-info/:id" element={<AdoptionInfo />} />
+                                    <Route path="/testimony-info/:id" element={<TestimonyInfo />} />
                                 </Route>
                             </Routes>
                         </AnimalsContextProvider>

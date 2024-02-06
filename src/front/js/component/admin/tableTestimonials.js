@@ -121,7 +121,7 @@ export default function TableReviews() {
                                                     <button 
                                                         id="info-button"
                                                         className="btn text-neutral-60 light-blue-button fs-5" 
-                                                        onClick={() => {}}
+                                                        onClick={() => navigate(`/testimony-info/${testimony.id}`)}
                                                     >
                                                         <i className="fa-regular fa-file-lines"></i>
                                                     </button>
