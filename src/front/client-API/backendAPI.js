@@ -413,11 +413,11 @@ export const forgotPassRequest = async (email) => {
 
     try {
         const response = await fetch(`${apiUrlBase}/api/password-reset-request`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({email}),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
         });
 
         if (!response.ok) {
@@ -430,10 +430,10 @@ export const forgotPassRequest = async (email) => {
         console.log(responseData);
         return responseData;
 
-      } catch (error) {
+    } catch (error) {
         console.error('Error on forgot password request:', error);
         throw error;
-      }
+    }
 }
 
 
@@ -443,12 +443,12 @@ export const updatePassRequest = async (password, authTokenFromURL) => {
     try {
         // Realiza la solicitud al backend con el token obtenido de la URL
         const response = await fetch(`${apiUrlBase}/password-update`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${authTokenFromURL}`
-          },
-          body: JSON.stringify({password})
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authTokenFromURL}`
+            },
+            body: JSON.stringify({ password })
         });
 
         if (!response.ok) {
@@ -456,13 +456,40 @@ export const updatePassRequest = async (password, authTokenFromURL) => {
             console.error('Error en la solicitud de cambio de contraseña:', response.statusText);
             throw new Error(errorData.msg);
         }
-  
+
         const responseData = await response.json();
         console.log(responseData);
         return responseData;
-        
+
     } catch (error) {
         console.error('Error on change password request:', error);
+        throw error;
+    }
+}
+
+
+// Modify testimony status
+export const modifyTestimonyStatus = async (testimonyId, new_status, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/testimonios/modificar-estado/${testimonyId}`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({new_status})
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        return data;
+
+    } catch (error) {
+        console.error('Error trying to modify a testimony status', error);
         throw error;
     }
 }

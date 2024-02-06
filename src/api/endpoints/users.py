@@ -165,9 +165,6 @@ def change_password():
 
 
 
-# ================== Recuperar Contraseña (Usuario No Logeado) ================== #
-# TO-DO
-
 
 
 # ================== Banear o Desbanear Usuario ================== #

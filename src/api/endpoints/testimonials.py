@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, Blueprint
-from api.models import Adoption_Users, Animals, Animals_images, User, db, Testimony
+from api.models import Adoption_Users, Animals, Animals_images, RoleEnum, TestimonyStatusEnum, User, db, Testimony
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import joinedload
@@ -310,3 +310,57 @@ def update_adoption_testimony(testimony_id):
     db.session.commit()
 
     return jsonify({"msg": "Testimonio modificado exitosamente"}), 200
+
+
+# ================= Modify testimonial status ================== #
+@testimonials_bp.route('/modificar-estado/<int:testimony_id>', methods=['PUT'])
+@jwt_required()
+def modify_testimonial_status(testimony_id):
+    """
+    Modifica el estado de un testimonio.
+
+    Endpoint:
+        PUT /testimonios/modificar-estado/<int:testimony_id>
+
+    Parámetros de consulta opcionales:
+        - new_status : Nuevo estado del testimonio ("approved", "pending" o "rejected").
+
+    Header:
+        - Authorization: Token JWT del usuario logeado con rol "admin".
+
+    Retorna:
+        - Mensaje de éxito o error.
+    """
+
+    # Obtener el usuario actual
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+
+    # Verificar que el usuario actual sea un administrador
+    if current_user.role != RoleEnum.ADMIN:
+        return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
+
+    # Obtener el nuevo estado del testimonio del body de la solicitud
+    new_status = request.json.get('new_status')
+
+    # Validar que el nuevo estado sea válido
+    if new_status not in ["approved", "pending", "rejected"]:
+        return jsonify({"msg": "El estado proporcionado no es válido"}), 400
+
+    # Buscar el testimonio en la base de datos
+    testimony = Testimony.query.get(testimony_id)
+    if not testimony:
+        return jsonify({"msg": "Testimonio no encontrado"}), 404
+
+    # Actualizar el estado del testimonio
+    if new_status == 'approved':
+        testimony.status = TestimonyStatusEnum.APPROVED
+    if new_status == 'pending':
+        testimony.status = TestimonyStatusEnum.PENDING
+    if new_status == 'rejected':
+        testimony.status = TestimonyStatusEnum.REJECTED
+
+    # Guardar los cambios en la base de datos
+    db.session.commit()
+
+    return jsonify({"msg": f"El estado del testimonio {testimony_id} ha sido actualizado a {new_status}"}), 200
