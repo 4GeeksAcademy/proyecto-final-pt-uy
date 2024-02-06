@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_cors import CORS
 
-from api.models import RoleEnum, StatusEnum, db, User, Animals, Adoption_Users
+from api.models import RoleEnum, StatusEnum, Testimony, db, User, Animals, Adoption_Users
 
 adoptions_bp = Blueprint('adopciones', __name__)
 
@@ -47,11 +47,6 @@ def register_adoption():
         "msg": "Adopción registrada exitosamente"
     }
     """
-    body = request.get_json(silent=True)
-    print(body)
-    if body is None:
-        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
-    
     current_user_id = get_jwt_identity()
 
     # Verificar si el usuario logeado es un administrador
@@ -60,10 +55,10 @@ def register_adoption():
         return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
 
     # Obtener datos de la solicitud
-    # body = request.get_json(silent=True)
-    # print(body)
-    # if body is None:
-    #     return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
+    body = request.get_json(silent=True)
+    print(body)
+    if body is None:
+        return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
 
     # Validar que los campos requeridos estén presentes en la solicitud
     required_fields = ['user_id', 'animal_id', 'registration_date']
@@ -117,18 +112,27 @@ def get_adoptions():
 
     serialized_adoptions = []
     for adoption in paginated_query:
-        # Obtener datos del usuario y del animal
+        # Obtener datos del usuario, del animal y del testimonio
         user = User.query.filter_by(id=adoption.user_id).first()
         animal = Animals.query.filter_by(id=adoption.animal_id).first()
+        testimony = Testimony.query.filter_by(adoption_id=adoption.id).first()
 
         # Serializar la información
         user_info = user.serialize()
         animal_info = animal.serialize()
         adoption_info = adoption.serialize()
+        if testimony:
+            testimony_info = testimony.serialize()
 
-        # Agregar la info del usuario y del animal al diccionario de la adopción
+        # Agregar la info del usuario, del animal y del testimonio al diccionario de la adopción
         adoption_info["user_info"] = user_info
         adoption_info["animal_info"] = animal_info
+        if testimony:
+            adoption_info["testimony_id"] = testimony_info['id']
+            adoption_info["testimony_info"] = testimony_info
+        else:
+            adoption_info["testimony_id"] = None
+            adoption_info["testimony_info"] = None
 
         serialized_adoptions.append(adoption_info)
 
@@ -142,6 +146,67 @@ def get_adoptions():
     
     return jsonify(response_body), 200
 
+
+
+# ================= Get adoptions by user ID ================== #
+@adoptions_bp.route('/usuario/<int:user_id>', methods=['GET'])
+@jwt_required()
+def get_adoptions_by_user(user_id):
+    """
+    Devuelve una lista de adopciones asociadas a un usuario específico.
+
+    Endpoint:
+        GET /adopciones/usuario/<int:user_id>
+
+    Parámetros de consulta opcionales:
+        - page : Página a devolver (por defecto, 1, es decir, la primera)
+        - per_page: Número máximo de registros a devolver (por defecto, 12).
+    """
+
+    # Obtener parámetros de consulta
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=12, type=int)
+
+    # Construir la consulta base
+    adoptions_query = Adoption_Users.query.filter_by(user_id=user_id)
+
+    # Paginar
+    paginated_query = adoptions_query.paginate(page=page, per_page=per_page)
+
+    serialized_adoptions = []
+    for adoption in paginated_query:
+        # Obtener datos del animal y del testimonio
+        animal = Animals.query.filter_by(id=adoption.animal_id).first()
+        testimony = Testimony.query.filter_by(adoption_id=adoption.id).first()
+
+        # Serializar la información
+        animal_info = animal.serialize()
+        adoption_info = adoption.serialize()
+        if testimony:
+            testimony_info = testimony.serialize()
+
+        # Agregar la info del animal y del testimonio al diccionario de la adopción
+        adoption_info["animal_info"] = animal_info
+        if testimony:
+            adoption_info["testimony_id"] = testimony_info['id']
+            adoption_info["testimony_info"] = testimony_info
+        else:
+            adoption_info["testimony_id"] = None
+            adoption_info["testimony_info"] = None
+
+        serialized_adoptions.append(adoption_info)
+
+    response_body = {
+        "msg": "ok",
+        "total_adoptions": paginated_query.total,
+        "total_pages": paginated_query.pages,
+        "current_page": paginated_query.page,
+        "result": serialized_adoptions
+    }
+
+    return jsonify(response_body), 200
+
+
   
 
 # ================= Get one adoption by id ================== #
@@ -152,17 +217,27 @@ def get_adoption(adoption_id):
     if adoption is None:
         return jsonify({"msg": "Adopción no encontrada"}), 404
     
-    # Obtener datos del usuario y del animal
+    # Obtener datos del usuario, del animal y del testimonio
     user = User.query.filter_by(id=adoption.user_id).first()
     animal = Animals.query.filter_by(id=adoption.animal_id).first()
+    testimony = Testimony.query.filter_by(adoption_id=adoption.id).first()
 
     # Serializar la información
     user_info = user.serialize()
     animal_info = animal.serialize()
     adoption_info = adoption.serialize()
+    if testimony:
+            testimony_info = testimony.serialize()
 
-     # Agregar la info del usuario y del animal al diccionario de la adopción
+     # Agregar la info del usuario, animal y testimonio al diccionario de la adopción
     adoption_info["user_info"] = user_info
     adoption_info["animal_info"] = animal_info
+    if testimony:
+        adoption_info["testimony_id"] = testimony_info['id']
+        adoption_info["testimony_info"] = testimony_info
+    else:
+        adoption_info["testimony_id"] = None
+        adoption_info["testimony_info"] = None
+        
     
     return jsonify(adoption_info), 200

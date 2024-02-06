@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, Blueprint
-from api.models import Adoption_Users, User, db, Testimony
+from api.models import Adoption_Users, Animals, Animals_images, User, db, Testimony
 from flask_cors import CORS
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy.orm import joinedload
@@ -107,46 +107,59 @@ def get_testimonials():
         GET /testimonios
 
     Parámetros de consulta opcionales:
-        - limit: Número máximo de registros a devolver (por defecto, 8).
-        - status: Estado o estados de los testimonios a incluir en la respuesta (por defecto, 'approved').
+        - page : Página a devolver (por defecto, 1, es decir, la primera)
+        - per_page: Número máximo de registros a devolver (por defecto, 8).
+        - statuses: Estado o estados de los testimonios a incluir en la respuesta (por defecto, 'approved').
     """
+
     # Obtener parámetros de consulta
-    limit = request.args.get('limit', default=8, type=int)
-    status = request.args.get('status', default='approved', type=str)
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=8, type=int)
+    statuses = request.args.get('statuses', default='approved', type=str)
 
-    # Validar el parámetro 'status'
-    valid_statuses = ['approved', 'pending', 'rejected']
-    if status not in valid_statuses:
-        return jsonify({"error": "El parámetro 'status' debe ser 'approved', 'pending' o 'rejected'"}), 400
+    # Convertir cadenas separadas por comas en listas
+    statuses = statuses.split(',') if statuses else []
 
-    # Obtener testimonios según los parámetros
-    testimonials_query = (
-        db.session.query(Testimony, Adoption_Users, User)
-        .join(Adoption_Users, Adoption_Users.id == Testimony.adoption_id)
-        .join(User, User.id == Adoption_Users.user_id)
-        .filter(Testimony.status == status)
-        .limit(limit)
-        .all()
-    )
+    # Construir la consulta base
+    testimonials_query = Testimony.query
 
-    # Serializar los resultados
+     # Filtrar por estado
+    if statuses:
+        testimonials_query = testimonials_query.filter(Testimony.status.in_(statuses))
+
+    # Paginar
+    paginated_query = testimonials_query.paginate(page=page, per_page=per_page)
+
     serialized_testimonials = []
-    for testimony, adoption, user in testimonials_query:
-        serialized_testimony = testimony.serialize()
+    for testimony in paginated_query:
+        # Obtener datos del usuario, del animal y del testimonio
+        adoption = Adoption_Users.query.filter_by(id=testimony.adoption_id).first()
+        user = User.query.filter_by(id=adoption.user_id).first()
+        animal = Animals.query.filter_by(id=adoption.animal_id).first()
 
-        # Obtener información del usuario asociado a la adopción
-        user_info = {
-            "id": user.id,
-            "name": user.name,
-            "last_name": user.last_name
-        }
+        # Serializar la información
+        adoption_info = adoption.serialize()
+        user_info = user.serialize()
+        animal_info = animal.serialize()
+        images_query = Animals_images.query.filter_by(animal_id=animal_info['id']).all()
+        image_urls = [image.image_url for image in images_query]
+        if not image_urls:
+            image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
+        animal_info['image_urls'] = image_urls
+        testimony_info = testimony.serialize()
 
-        serialized_testimony['user_info'] = user_info
-        serialized_testimonials.append(serialized_testimony)
+        # Agregar la info de la adopción, del usuario y del animal al diccionario del testimonio
+        testimony_info["adoption_info"] = adoption_info
+        testimony_info["user_info"] = user_info
+        testimony_info["animal_info"] = animal_info
+
+        serialized_testimonials.append(testimony_info)
 
     response_body = {
         "msg": "ok",
-        "total_testimonials": len(serialized_testimonials),
+        "total_testimonials": paginated_query.total,
+        "total_pages": paginated_query.pages,
+        "current_page": paginated_query.page,
         "result": serialized_testimonials
     }
     
@@ -157,27 +170,29 @@ def get_testimonials():
 # ================= Get one testimony by id ================== #
 @testimonials_bp.route('/testimonio/<int:testimony_id>', methods=['GET'])
 def get_testimony(testimony_id):
+
     testimony = (
-        db.session.query(Testimony, Adoption_Users, User)
+        db.session.query(Testimony, Adoption_Users, User, Animals)
         .filter(Testimony.id == testimony_id)
         .join(Adoption_Users, Adoption_Users.id == Testimony.adoption_id)
         .join(User, User.id == Adoption_Users.user_id)
+        .join(Animals, Animals.id == Adoption_Users.animal_id)
         .first()
     )
 
     if testimony is None:
         return jsonify({"msg": "Testimonio no encontrado"}), 404
+    
 
-    # Obtener información del usuario asociado a la adopción
-    user_info = {
-        "id": testimony.User.id,
-        "name": testimony.User.name,
-        "last_name": testimony.User.last_name
-    }
-
-    # Serializar el testimonio junto con la información del usuario
+    # Serializar el testimonio junto con la información de la adopción, el usuario y el animal asociados
     serialized_testimony = testimony.Testimony.serialize()
-    serialized_testimony['user_info'] = user_info
+    serialized_adoption = testimony.Adoption_Users.serialize()
+    serialized_user = testimony.User.serialize()
+    serialized_animal = testimony.Animals.serialize()
+
+    serialized_testimony['adoption_info'] = serialized_adoption
+    serialized_testimony['user_info'] = serialized_user
+    serialized_testimony['animal_info'] = serialized_animal
 
     return jsonify(serialized_testimony), 200
 
