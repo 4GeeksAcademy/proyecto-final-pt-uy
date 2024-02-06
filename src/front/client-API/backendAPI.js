@@ -271,6 +271,28 @@ export const getTestimonialsList = async (pagination, statuses = "approved") => 
 
 
 
+// Get testimony by id
+export const getTestimony = async (id) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/animales/animal/${id}`);
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        return data;
+
+    } catch (error) {
+        console.error('Error fetching testimony details:', error);
+        throw error;
+    }
+}
+
+
+
+
 // Get users list
 export const getUsersList = async (pagination, token) => {
     const page = pagination?.page || 1;
