@@ -15,6 +15,9 @@ from email.mime.text import MIMEText
 
 from smtplib import SMTPException
 
+load_dotenv()
+api = Blueprint('api', __name__)
+CORS(api)
 
 def generate_token_password(email):
     expire = datetime.timedelta(hours=1)
@@ -137,10 +140,8 @@ def handle_email_change_confirmation(recipient, name):
     finally:
         server.quit()
 
-api = Blueprint('api', __name__)
 
 # Permitir solicitudes CORS a esta API
-CORS(api)
 
 # Cargar variables de entorno desde el archivo .env
 load_dotenv()
