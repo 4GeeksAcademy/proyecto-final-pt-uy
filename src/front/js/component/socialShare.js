@@ -7,10 +7,10 @@ export default function SocialShare() {
             <p className='fw-semibold '>
                 <i className="fa-solid fa-share-nodes fa-xl px-2"></i>
                 Comparte:
-                <i className="fa-brands fa-facebook fa-xl px-2" style={{ color: '#808080' }}></i>
-                <i className="fa-brands fa-twitter fa-xl px-2" style={{ color: '#808080' }}></i>
-                <i className="fa-brands fa-instagram fa-xl px-2" style={{ color: '#808080' }}></i>
-                <i className="fa-brands fa-youtube fa-xl px-2" style={{ color: '#808080' }}></i>
+                <a href="https://www.facebook.com" target="_blank"><i className="fa-brands fa-facebook fa-xl px-2 text-neutral-40"></i></a>
+                <a href="https://twitter.com" target="_blank"><i className="fa-brands fa-twitter fa-xl px-2 text-neutral-40"></i></a>
+                <a href="https://www.instagram.com" target="_blank"><i className="fa-brands fa-instagram fa-xl px-2 text-neutral-40"></i></a>
+                <a href="https://www.youtube.com" target="_blank"><i className="fa-brands fa-youtube fa-xl px-2 text-neutral-40"></i></a>
             </p>
         </div>
     );

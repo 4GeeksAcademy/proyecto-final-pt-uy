@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { UserContextProvider } from "./contexts/userContext.js";
+import { UserContextProvider, useUserContext } from "./contexts/userContext.js";
 import { AnimalsContextProvider } from "./contexts/animalsContext.js";
 
 import LayoutWithNav from "./layoutWithNav.js";
@@ -31,6 +31,10 @@ import FormAddAdoption from "./component/Forms/FormAddAdoption.js";
 import UserInfo from "./component/admin/userInfo.js";
 import AdoptionInfo from "./component/admin/adoptionInfo.js";
 import TestimonyInfo from "./component/admin/testimonyInfo.js";
+import TermsAndConditions from "./pages/TermsAndConditions.js";
+import PrivacyPolicies from "./pages/PrivacyPolicies.js";
+import Donate from "./pages/Donate.js";
+import NotFound from "./pages/NotFound.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -42,52 +46,58 @@ const App = () => {
 
     if (!process.env.BACKEND_URL || process.env.BACKEND_URL == "") return <BackendURL />;
 
-    //Alguno de los path tendra que ser editado a futuro para recibir parametros especificos como un ID
+    const {store: {user}} = useUserContext();
+
+
     return (
         <div>
-            <React.StrictMode>
-                <BrowserRouter basename={basename}>
-                    <UserContextProvider>
-                        <AnimalsContextProvider>
-                            <Routes>
+            <BrowserRouter basename={basename}>
+                <Routes>
+                    <Route element={<LayoutWithNav />}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<AboutUs />} />
+                        <Route path="/animal-list" element={<AnimalList />} />
+                        <Route path="/animal-profile/:id" element={<AnimalProfile />} />
+                        {
+                            user.id &&
+                            <>
+                            <Route path="/edit-profile" element={<FormEditProfile />} />
+                            <Route path="/testimony" element={<FormTestimony />} />
+                            <Route path="/profile" element={<Profile />} />
+                            </>
+                        }
+                        <Route path="/recomendations" element={<Recomendations />} />
+                        <Route path="/donate" element={<Donate />} />
+                        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+                        <Route path="/privacy-policies" element={<PrivacyPolicies />} />
+                        <Route path="*" element={<NotFound />} />
+                    </Route>
 
-                                <Route element={<LayoutWithNav />}>
-                                    <Route path="/" element={<Home />} />
-                                    <Route path="/about" element={<AboutUs />} />
-                                    <Route path="/animal-list" element={<AnimalList />} />
-                                    <Route path="/animal-profile/:id" element={<AnimalProfile />} />
-                                    <Route path="/edit-profile" element={<FormEditProfile />} />
-                                    <Route path="/testimony" element={<FormTestimony />} />
-                                    <Route path="/profile" element={<Profile />} />
-                                    <Route path="/recomendations" element={<Recomendations />} />
-                                    <Route path="*" element={<h1>Not found!</h1>} />
-                                </Route>
+                    <Route element={<LayoutWithoutNav />}>
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/new-password" element={<NewPassword />} />
+                    </Route>
 
-                                <Route element={<LayoutWithoutNav />}>
-                                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                                    <Route path="/login" element={<Login />} />
-                                    <Route path="/register" element={<Register />} />
-                                    <Route path="/new-password" element={<NewPassword />} />
-                                </Route>
-
-                                <Route element={<LayoutDashAdmin />} >
-                                    <Route path="/add-animal" element={<FormAddAnimal />} />
-                                    <Route path="/add-adoption" element={<FormAddAdoption />} />
-                                    <Route path="/table-animals" element={<TableAnimals />} />
-                                    <Route path="/table-reviews" element={<TableReviews />} />
-                                    <Route path="/table-users" element={<TableUsers />} />
-                                    <Route path="/table-adoptions" element={<TableAdoptions />} />
-                                    <Route path="/animal-info/:id" element={<AnimalInfo />} />
-                                    <Route path="/modify-animal/:id" element={<FormModifyAnimal />} />
-                                    <Route path="/user-info/:id" element={<UserInfo />} />
-                                    <Route path="/adoption-info/:id" element={<AdoptionInfo />} />
-                                    <Route path="/testimony-info/:id" element={<TestimonyInfo />} />
-                                </Route>
-                            </Routes>
-                        </AnimalsContextProvider>
-                    </UserContextProvider>
-                </BrowserRouter>
-            </React.StrictMode>
+                    {
+                        user.id && user.role === "admin" &&
+                        <Route element={<LayoutDashAdmin />} >
+                            <Route path="/add-animal" element={<FormAddAnimal />} />
+                            <Route path="/add-adoption" element={<FormAddAdoption />} />
+                            <Route path="/table-animals" element={<TableAnimals />} />
+                            <Route path="/table-reviews" element={<TableReviews />} />
+                            <Route path="/table-users" element={<TableUsers />} />
+                            <Route path="/table-adoptions" element={<TableAdoptions />} />
+                            <Route path="/animal-info/:id" element={<AnimalInfo />} />
+                            <Route path="/modify-animal/:id" element={<FormModifyAnimal />} />
+                            <Route path="/user-info/:id" element={<UserInfo />} />
+                            <Route path="/adoption-info/:id" element={<AdoptionInfo />} />
+                            <Route path="/testimony-info/:id" element={<TestimonyInfo />} />
+                        </Route>
+                    }
+                </Routes>
+            </BrowserRouter>
         </div>
     );
 };
