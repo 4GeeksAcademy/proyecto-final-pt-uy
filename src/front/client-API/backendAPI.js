@@ -521,3 +521,30 @@ export const modifyTestimonyStatus = async (testimonyId, new_status, token) => {
         throw error;
     }
 }
+
+
+// Register testimony
+export const addTestimony = async (formData, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/testimonios/testimonio`, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData,
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Returns message
+        return data;
+
+    } catch (error) {
+        console.error('Error trying to register an testimony', error);
+        throw error;
+    }
+}
