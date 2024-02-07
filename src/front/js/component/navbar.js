@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { useUserContext } from "../contexts/userContext";
 
@@ -20,9 +20,9 @@ export const Navbar = () => {
 	return (
 		<nav className="navbar navbar-expand-lg my-4">
 			<div className="container">
-				<Link to="/" className="logo-container me-4">
+				<NavLink to="/" className="logo-container me-4">
 					<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
-				</Link>
+				</NavLink>
 
 				<button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
 					<span className="navbar-toggler-icon"></span>
@@ -31,24 +31,24 @@ export const Navbar = () => {
 				<div className="collapse navbar-collapse" id="navbarText">
 					<ul className="navbar-nav me-auto mb-2 mb-lg-0">
 						<li className="nav-item">
-							<Link to="/" className="mt-3 mt-lg-0 nav-link text-primary fw-medium text-decoration-none">
+							<NavLink to="/" className="mt-3 mt-lg-0 nav-link text-primary fw-medium text-decoration-none">
 								Inicio
-							</Link>
+							</NavLink>
 						</li>
 						<li className="nav-item">
-							<Link to="/animal-list" className="nav-link text-primary fw-medium text-decoration-none">
+							<NavLink to="/animal-list" className="nav-link text-primary fw-medium text-decoration-none">
 								Peluditos
-							</Link>
+							</NavLink>
 						</li>
 						<li className="nav-item">
-							<Link to="/recomendations" className="nav-link text-primary fw-medium text-decoration-none">
+							<NavLink to="/recomendations" className="nav-link text-primary fw-medium text-decoration-none">
 								Información
-							</Link>
+							</NavLink>
 						</li>
 						<li className="nav-item">
-							<Link to="/about" className="nav-link text-primary fw-medium text-decoration-none">
+							<NavLink to="/about" className="nav-link text-primary fw-medium text-decoration-none">
 								Sobre Nosotros
-							</Link>
+							</NavLink>
 						</li>
 						<li className="nav-item text-primary fw-medium">
 							<button data-bs-toggle="modal" data-bs-target="#staticBackdrop" className="nav-link text-primary">
@@ -72,12 +72,12 @@ export const Navbar = () => {
 									</div>
 									<hr />
 									<p>¡También te invitamos a seguirnos en nuestras redes sociales!</p>
-									<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none me-3">
+									<NavLink to="" className="text-body-color fs-5 fw-medium text-decoration-none me-3">
 										<i className="fa-brands fa-facebook"></i>
-									</Link>
-									<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
+									</NavLink>
+									<NavLink to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
 										<i className="fa-brands fa-instagram"></i>
-									</Link>
+									</NavLink>
 								</div>
 							</div>
 						</div>
@@ -85,12 +85,12 @@ export const Navbar = () => {
 
 					<ul className="navbar-nav ms-auto mb-2 mb-lg-0">
 
-						{ // Link para ir al Admin Dashboard
+						{ // NavLink para ir al Admin Dashboard
 							store.user.role === "admin" &&
 							<li className="nav-item">
-								<Link to="/table-animals" className="nav-link text-primary fw-medium text-decoration-none">
+								<NavLink to="/table-animals" className="nav-link text-primary fw-medium text-decoration-none">
 									<i className="fa-solid fa-list-check"></i> Dashboard
-								</Link>
+								</NavLink>
 							</li>
 						}
 
@@ -98,9 +98,9 @@ export const Navbar = () => {
 							store.user.id &&
 							<>
 								<li className="nav-item">
-									<Link to="/profile" className="nav-link text-primary fw-medium text-decoration-none">
+									<NavLink to="/profile" className="nav-link text-primary fw-medium text-decoration-none">
 										<i className="fa-solid fa-address-card"></i> Perfil
-									</Link>
+									</NavLink>
 								</li>
 								<li className="nav-item">
 									<button className="nav-link text-primary fw-medium text-decoration-none" onClick={handleLogout}>
@@ -114,14 +114,14 @@ export const Navbar = () => {
 							!store.user.id &&
 							<>
 								<li className="nav-item">
-									<Link to="/register" className="nav-link text-primary fw-medium text-decoration-none">
+									<NavLink to="/register" className="nav-link text-primary fw-medium text-decoration-none">
 										Regístrate
-									</Link>
+									</NavLink>
 								</li>
 								<li className="nav-item">
-									<Link to="/login" className="nav-link text-primary fw-medium text-decoration-none">
+									<NavLink to="/login" className="nav-link text-primary fw-medium text-decoration-none">
 										Ingresa
-									</Link>
+									</NavLink>
 								</li>
 							</>
 						}
