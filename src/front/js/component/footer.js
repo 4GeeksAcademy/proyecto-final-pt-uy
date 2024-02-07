@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import EmailCopy from "./emailCopy";
+import PhoneCopy from "./phoneCopy";
 
 export const Footer = () => (
 	<footer className="footer bg-linear mt-auto py-3">
@@ -42,11 +44,12 @@ export const Footer = () => (
 						<i className="fa-brands fa-instagram"></i>
 					</Link>
 					<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
-						<i className="fa-solid fa-phone"></i>
+						<PhoneCopy />
 					</Link>
 					<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none ms-3">
-						<i className="fa-regular fa-envelope"></i>
+						<EmailCopy />
 					</Link>
+					
 				</div>
 			</div>
 
@@ -62,10 +65,10 @@ export const Footer = () => (
 					<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
 				</figure>
 				<div className="mb-3 mb-lg-0">
-					<Link to="" className="me-4 text-decoration-none text-neutral-60">
+					<Link to="/terms-and-conditions" className="me-4 text-decoration-none text-neutral-60">
 						Términos y Condiciones
 					</Link>
-					<Link to="" className="text-decoration-none text-neutral-60">
+					<Link to="/privacy-policies" className="text-decoration-none text-neutral-60">
 						Políticas de Privacidad
 					</Link>
 				</div>
