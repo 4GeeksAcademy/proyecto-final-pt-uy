@@ -78,7 +78,7 @@ const ForgotPassword = () => {
                 <button 
                   type='button' 
                   className='btn btn-outline-primary rounded-4 w-100'
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/login")}
                   disabled={isSubmitting}
                 >
                   Volver
