@@ -41,7 +41,8 @@ const FormEditProfile = () => {
         setErrorMsg(error.message);
         setIsLoading(false);
       }
-    }
+    },
+    mode: "onBlur"
   });
 
   const { register, handleSubmit, formState } = form;
