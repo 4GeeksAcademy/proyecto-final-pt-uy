@@ -171,30 +171,34 @@ def get_testimonials():
 @testimonials_bp.route('/testimonio/<int:testimony_id>', methods=['GET'])
 def get_testimony(testimony_id):
 
-    testimony = (
-        db.session.query(Testimony, Adoption_Users, User, Animals)
-        .filter(Testimony.id == testimony_id)
-        .join(Adoption_Users, Adoption_Users.id == Testimony.adoption_id)
-        .join(User, User.id == Adoption_Users.user_id)
-        .join(Animals, Animals.id == Adoption_Users.animal_id)
-        .first()
-    )
+    testimony = Testimony.query.get(testimony_id)
 
     if testimony is None:
         return jsonify({"msg": "Testimonio no encontrado"}), 404
     
+    # Obtener datos del usuario, del animal y del testimonio
+    adoption = Adoption_Users.query.filter_by(id=testimony.adoption_id).first()
+    user = User.query.filter_by(id=adoption.user_id).first()
+    animal = Animals.query.filter_by(id=adoption.animal_id).first()
 
-    # Serializar el testimonio junto con la información de la adopción, el usuario y el animal asociados
-    serialized_testimony = testimony.Testimony.serialize()
-    serialized_adoption = testimony.Adoption_Users.serialize()
-    serialized_user = testimony.User.serialize()
-    serialized_animal = testimony.Animals.serialize()
+    # Serializar la información
+    adoption_info = adoption.serialize()
+    user_info = user.serialize()
+    animal_info = animal.serialize()
+    images_query = Animals_images.query.filter_by(animal_id=animal_info['id']).all()
+    image_urls = [image.image_url for image in images_query]
+    if not image_urls:
+        image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
+    animal_info['image_urls'] = image_urls
+    testimony_info = testimony.serialize()
 
-    serialized_testimony['adoption_info'] = serialized_adoption
-    serialized_testimony['user_info'] = serialized_user
-    serialized_testimony['animal_info'] = serialized_animal
+    # Agregar la info de la adopción, del usuario y del animal al diccionario del testimonio
+    testimony_info["adoption_info"] = adoption_info
+    testimony_info["user_info"] = user_info
+    testimony_info["animal_info"] = animal_info
 
-    return jsonify(serialized_testimony), 200
+
+    return jsonify(testimony_info), 200
 
 
 
