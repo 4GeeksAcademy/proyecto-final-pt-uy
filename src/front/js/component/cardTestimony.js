@@ -1,14 +1,17 @@
 import React from "react";
 
-export default function CardTestimony({testimony: {testimony_text, image_url, user_info}}) {
+export default function CardTestimony({testimony: {testimony_text, image_url, user_info, animal_info}}) {
     const userDisplayName = `${user_info.name} ${user_info.last_name.split("")[0]}.`;
+
+    console.log(animal_info);
 
     return (
         <div className="testimony-card rounded-3 shadow-sm" >
             <input type="checkbox" name="" />
             <div className="toggle">+</div>
             <figure className="imgBox">
-                <img src={image_url}/>
+                {/* Si el testimonio no tiene imagen, muestra la del animal adoptado */}git
+                <img src={image_url || animal_info.image_urls[0]}/>
             </figure>
             <div className="details p-3 pt-4">
                 <p>{testimony_text}</p>
