@@ -34,6 +34,7 @@ import TestimonyInfo from "./component/admin/testimonyInfo.js";
 import TermsAndConditions from "./pages/TermsAndConditions.js";
 import PrivacyPolicies from "./pages/PrivacyPolicies.js";
 import Donate from "./pages/Donate.js";
+import NotFound from "./pages/NotFound.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -69,7 +70,7 @@ const App = () => {
                         <Route path="/donate" element={<Donate />} />
                         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
                         <Route path="/privacy-policies" element={<PrivacyPolicies />} />
-                        <Route path="*" element={<h1>Not found!</h1>} />
+                        <Route path="*" element={<NotFound />} />
                     </Route>
 
                     <Route element={<LayoutWithoutNav />}>
