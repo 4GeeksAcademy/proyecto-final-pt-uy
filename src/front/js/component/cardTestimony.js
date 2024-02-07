@@ -3,8 +3,6 @@ import React from "react";
 export default function CardTestimony({testimony: {testimony_text, image_url, user_info, animal_info}}) {
     const userDisplayName = `${user_info.name} ${user_info.last_name.split("")[0]}.`;
 
-    console.log(animal_info);
-
     return (
         <div className="testimony-card rounded-3 shadow-sm" >
             <input type="checkbox" name="" />
