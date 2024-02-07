@@ -31,6 +31,8 @@ import FormAddAdoption from "./component/Forms/FormAddAdoption.js";
 import UserInfo from "./component/admin/userInfo.js";
 import AdoptionInfo from "./component/admin/adoptionInfo.js";
 import TestimonyInfo from "./component/admin/testimonyInfo.js";
+import TermsAndConditions from "./pages/TermsAndConditions.js";
+import PrivacyPolicies from "./pages/PrivacyPolicies.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -60,6 +62,8 @@ const App = () => {
                                     <Route path="/testimony" element={<FormTestimony />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/recomendations" element={<Recomendations />} />
+                                    <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+                                    <Route path="/privacy-policies" element={<PrivacyPolicies />} />
                                     <Route path="*" element={<h1>Not found!</h1>} />
                                 </Route>
 
