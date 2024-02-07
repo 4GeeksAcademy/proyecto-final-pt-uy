@@ -18,6 +18,8 @@ from smtplib import SMTPException
 load_dotenv()
 api = Blueprint('api', __name__)
 CORS(api)
+load_dotenv()
+
 
 def generate_token_password(email):
     expire = datetime.timedelta(hours=1)
@@ -144,7 +146,7 @@ def handle_email_change_confirmation(recipient, name):
 # Permitir solicitudes CORS a esta API
 
 # Cargar variables de entorno desde el archivo .env
-load_dotenv()
+
 
 @api.route('/password-reset-request', methods=['POST'])
 def password_reset_request():
