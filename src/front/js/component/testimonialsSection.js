@@ -25,7 +25,7 @@ export default function TestimonialsSection() {
     
     try {
       const data = await getTestimonialsList();
-      setTestimonialsList(data);
+      setTestimonialsList(data.result);
       setIsLoading(false);
     } catch (error) {
       console.error(`Error fetching testimonials list: `, error);
