@@ -27,7 +27,7 @@ const AboutUs = () => {
               <button type="button" className="btn btn-outline-primary rounded-pill px-3 py-2 me-3 my-4" onClick={() => navigate("/recomendations")}>
                 Más información
               </button>
-              <button type="button" className="btn btn-secondary rounded-pill px-5 py-2 my-4">
+              <button type="button" className="btn btn-secondary rounded-pill px-5 py-2 my-4" onClick={() => navigate("/donate")}>
                 Donar
               </button>
             </div>

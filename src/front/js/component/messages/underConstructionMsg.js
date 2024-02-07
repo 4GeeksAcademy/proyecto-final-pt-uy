@@ -10,7 +10,7 @@ export default function UnderConstructionMsg({message=""}) {
             {
                 !message &&
                 <p className="text-center">
-                    Alineando astros y píxeles <br/> para que más peluditos encuentren <br/>el dulce hogar que los espera 
+                    Alineando astros y píxeles <br/> para que más peluditos encuentren <br/>el hogar que los espera 
                     <i class="fa-solid fa-heart text-secondary ms-2"></i>
                 </p>
             }
