@@ -4,7 +4,6 @@ from flask_cors import CORS
 from flask_jwt_extended import create_access_token
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
-from ..routes import handle_registration_confirmation
 import os
 
 auth_bp = Blueprint('auth', __name__)
@@ -52,11 +51,7 @@ def register():
 
     db.session.add(user)
     db.session.commit()
-
-    # Llama a la función de confirmación de registro
-    handle_registration_confirmation(user.email, user.name)
-
-    return jsonify({'msg': 'Usuario registrado y correo electrónico de confirmación enviado'}), 200
+    return jsonify({'msg': 'Usuario registrado'}), 200
 
 
 
