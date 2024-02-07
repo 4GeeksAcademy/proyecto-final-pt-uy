@@ -4,10 +4,18 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../contexts/userContext';
 
 import { getUser, getAnimal, getTestimonialsList, getAdoptions } from '../../client-API/backendAPI';
+import Pagination from '../component/pagination';
 
 import CardAnimal from '../component/cardAnimal';
 import CardTestimony from "../component/cardTestimony";
 
+const initialPagination = {
+  limit: 12,
+  offset: 0,
+  totalPages: 1,
+  currentPage: 1,
+  totalTestimonials: 0
+}
 
 const Profile = () => {
 
@@ -20,6 +28,7 @@ const Profile = () => {
   const [animalDetails, setAnimalDetails] = useState(null);
 
   const [testimonies, setTestimonies] = useState(null);
+  const [pagination, setPagination] = useState(initialPagination);
 
   const [adoptions, setAdoptions] = useState(null);
 
@@ -30,15 +39,22 @@ const Profile = () => {
   useEffect(() => {
     fetchUser();
     fetchAdoptions();
-  }, [user.id, token])
+  }, [user.id, token]);
 
   useEffect(() => {
     fetchTestimony();
-  }, [adoptions])
+  }, [adoptions]);
+
+  useEffect(() => {
+    fetchTestimony();
+  }, [pagination.currentPage]);
 
   const fetchTestimony = async () => {
+    const paginationParams = { page: pagination.currentPage, perPage: pagination.limit };
+    const statuses = "pending,approved,rejected";
+
     try {
-      const data = await getTestimonialsList();
+      const data = await getTestimonialsList(paginationParams, statuses);
       const filteredTestimonies = data.result.filter((testimony) => testimony.user_info.id === user.id);
 
       if (adoptions) {
@@ -50,6 +66,11 @@ const Profile = () => {
         });
       }
       setTestimonies(filteredTestimonies);
+      setPagination(prevState => ({
+        ...prevState,
+        totalTestimonials: filteredTestimonies.length,
+        totalPages: data.total_pages
+      }))
     } catch (error) {
       console.error(`Error fetching testimony: `, error);
     }
@@ -321,7 +342,7 @@ const Profile = () => {
                   )}
                 </div>
               </div>
-              
+
             </div>
           </form>
 
@@ -348,31 +369,59 @@ const Profile = () => {
                 <div>
                   <div className='d-flex flex-wrap align-items-start gap-3 gap-lg-4 my-4'>
                     {animalDetails.map((animal) => (
-                      <CardAnimal animal={animal} />
+                      <CardAnimal key={animal.id} animal={animal} />
                     ))}
                   </div>
                   <h5 className='fw-medium'>Tus Testimonios</h5>
                   <div className='d-flex flex-wrap align-items-start gap-3 gap-lg-4 my-4'>
                     {animalDetails.map((animal) => (
                       <React.Fragment key={animal.id}>
-                        {animal.testimony &&
+                        {console.log("testimonio de animal:", animal?.testimony?.status)}
+                        {animal.testimony && animal?.testimony?.status === "approved" &&
                           <CardTestimony key={animal.id} testimony={animal.testimony} />
+                        }
+                        {animal.testimony && animal?.testimony?.status === "pending" &&
+                          <div className='position-relative'>
+                            <p className='position-absolute bg-secondary bg-opacity-75 p-3 text-center'
+                              style={{
+                                top: 0,
+                                left: 0,
+                                zIndex: 1,
+                                width: '100%'
+                              }}>
+                              Testimonio pendiente
+                            </p>
+                            <CardTestimony key={animal.id} testimony={animal.testimony} />
+                          </div>
+                        }
+                        {animal.testimony && animal?.testimony?.status === "rejected" &&
+                          <Link to="/testimony">
+                            <button className="btn btn-secondary rounded-pill px-4 py-2 testimony-card bg-secondary">
+                              Lo sentimos, tu testimonio sobre {animal.name} fue rechazado
+                              <br />
+                              ¡Te invitamos a dejar otro testimonio!
+                            </button>
+                          </Link>
                         }
                         {!animal.testimony &&
                           <Link to="/testimony">
-                            <button className="btn btn-secondary rounded-pill px-4 py-2 testimony-card bg-secondary">Contanos tu experiencia con {animal.name}!</button>
+                            <button className="btn btn-secondary rounded-pill px-4 py-2 testimony-card bg-secondary">¡Contanos tu experiencia con {animal.name}!</button>
                           </Link>
                         }
                       </React.Fragment>
                     ))}
                   </div>
-                  <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar otro peludito</button>
+                  <Link to="/animal-list">
+                    <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar otro peludito</button>
+                  </Link>
                 </div>
               )}
             </div>
           ) : (
             // If the user hasn't adopted any animals
-            <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar!</button>
+            <Link to="/animal-list">
+              <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar!</button>
+            </Link>
           )}
 
           {/*Buttons*/}
