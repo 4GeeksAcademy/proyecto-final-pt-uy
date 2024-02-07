@@ -64,9 +64,9 @@ const Register = () => {
         <div className="d-flex flex-column w-100" style={{ maxWidth: "470px" }}>
 
           {/* Logo */}
-          <figure className='logo-container mb-4 mb-md-5'>
+          <Link to="/" className='logo-container mb-4 mb-md-5'>
             <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
-          </figure>
+          </Link>
 
           {/* Text */}
           <h1 className="fw-bold lh-1 mb-2 mb-md-3">Registro de Usario</h1>

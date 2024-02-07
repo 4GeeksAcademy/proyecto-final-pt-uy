@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { useForm } from 'react-hook-form';
 
 import { forgotPassRequest } from '../../client-API/backendAPI';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const ForgotPassword = () => {
@@ -39,9 +39,9 @@ const ForgotPassword = () => {
         <div className="d-flex flex-column w-100" style={{ maxWidth: "470px" }}>
 
           {/* Logo */}
-          <figure className='logo-container mb-4 mb-md-5'>
+          <Link to="/" className='logo-container mb-4 mb-md-5'>
             <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
-          </figure>
+          </Link>
 
           {/* Text */}
           <h1 className='fw-bold lh-1 mb-2 mb-md-3'>Olvidaste tu contraseña?</h1>
@@ -78,7 +78,7 @@ const ForgotPassword = () => {
                 <button 
                   type='button' 
                   className='btn btn-outline-primary rounded-4 w-100'
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate("/login")}
                   disabled={isSubmitting}
                 >
                   Volver

@@ -1,13 +1,13 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 export default function DashboardLeftPanel() {
 
     return (
         <div className="dash-left-panel">
-            <figure className='logo-container mb-4 mb-md-5'>
+            <Link to="/" className='logo-container mb-4 mb-md-5'>
                 <img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706900398/Site/el_refugio_logo.png" alt="Logo" />
-            </figure>
+            </Link>
 
             <NavLink to={"/add-animal"} className="btn btn-outline-primary rounded-4 w-100 mb-2">Registrar Peludito</NavLink>
             <NavLink to={"/add-adoption"} className="btn btn-secondary rounded-4 w-100">Registrar Adopción</NavLink>
