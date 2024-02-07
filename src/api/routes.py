@@ -46,7 +46,7 @@ def handle_email_send(recipient, name):
         password_reset_url = f"{frontend_url}/new-password?token={generated_token}"
 
         # renderizar plantilla HTML
-        html = render_template("email_template.html", name=name, password_reset_url=password_reset_url)
+        html = render_template("email_template2.html", name=name, password_reset_url=password_reset_url)
         html_part = MIMEText(html, 'html')
 
         # adjuntar el contenido HTML
@@ -61,6 +61,81 @@ def handle_email_send(recipient, name):
         return f"Ocurrió un error: {e}"
     finally:
         server.quit()    
+
+def handle_registration_confirmation(recipient, name):
+    try:
+        smtp_server = os.getenv('SMTP_SERVER')
+        smtp_port = os.getenv('SMTP_PORT')
+        smtp_username = os.getenv('SMTP_USERNAME')
+        smtp_password = os.getenv('SMTP_PASSWORD')
+          
+          
+        # Configuración del servidor SMTP
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_username, smtp_password)
+        
+        # Crear mensaje
+        message = MIMEMultipart('alternative')
+        message["Subject"] = "Confirmación de registro en El Refugio"
+        message["From"] = smtp_username
+        message["To"] = recipient
+
+        # Renderizar plantilla HTML para el correo de confirmación
+        html = render_template("registration_confirmation_template.html", name=name)
+        html_part = MIMEText(html, 'html')
+
+        # Adjuntar el contenido HTML al mensaje
+        message.attach(html_part)
+
+        # Enviar el correo electrónico
+        server.sendmail(smtp_username, recipient, message.as_string())
+        
+        return "Correo electrónico de confirmación enviado exitosamente."
+    except SMTPException as e:
+        return f"Error al enviar el correo electrónico: {e}"
+    except Exception as e:
+        return f"Ocurrió un error: {e}"
+    finally:
+        server.quit()
+
+
+def handle_email_change_confirmation(recipient, name):
+    try:
+        smtp_server = os.getenv('SMTP_SERVER')
+        smtp_port = os.getenv('SMTP_PORT')
+        smtp_username = os.getenv('SMTP_USERNAME')
+        smtp_password = os.getenv('SMTP_PASSWORD')
+          
+          
+        # Configuración del servidor SMTP
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_username, smtp_password)
+        
+        # Crear mensaje
+        message = MIMEMultipart('alternative')
+        message["Subject"] = "Confirmación de cambio de correo en su cuenta El Refugio"
+        message["From"] = smtp_username
+        message["To"] = recipient
+
+        # Renderizar plantilla HTML para el correo de confirmación
+        html = render_template("change_email_template.html", name=name)
+        html_part = MIMEText(html, 'html')
+
+        # Adjuntar el contenido HTML al mensaje
+        message.attach(html_part)
+
+        # Enviar el correo electrónico
+        server.sendmail(smtp_username, recipient, message.as_string())
+        
+        return "Correo electrónico de cambio enviado exitosamente."
+    except SMTPException as e:
+        return f"Error al enviar el correo electrónico: {e}"
+    except Exception as e:
+        return f"Ocurrió un error: {e}"
+    finally:
+        server.quit()
 
 api = Blueprint('api', __name__)
 
