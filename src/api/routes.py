@@ -99,9 +99,6 @@ def handle_registration_confirmation(recipient, name):
     finally:
         server.quit()
 
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
 
 def handle_email_change_confirmation(recipient, name):
     try:
