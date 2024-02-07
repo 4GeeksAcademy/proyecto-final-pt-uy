@@ -293,13 +293,13 @@ const FormEditProfile = () => {
 
             {/*Password */}
             <Link to="/new-password">
-              <button className='btn btn-secondary rounded-pill px-4 py-2'>Cambiar contraseña</button>
+              <button type='button' className='btn btn-secondary rounded-pill px-4 py-2'>Cambiar contraseña</button>
             </Link>
 
             {/*Buttons*/}
             <div className='d-flex mt-5'>
               <Link to="/profile" className='ms-auto'>
-                <button className='btn btn-outline-primary rounded-pill px-4 p-2 me-3' disabled={isSubmitting}>Salir</button>
+                <button type='button' className='btn btn-outline-primary rounded-pill px-4 p-2 me-3' disabled={isSubmitting}>Salir</button>
               </Link>
               <button type='submit' className='btn btn-primary rounded-pill px-4 p-2' disabled={isSubmitting}>Guardar cambios</button>
               {/* Spinner es renderizado mientras llega la respuesta del backend */}
