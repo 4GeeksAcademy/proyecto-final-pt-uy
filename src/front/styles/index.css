@@ -103,25 +103,6 @@ body {
     background-color: #EBEEEF;
 }
 
-.dash.nav-link {
-    text-align: center;
-    position: relative;
-}
-.dash.nav-link::before {
-    content: "";
-    position: absolute;
-    bottom: 0px;
-    width: 0;
-    height: 3px;
-    margin-top: 4px;
-    background-color: #EEC77E;
-    transform: translateX(-0.5rem);
-    transition: all 0.3s ease;
-}
-.dash.nav-link:hover::before {
-    width: 85%;
-}
-
 .table-item-super {
     min-width: 320px;
 }
@@ -354,6 +335,26 @@ body {
     .animal-card figure {
         height: 200px;
     }
+
+    .nav-link {
+        text-align: center;
+        position: relative;
+    }
+    .nav-link::before {
+        content: "";
+        position: absolute;
+        bottom: 0px;
+        width: 0;
+        height: 3px;
+        margin-top: 4px;
+        background-color: #EEC77E;
+        transition: all 0.3s ease;
+    }
+    .nav-link.active::before,
+    .nav-link:hover::before {
+        width: 90%;
+    }
+
 }
 
 @media screen and (min-width: 1200px) {
