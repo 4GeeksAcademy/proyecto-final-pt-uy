@@ -105,37 +105,38 @@ from email.mime.text import MIMEText
 
 def handle_email_change_confirmation(recipient, name):
     try:
-        SMTP_SERVER = "smtp.gmail.com"
-        SMTP_PORT = 587
-        SMTP_USERNAME = "tu_correo@gmail.com"  # Inserta aquí tu dirección de correo electrónico
-        SMTP_PASSWORD = "tu_contraseña"  # Inserta aquí tu contraseña de correo electrónico
+        smtp_server = os.getenv('SMTP_SERVER')
+        smtp_port = os.getenv('SMTP_PORT')
+        smtp_username = os.getenv('SMTP_USERNAME')
+        smtp_password = os.getenv('SMTP_PASSWORD')
+          
           
         # Configuración del servidor SMTP
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
+        server.login(smtp_username, smtp_password)
         
         # Crear mensaje
         message = MIMEMultipart('alternative')
-        message["Subject"] = "Confirmación de cambio de correo electrónico"
-        message["From"] = SMTP_USERNAME
+        message["Subject"] = "Confirmación de cambio de correo en su cuenta El Refugio"
+        message["From"] = smtp_username
         message["To"] = recipient
 
-        # Contenido del correo electrónico
+        # Renderizar plantilla HTML para el correo de confirmación
         html = render_template("change_email_template.html", name=name)
         html_part = MIMEText(html, 'html')
-        
 
-        # Adjuntar contenido HTML al mensaje
-        html_part = MIMEText(html_content, 'html')
+        # Adjuntar el contenido HTML al mensaje
         message.attach(html_part)
 
         # Enviar el correo electrónico
-        server.sendmail(SMTP_USERNAME, recipient, message.as_string())
+        server.sendmail(smtp_username, recipient, message.as_string())
         
-        return "Correo electrónico de confirmación enviado exitosamente."
-    except Exception as e:
+        return "Correo electrónico de cambio enviado exitosamente."
+    except SMTPException as e:
         return f"Error al enviar el correo electrónico: {e}"
+    except Exception as e:
+        return f"Ocurrió un error: {e}"
     finally:
         server.quit()
 
