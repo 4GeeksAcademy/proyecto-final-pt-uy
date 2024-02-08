@@ -310,7 +310,7 @@ const Profile = () => {
                                 }}>
                                 Testimonio pendiente
                               </p>
-                              <CardTestimony testimony={testimony} />>
+                              <CardTestimony testimony={testimony} />
                             </div>
                           }
                           {testimony && testimony?.status === "rejected" &&
