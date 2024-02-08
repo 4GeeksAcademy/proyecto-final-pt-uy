@@ -37,7 +37,6 @@ const Register = () => {
 
   const onSubmit = async (data) => {
     setRegisterError("");
-    console.log("Form submitted", data);
 
     const newUser = {
       name: `${data.name}`,

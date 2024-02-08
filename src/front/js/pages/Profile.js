@@ -58,7 +58,6 @@ const Profile = () => {
       const data = await getAdoptionsByUser(user.id, token);
       setAdoptions(data);
       setIsLoadingAdoption(false);
-      console.log(data);
     } catch (error) {
       console.error("Error fetching adoptions: ", error);
       setErrorMsgAdoption(error.message);
@@ -293,7 +292,6 @@ const Profile = () => {
                         testimony.user_info = userInfo;
                         testimony.animal_info = adoption.animal_info;
                       }
-                      console.log("testimony:", testimony);
                       return (
                         <React.Fragment key={adoption.id}>
                           {testimony && testimony?.status === "approved" &&

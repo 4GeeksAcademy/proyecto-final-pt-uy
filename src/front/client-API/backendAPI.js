@@ -82,7 +82,6 @@ export const getUser = async (user_id, token) => {
 
 //Modify user
 export const modifyUser = async (id, formData, token) => {
-    console.log("desde modifyUser", id, formData, token)
     formData.phone_number = formData.phone_number === "null" ? null : formData.phone_number;
     formData.address = formData.address === "null" ? null : formData.address;
     try {
@@ -95,7 +94,6 @@ export const modifyUser = async (id, formData, token) => {
             body: JSON.stringify(formData),
         });
         const data = await response.json();
-        console.log("usuario modificado desde modify user backend api", data)
 
         if (!response.ok) {
             const errorData = data;
@@ -465,7 +463,6 @@ export const forgotPassRequest = async (email) => {
         }
 
         const responseData = await response.json();
-        console.log(responseData);
         return responseData;
 
     } catch (error) {
@@ -497,7 +494,6 @@ export const updatePassRequest = async (password, authTokenFromURL) => {
         }
 
         const responseData = await response.json();
-        console.log(responseData);
         return responseData;
 
     } catch (error) {
