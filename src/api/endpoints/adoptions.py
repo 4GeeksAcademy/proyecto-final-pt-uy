@@ -56,7 +56,6 @@ def register_adoption():
 
     # Obtener datos de la solicitud
     body = request.get_json(silent=True)
-    print(body)
     if body is None:
         return jsonify({'msg': 'Debes enviar informacion en el body'}), 400
 

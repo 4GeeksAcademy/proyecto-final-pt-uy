@@ -38,7 +38,6 @@ def handle_email_send(recipient, name):
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
         server.login(smtp_username, smtp_password)
-        print(recipient)
         # crear mensaje
         message = MIMEMultipart('alternative')
         message["Subject"] = "Correo Electronico desde ElRefugio"
