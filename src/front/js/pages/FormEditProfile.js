@@ -86,7 +86,6 @@ const FormEditProfile = () => {
   return (
     <div className='container bg-linear-0 my-5 p-5'>
       {/* While waiting for the backend response */}
-      {console.log("user info",userInfo)}
       {
         isLoading &&
         <div className='d-flex flex-column w-100 align-items-center'>

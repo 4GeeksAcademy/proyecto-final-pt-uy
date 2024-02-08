@@ -11,7 +11,7 @@ export default function CardTestimony({testimony: {testimony_text, image_url, us
                 {/* Si el testimonio no tiene imagen, muestra la del animal adoptado */}git
                 <img src={image_url || animal_info.image_urls[0]}/>
             </figure>
-            <div className="details p-3 pt-4">
+            <div className="details p-3 pt-4 vertical-scroll-bar scroll-bar" style={{ overflowY: "scroll", overflowX: "scroll" }}>
                 <p>{testimony_text}</p>
                 <p className="fs-7 fw-semibold text-end text-capitalize">{userDisplayName}</p>
             </div>

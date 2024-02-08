@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 
 import Select from './select.js';
 import Input from "./input.js";
@@ -38,7 +37,7 @@ const FormAddAnimal = () => {
   const navigate = useNavigate();
 
   const form = useForm({ defaultValues, mode: "onBlur" });
-  const { register, control, formState, handleSubmit, reset, watch, getValues } = form;
+  const { register, formState, handleSubmit, reset, watch, getValues } = form;
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
   const watchimages = watch("images");
@@ -277,7 +276,6 @@ const FormAddAnimal = () => {
         </div>
       }
 
-      <DevTool control={control} />
     </div>
   )
 }

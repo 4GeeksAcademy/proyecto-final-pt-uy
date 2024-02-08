@@ -194,6 +194,24 @@ body {
     background-color: #EEC77E;
 }
 
+.vertical-scroll-bar::-webkit-scrollbar {
+    display: block;
+    overflow: auto;
+    width: 6px;
+    height: 8px;
+    background-color: #EEC77E;
+}
+
+.vertical-scroll-bar::-webkit-scrollbar-thumb {
+    background: #003459;
+    border-radius: 6px;
+}
+
+.vertical-scroll-bar::-webkit-scrollbar-thumb:active {
+    background-color: #FCEED5;
+}
+
+
 .animal-list-banner {
     background-image: url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706897706/Site/animalListBanner_bg_smallerSize.png");
     background-position: center top;
