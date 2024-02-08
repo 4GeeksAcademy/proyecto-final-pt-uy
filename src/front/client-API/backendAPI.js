@@ -77,6 +77,9 @@ export const getUser = async (user_id, token) => {
 
 //Modify user
 export const modifyUser = async (id, formData, token) => {
+    console.log("desde modifyUser", id, formData, token)
+    formData.phone_number = formData.phone_number === "null" ? null : formData.phone_number;
+    formData.address = formData.address === "null" ? null : formData.address;
     try {
         const response = await fetch(`${apiUrlBase}/usuarios/usuario/${id}`, {
             method: "PUT",
