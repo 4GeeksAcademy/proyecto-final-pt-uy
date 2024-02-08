@@ -3,7 +3,7 @@ import { Tooltip } from 'react-tooltip';
 
 const PhoneCopy = () => {
     const [tooltipMsg, setTooltipMsg] = useState("Click para copiar el teléfono");
-    const phone = '(+48) 123 456 789'
+    const phone = '(+598) 12 345 678'
 
     useEffect(() => {
         const timer = setTimeout(() => {
