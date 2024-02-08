@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 
 import { useUserContext } from "../../contexts/userContext.js";
 import { modifyAnimal, getAnimal } from '../../../client-API/backendAPI.js';
@@ -27,7 +26,7 @@ const FormModifyAnimal = () => {
     defaultValues: async() => await fetchAnimalToForm(), 
     mode: "onBlur" 
   });
-  const { register, control, formState, handleSubmit, reset, watch, setValue } = form;
+  const { register, formState, handleSubmit, reset, watch, setValue } = form;
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
   const watchimages = watch("images");
@@ -342,7 +341,6 @@ const FormModifyAnimal = () => {
         </div>
       }
 
-      <DevTool control={control} />
     </div>
   )
 }

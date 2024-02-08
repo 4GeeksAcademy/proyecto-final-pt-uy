@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 
 import { useUserContext } from "../../contexts/userContext.js";
 import { addAdoption } from '../../../client-API/backendAPI.js';
@@ -20,7 +19,7 @@ const FormAddAdoption = () => {
   };
 
   const form = useForm({ defaultValues, mode: "onBlur" });
-  const { register, control, formState, handleSubmit, reset, watch, getValues } = form;
+  const { register, formState, handleSubmit, reset, watch, getValues } = form;
   const { errors, isSubmitting, isSubmitSuccessful } = formState;
 
   const { store: {token} } = useUserContext();
@@ -162,8 +161,6 @@ const FormAddAdoption = () => {
           </div>
         </div>
       }
-
-      <DevTool control={control} />
     </div>
   )
 }
