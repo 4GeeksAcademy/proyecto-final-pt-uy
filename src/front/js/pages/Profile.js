@@ -291,12 +291,13 @@ const Profile = () => {
                       const testimony = adoption.testimony_info || null;
                       if (testimony) {
                         testimony.user_info = userInfo;
+                        testimony.animal_info = adoption.animal_info;
                       }
+                      console.log("testimony:", testimony);
                       return (
                         <React.Fragment key={adoption.id}>
                           {testimony && testimony?.status === "approved" &&
-                            //<CardTestimony testimony={testimony} />
-                            <p>testimony card</p>
+                            <CardTestimony testimony={testimony} />
                           }
                           {testimony && testimony?.status === "pending" &&
                             <div className='position-relative'>
@@ -309,8 +310,7 @@ const Profile = () => {
                                 }}>
                                 Testimonio pendiente
                               </p>
-                              {/*<CardTestimony testimony={testimony} />>*/}
-                              <p>testimony card</p>
+                              <CardTestimony testimony={testimony} />>
                             </div>
                           }
                           {testimony && testimony?.status === "rejected" &&
@@ -327,16 +327,19 @@ const Profile = () => {
                           }
                         </React.Fragment>
                       )
-                    }
-                    )}
+                    })}
                   </div>
+                  <hr />
+                  <Link to="/animal-list">
+                    <button className="btn btn-secondary rounded-pill px-4 py-2 mt-3">¡Quiero adoptar otro peludito!</button>
+                  </Link>
                 </div>
               )}
             </div>
           ) : (
             // If the user hasn't adopted any animals
             <Link to="/animal-list">
-              <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar!</button>
+              <button className="btn btn-secondary rounded-pill px-4 py-2 mt-3">¡Quiero adoptar!</button>
             </Link>
           )}
 
