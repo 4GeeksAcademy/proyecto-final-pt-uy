@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from 'react-tooltip';
 
 import { useUserContext } from "../../contexts/userContext";
 import { formatUserData } from "../../../utils/fromattingFunctions";
+import { modifyUserRole } from "../../../client-API/backendAPI";
 
 import Pagination from '../pagination';
 import IsLoadingMsg from "../messages/isLoadingMsg";
@@ -13,15 +14,60 @@ import NotFoundMsg from "../messages/notFoundMsg";
 
 export default function TableUsers() {
     const navigate = useNavigate();
-    const { store: { users, pagination, isLoading, error }, actions: { setUsers, setPagination } } = useUserContext();
+    const { store: { users, pagination, isLoading, error, token }, actions: { setUsers, setPagination } } = useUserContext();
+    const [isWaiting, setIsWaiting] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+    const [userToChangeRole, setUserToChangeRole] = useState(null);
+    const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [roleIsChanged, setRoleIsChanged] = useState(false);
+
 
     useEffect(() => {
         setUsers();
     }, []);
 
     useEffect(() => {
+        if (showConfirmationModal && roleIsChanged) {
+            setShowConfirmationModal(false);
+        }
         setUsers();
-    }, [pagination.currentPage]);
+
+    }, [pagination.currentPage, roleIsChanged]);
+
+
+
+
+
+
+    const handleIconClick = (user) => {
+        setRoleIsChanged(false);
+        setUserToChangeRole(user);
+        setShowConfirmationModal(true);
+    }
+
+    const handleCloseModal = () => {
+        setUserToChangeRole(null);
+        setShowConfirmationModal(false);
+    }
+
+
+    const changeUserRole = async () => {
+        const newRoleString = userToChangeRole.role === "user" ? "admin" : "user";
+        setErrorMsg("");
+        setIsWaiting(true);
+
+        try {
+            const data = await modifyUserRole(userToChangeRole.id, newRoleString, token);
+            if (data) {
+                setRoleIsChanged(true);
+                setIsWaiting(false);
+            }
+        } catch (error) {
+            console.error(`Error trying to change user role: `, error);
+            setErrorMsg(error.message);
+            setIsWaiting(false);
+        }
+    }
 
 
 
@@ -98,7 +144,7 @@ export default function TableUsers() {
                                                     <button
                                                         id={`change-role-button-${user.id}`}
                                                         className="btn text-neutral-60 pink-red-button fs-5 px-2"
-                                                        onClick={() => { }}
+                                                        onClick={() => handleIconClick(user)}
                                                     >
                                                         {
                                                             role === "admin" ? <i className="fa-solid fa-lock"></i> : <i className="fa-solid fa-unlock"></i>
@@ -123,6 +169,61 @@ export default function TableUsers() {
 
                 {/* Si no está esperando respuesta, no recibió error y la lista de animales del store está vacía */}
                 {!isLoading && !error && users.length === 0 && <NotFoundMsg message="No se encontraron usuarios" />}
+            </div>
+
+
+            {/* Modal que pide la confirmación para cambiar el rol de usuario*/}
+            <div className="modal" tabIndex="-1" role="dialog" style={{ display: showConfirmationModal ? 'block' : 'none' }}>
+                <div className="modal-dialog" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Confirmación</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => handleCloseModal()}></button>
+                        </div>
+                        <div className="modal-body">
+                            {
+                                userToChangeRole?.role === "admin" &&
+                                <p className="fw-semibold">¿Confirmas que quieres QUITAR el rol de administrador a {`${userToChangeRole.name} ${userToChangeRole.last_name}`}?</p>
+                            }
+                            {
+                                userToChangeRole?.role === "user" &&
+                                <p className="fw-semibold">¿Confirmas que quieres ASIGNAR el rol de administrador a {`${userToChangeRole.name} ${userToChangeRole.last_name}`}?</p>
+                            }
+                        </div>
+
+
+                        { // Errores generados por validaciones del backend
+                            errorMsg !== "" &&
+                            <div className="alert alert-danger mt-3" role="alert">
+                                {errorMsg}
+                            </div>
+                        }
+
+
+                        {/* Botones */}
+                        <div className="modal-footer">
+                            <button
+                                type="button"
+                                className="btn btn-primary"
+                                data-bs-dismiss="modal"
+                                onClick={() => handleCloseModal()}
+                                disabled={isWaiting}
+                            >
+                                Cancelar
+                            </button>
+
+                            <button
+                                type="button"
+                                className="btn btn-danger"
+                                data-bs-dismiss="modal"
+                                onClick={() => changeUserRole()}
+                                disabled={isWaiting}
+                            >
+                                {isWaiting ? "Cargando..." : "Confirmar"}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
