@@ -513,7 +513,7 @@ export const modifyTestimonyStatus = async (testimonyId, new_status, token) => {
                 'Content-Type': 'application/json',
                 "Authorization": "Bearer " + token
             },
-            body: JSON.stringify({new_status})
+            body: JSON.stringify({ new_status })
         });
         const data = await response.json();
 
@@ -587,3 +587,31 @@ export const getAdoptionsByUser = async (userId, token) => {
     }
 }
 
+
+
+// Modify user role
+export const modifyUserRole = async (userId, new_role, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/usuarios/modificar-rol/${userId}`, {
+            method: "PUT",
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify({ new_role })
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Retorna mensaje de éxito
+        return data;
+
+    } catch (error) {
+        console.error('Error trying to modify a user role', error);
+        throw error;
+    }
+}
