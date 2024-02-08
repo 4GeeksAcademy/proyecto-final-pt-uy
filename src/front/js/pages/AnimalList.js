@@ -33,6 +33,16 @@ const AnimalList = () => {
     setAnimals();
   }, [filters, sorting, pagination.currentPage]);
 
+  useEffect(() => {
+    if(!isLoading) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [isLoading]);
+
 
   return (
     <div className='container d-flex flex-column my-4'>

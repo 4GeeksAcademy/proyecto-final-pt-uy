@@ -28,13 +28,17 @@ const AnimalProfile = () => {
     if(animal) {
       setAnimalType(animal.type)
     }
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-
   }, [animal]);
+
+  useEffect(() => {
+    if(!isLoading) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+    }
+  }, [isLoading]);
 
 
   const fetchAnimal = async () => {
