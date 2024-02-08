@@ -51,13 +51,13 @@ export const Navbar = () => {
 							</NavLink>
 						</li>
 						<li className="nav-item text-primary fw-medium">
-							<button data-bs-toggle="modal" data-bs-target="#staticBackdrop" className="nav-link text-primary">
+							<button data-bs-toggle="modal" data-bs-target="#contactModalNavbar" className="nav-link text-primary">
 								Contacto
 							</button>
 						</li>
 					</ul>
 
-					<div class="modal fade text-center" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+					<div class="modal fade text-center" id="contactModalNavbar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="contactModalNavbarLabel" aria-hidden="true">
 						<div className="modal-dialog" role="document">
 							<div className="modal-content">
 								<div className="modal-header">

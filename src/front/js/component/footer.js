@@ -29,13 +29,13 @@ export const Footer = () => (
 						<Link to="/about" className="text-body-color fw-medium text-decoration-none mx-3">
 							Sobre Nosotros
 						</Link>
-						<button data-bs-toggle="modal" data-bs-target="#staticBackdrop" className="nav-link text-primary">
+						<Link to="" data-bs-toggle="modal" data-bs-target="#contactModalFooter" className="text-body-color fw-medium text-decoration-none mx-3">
 							Contacto
-						</button>
+						</Link>
 					</div>
 				</div>
 
-				<div class="modal fade text-center" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				<div class="modal fade text-center" id="contactModalFooter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="contactModalFooterLabel" aria-hidden="true">
 					<div className="modal-dialog" role="document">
 						<div className="modal-content">
 							<div className="modal-header">
