@@ -1,3 +1,416 @@
 /* 
     General Styles used on every website (Don't Repeat Yourself)
 */
+/*=============== GOOGLE FONTS ===============*/
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap');
+
+/*=============== VARIABLES CSS ===============*/
+:root {
+  /*========== Colors ==========*/
+  --dark-blue: #003459;
+  --dark-blue-80: #002A48;
+  --dark-blue-60: #00528C;
+  --dark-blue-40: #0078CD;
+  --mon-yellow: #F7DBA7;
+  --mon-yellow-80: #EEC77E;
+  --mon-yellow-60: #F1D092;
+  --mon-yellow-40: #FCEED5;
+  --neutral-100: #00171F;
+  --neutral-80: #242B33;
+  --neutral-60: #667479;
+  --neutral-40: #99A2A5;
+  --neutral-20: #CCD1D2;
+  --neutral-10: #EBEEEF;
+  --neutral-0: #FDFDFD;
+
+  /*========== Font and typography ==========*/
+  --body-font: 'Fredoka', sans-serif;
+}
+
+body {
+    font-family: var(--body-font);
+}
+
+.fs-0 {
+    font-size: 100px;
+}
+
+.fs-0-1{
+    font-size: 65px;
+}
+
+.fs-0-2{
+    font-size: 50px;
+}
+
+.fs-7 {
+    font-size: 14px;
+}
+
+.modal {
+    background-color: rgba(0,0,0,0.5);
+}
+
+.logo-container {
+    display: flex;
+    width: 100%;
+    max-width: 150px;
+}
+
+.logo-container img {
+    max-width: 100%;
+}
+
+.image-panel {
+    height: 30vh;
+    background-repeat: no-repeat;
+    background-position: left top; 
+    background-size: cover;
+}
+
+.form-panel {
+    min-height: 70vh;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.dash-left-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100vh;
+    padding: 1.5rem;
+    background-color: white;
+}
+
+.dash-panel-link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 1rem;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+}
+.dash-panel-link.active,
+.dash-panel-link:hover {
+    background-color: #EBEEEF;
+}
+
+.table-item-super {
+    min-width: 320px;
+}
+.table-item-big {
+    min-width: 300px;
+}
+.table-item-med {
+    min-width: 250px;
+}
+.table-item-small {
+    min-width: 200px;
+}
+.table-item-mini {
+    min-width: 100px;
+}
+
+.circle_profile_img{
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+
+.border_profile_img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+}
+
+.banner {
+    display: flex;
+    width: 100%;
+    height: 308px;
+}
+
+.animal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 47%;
+    min-width: 150px;
+    max-width: 250px;
+    filter: drop-shadow(4px 4px 6px rgba(0,0,0,0.15));
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.animal-card:hover {
+    transform: translateY(-0.5rem);
+}
+
+.animal-card figure {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+    height: 180px;
+}
+
+.animal-card figure img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.animal-left-panel {
+    max-width: 75vw;
+}
+
+.dropdown-item {
+    cursor: pointer;
+}
+.dropdown-item:hover {
+    background-color: #EBEEEF;
+}
+
+.scroll-bar::-webkit-scrollbar {
+    display: block;
+    overflow: auto;
+    width: 6px;
+    height: 8px;
+    background-color: white;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb {
+    background: #003459;
+    border-radius: 6px;
+}
+
+.scroll-bar::-webkit-scrollbar-thumb:active {
+    background-color: #EEC77E;
+}
+
+.vertical-scroll-bar::-webkit-scrollbar {
+    display: block;
+    overflow: auto;
+    width: 6px;
+    height: 8px;
+    background-color: #EEC77E;
+}
+
+.vertical-scroll-bar::-webkit-scrollbar-thumb {
+    background: #003459;
+    border-radius: 6px;
+}
+
+.vertical-scroll-bar::-webkit-scrollbar-thumb:active {
+    background-color: #FCEED5;
+}
+
+
+.animal-list-banner {
+    background-image: url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706897706/Site/animalListBanner_bg_smallerSize.png");
+    background-position: center top;
+    background-size: cover;
+    color: #003459;
+}
+
+.testimony-card {
+    position: relative;
+    width: 250px;
+    min-width: 250px;
+    height: 400px;
+    background-color: #EBEEEF;
+    overflow: hidden;
+}
+
+.testimony-card input, 
+.testimony-card .toggle {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    bottom: 20px;
+    right: 20px;
+    outline: none;
+    z-index: 10;
+}
+
+.testimony-card input {
+    opacity: 0;
+}
+
+.testimony-card .toggle {
+    pointer-events: none;
+    border-radius: 50%;
+    background: #fff;
+    transition: 0.5s;
+    text-align: center;
+    line-height: 30px;
+    font-size: 36px;
+    box-shadow: 0 0 0 0px #EEC77E;
+}
+
+.testimony-card input:checked ~ .toggle {
+    box-shadow: 0 0 0 500px #EEC77E;
+    transform: rotate(225deg);
+}
+
+.imgBox {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.imgBox img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 85%;
+    z-index: 11;
+    overflow-y: scroll;
+    transition: 0.5s;
+    opacity: 0;
+}
+
+.testimony-card input:checked ~ .details {
+    opacity: 1;
+}
+
+.light-blue-button:hover {
+    background-color: #0078CD;
+}
+.light-blue-button:hover i {
+    color: white;
+}
+
+.yellow-button:hover {
+    background-color: #EEC77E;
+}
+.yellow-button:hover svg path {
+    fill: white;
+}
+.yellow-button:hover i {
+    fill: white;
+}
+
+.pink-red-button:hover {
+    background-color: #FF564F;
+}
+.pink-red-button:hover i {
+    color: white;
+}
+
+.floating {
+    animation: float 3s ease-out infinite;
+}
+
+@keyframes float {
+    50% {
+    transform: translate(0, 12px);
+    }
+}
+
+
+
+
+
+@media screen and (min-width: 768px) {
+    .image-panel {
+        height: 100vh;
+    }
+
+    .form-panel {
+        min-height: 100vh;
+    }
+
+    .logo-container {
+        max-width: 180px;
+    }
+
+    .dash-left-panel {
+        min-width: 250px;
+    }
+
+    .banner {
+        height: 378px;
+    }   
+}
+
+@media screen and (min-width: 992px) {
+    .animal-card {
+        width: 30%;
+        min-width: 180px;
+        max-width: 250px;
+    }
+
+    .animal-card figure {
+        height: 200px;
+    }
+
+    .nav-link {
+        text-align: center;
+        position: relative;
+    }
+    .nav-link::before {
+        content: "";
+        position: absolute;
+        bottom: 0px;
+        width: 0;
+        height: 3px;
+        margin-top: 4px;
+        background-color: #EEC77E;
+        transition: all 0.3s ease;
+    }
+    .nav-link.active::before,
+    .nav-link:hover::before {
+        width: 90%;
+    }
+
+}
+
+@media screen and (min-width: 1200px) {
+    .animal-list-banner {
+        background-image: url("https://res.cloudinary.com/dnwfyqslx/image/upload/v1706897801/Site/animalListBanner_bg.png");
+        color: white;
+    }
+    .animal-list-banner .btn-outline-css-biggerSize {
+        color: white;
+        border-color: white;
+    }
+    .animal-list-banner .btn-outline-css-biggerSize:hover {
+        color: #003459;
+        border-color: white;
+        background-color: white;
+    }
+    .animal-list-banner .btn-css-biggerSize {
+        color: #003459;
+        border-color: white;
+        background-color: white;
+    }
+    .animal-list-banner .btn-css-biggerSize:hover {
+        color: #003459;
+        border-color: rgba(255, 255, 255, 0.929);
+        background-color: rgba(255, 255, 255, 0.929);
+    }
+}
+
+@media screen and (min-width: 1400px) {
+    .animal-card {
+        width: 23%;
+    }
+}
+
