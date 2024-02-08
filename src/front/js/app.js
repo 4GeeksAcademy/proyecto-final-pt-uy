@@ -62,7 +62,7 @@ const App = () => {
                             user.id &&
                             <>
                             <Route path="/edit-profile" element={<FormEditProfile />} />
-                            <Route path="/testimony" element={<FormTestimony />} />
+                            <Route path="/testimony/:adoptionId" element={<FormTestimony />} />
                             <Route path="/profile" element={<Profile />} />
                             </>
                         }

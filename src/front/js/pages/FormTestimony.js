@@ -9,13 +9,13 @@ import { addTestimony } from '../../client-API/backendAPI.js';
 // Valores por defecto para los campos del form
 const defaultValues = {
   testimony_text: "",
-  image_file: null
+  image: []
 };
 
 
 const FormTestimony = () => {
   const navigate = useNavigate();
-  const { adoptionId } = useParams(); // enviar como "adoption_id"
+  const { adoptionId } = useParams();
 
   const form = useForm({ defaultValues, mode: "onBlur" });
   const { register, formState, handleSubmit, watch, getValues, reset } = form;
@@ -26,8 +26,10 @@ const FormTestimony = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
 
+  const watchimage = watch("image");
+  const filesArray = Array.from(watchimage);
+  const filesURL = filesArray.map(file => URL.createObjectURL(file));
 
 
   useEffect(() => {
@@ -37,8 +39,6 @@ const FormTestimony = () => {
       setShowSuccessModal(true);
       // Resetear el form
       reset();
-      // Limpiar la vista previa de la imagen
-      setImagePreview(null);
     }
   }, [isSubmitSuccessful, reset, isRegistered]);
 
@@ -50,7 +50,15 @@ const FormTestimony = () => {
     // Agregar datos del formulario
     Object.keys(data).forEach((key) => {
       if (data[key] !== "" && data[key] !== null) {
-        formData.append(key, data[key]);
+        if (key === 'image') {
+          if (data.image.length > 0) {
+            // Agregar el archivo de imagen
+            formData.append(key, Array.from(data[key])[0]);
+          }
+        }
+        else {
+          formData.append(key, data[key]);
+        }
       }
     });
     formData.append("adoption_id", adoptionId);
@@ -66,21 +74,6 @@ const FormTestimony = () => {
       setErrorMsg(error.message);
     }
   }
-
-
-
-  // Función para manejar el cambio de imagen
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
 
 
   return (
@@ -117,6 +110,10 @@ const FormTestimony = () => {
                   value: 400,
                   message: "Se permiten hasta 400 caracteres.",
                 },
+                minLength: {
+                  value: 30,
+                  message: "Debe contener un mínimo de 30 caracteres.",
+                },
               }
               )}
             />
@@ -134,20 +131,23 @@ const FormTestimony = () => {
                   className="form-control"
                   id="image"
                   accept="image/png, image/jpeg"
-                  onChange={handleImageChange}
-                  {...register("image_file")}
+                  {...register("image")}
                 />
                 <p className='fs-7 text-neutral-40 mb-1'>Formatos aceptados: .jpg o .png</p>
-                <p className="fs-7 text-danger">{errors.image_file?.message}</p>
+                <p className="fs-7 text-danger">{errors.image?.message}</p>
               </div>
             </div>
 
             {/* Vista previa de la imagen */}
-            {imagePreview && (
-            <div className="d-flex justify-content-center overflow-hidden rounded-2 border border-3 border-white shadow-sm" style={{ maxWidth: "80px", height: "80px" }}>
-              <img className="d-flex w-100 object-fit-cover" src={imagePreview} alt="preview" />
+            <div className='d-inline-flex flex-wrap flex-grow-1 gap-2 align-items-center justify-content-center justify-content-md-start'>
+              {
+                filesURL.map((preview, index) => (
+                  <div key={index} className="d-flex justify-content-center overflow-hidden rounded-2 border border-3 border-white shadow-sm" style={{ maxWidth: "80px", height: "80px" }}>
+                    <img className="d-flex w-100 object-fit-cover" src={preview} alt="preview" />
+                  </div>
+                ))
+              }
             </div>
-            )}
           </div>
 
           {/* Buttons */}
