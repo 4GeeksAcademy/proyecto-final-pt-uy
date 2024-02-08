@@ -324,9 +324,9 @@ const FormEditProfile = () => {
                 <h5 className="modal-title">Edición exitosa</h5>
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={() => navigate("/profile")}></button>
               </div>
-              <div className="modal-body">
+              <div className="modal-body text-center">
                 <h2 className='f-5 fw-medium'>¡Tus datos fueron modificados correctamente!</h2>
-                <p>Ya podes ver tus datos actaulizados en tu Perfil de Usario</p>
+                <p>Ya podes ver tus datos actualizados en tu Perfil de Usario</p>
               </div>
             </div>
           </div>
