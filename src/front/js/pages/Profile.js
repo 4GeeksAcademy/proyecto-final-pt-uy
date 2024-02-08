@@ -3,19 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '../contexts/userContext';
 
-import { getUser, getAnimal, getTestimonialsList, getAdoptions } from '../../client-API/backendAPI';
-import Pagination from '../component/pagination';
+import { getUser, getAdoptionsByUser } from '../../client-API/backendAPI';
 
 import CardAnimal from '../component/cardAnimal';
 import CardTestimony from "../component/cardTestimony";
 
-const initialPagination = {
-  limit: 12,
-  offset: 0,
-  totalPages: 1,
-  currentPage: 1,
-  totalTestimonials: 0
-}
 
 const Profile = () => {
 
@@ -23,14 +15,9 @@ const Profile = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [userInfo, setUserInfo] = useState(null);
 
-  const [isLoadingAnimal, setIsLoadingAnimal] = useState(false);
-  const [errorMsgAnimal, setErrorMsgAnimal] = useState("");
-  const [animalDetails, setAnimalDetails] = useState(null);
-
-  const [testimonies, setTestimonies] = useState(null);
-  const [pagination, setPagination] = useState(initialPagination);
-
-  const [adoptions, setAdoptions] = useState(null);
+  const [isLoadingAdoption, setIsLoadingAdoption] = useState(false);
+  const [errorMsgAdoption, setErrorMsgAdoption] = useState("");
+  const [adoptions, setAdoptions] = useState([]);
 
   const { store: { user, token }, actions } = useUserContext();
 
@@ -38,55 +25,14 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUser();
-    fetchAdoptions();
   }, [user.id, token]);
 
   useEffect(() => {
-    fetchTestimony();
-  }, [adoptions]);
-
-  useEffect(() => {
-    fetchTestimony();
-  }, [pagination.currentPage]);
-
-  const fetchTestimony = async () => {
-    const paginationParams = { page: pagination.currentPage, perPage: pagination.limit };
-    const statuses = "pending,approved,rejected";
-
-    try {
-      const data = await getTestimonialsList(paginationParams, statuses);
-      const filteredTestimonies = data.result.filter((testimony) => testimony.user_info.id === user.id);
-
-      if (adoptions) {
-        filteredTestimonies.forEach((testimony) => {
-          const adoption = adoptions.find((adoption) => testimony.adoption_id === adoption.id);
-          if (adoption) {
-            testimony.animal_id = adoption.animal_id;
-          }
-        });
-      }
-      setTestimonies(filteredTestimonies);
-      setPagination(prevState => ({
-        ...prevState,
-        totalTestimonials: filteredTestimonies.length,
-        totalPages: data.total_pages
-      }))
-    } catch (error) {
-      console.error(`Error fetching testimony: `, error);
+    if (userInfo) {
+      fetchAdoptions();
     }
-  };
+  }, [userInfo])
 
-  const fetchAdoptions = async () => {
-    try {
-      const data = await getAdoptions(token);
-      const adoptionsInfo = data.result;
-      const filteredAdoptions = adoptionsInfo.filter((adoption) => adoption.user_id === user.id);
-      setAdoptions(filteredAdoptions);
-    }
-    catch (error) {
-      console.log("Error fetching adoptions:", error);
-    }
-  }
 
   // Function to fetch user details
   const fetchUser = async () => {
@@ -104,54 +50,21 @@ const Profile = () => {
     }
   }
 
-  // Function to fetch details of adopted animals including testimonials
-  const fetchAdoptedAnimalsDetails = async () => {
-    // Extract animal IDs from adopted animals relationships
-    const adoptedAnimalsIds = userInfo.adopted_animals.map(
-      (adoption_relationship) => adoption_relationship.animal_id
-    );
-
-    // Create an array of promises to fetch details for each adopted animal
-    const animalPromises = adoptedAnimalsIds.map(async (animalId) => {
-      try {
-        const animalDetail = await getAnimal(animalId);
-        // Check if there is a testimony for this animal
-        const testimonyForAnimal = testimonies.find((testimony) => testimony.animal_id === animalId);
-
-        // If there is a testimony, add it to the animal details
-        if (testimonyForAnimal) {
-          animalDetail.testimony = testimonyForAnimal;
-        }
-
-        return animalDetail;
-      } catch (error) {
-        // Handle error for this specific animal
-        console.error(`Error fetching details for animal ${animalId}: `, error);
-        return null; // Return null or handle error as needed
-      }
-    });
-
+  const fetchAdoptions = async () => {
+    setErrorMsgAdoption("");
+    setIsLoadingAdoption(true);
 
     try {
-      // Resolve all promises at the same time
-      const animalInfo = await Promise.all(animalPromises);
-      setAnimalDetails(animalInfo);
-      setIsLoadingAnimal(false);
+      const data = await getAdoptionsByUser(user.id, token);
+      setAdoptions(data);
+      setIsLoadingAdoption(false);
+      console.log(data);
     } catch (error) {
-      console.error('Error fetching adopted animals details: ', error);
-      setErrorMsgAnimal('Error fetching adopted animals details');
-      setIsLoadingAnimal(false);
+      console.error("Error fetching adoptions: ", error);
+      setErrorMsgAdoption(error.message);
+      setIsLoadingAdoption(false);
     }
-  };
-
-  // Fetch adopted animals details when user info or testimonies change
-  useEffect(() => {
-    if (userInfo?.adopted_animals.length > 0) {
-      setIsLoadingAnimal(true);
-      setErrorMsgAnimal('');
-      fetchAdoptedAnimalsDetails();
-    }
-  }, [userInfo, testimonies]);
+  }
 
   // Function to handle user logout
   const handleLogout = () => {
@@ -353,8 +266,8 @@ const Profile = () => {
             // If the user has adopted animals
             <div>
               <h5 className='fw-medium'>Peluditos que ahora forman parte de tu familia</h5>
-              {/*While waiting for animal details to be loaded */}
-              {isLoadingAnimal ? (
+              {/*While waiting for adoption to be loaded */}
+              {isLoadingAdoption ? (
                 <div className='d-flex flex-column w-100 align-items-center'>
                   <figure className='d-flex justify-content-center overflow-hidden w-100' style={{ maxWidth: '250px' }}>
                     <img
@@ -365,55 +278,58 @@ const Profile = () => {
                   <p className='fw-semibold'>Cargando...</p>
                 </div>
               ) : (
-                // When animal details are loaded
+                // When adoptions are loaded
                 <div>
                   <div className='d-flex flex-wrap align-items-start gap-3 gap-lg-4 my-4'>
-                    {animalDetails.map((animal) => (
-                      <CardAnimal key={animal.id} animal={animal} />
+                    {adoptions.map((adoption) => (
+                      <CardAnimal key={adoption.id} animal={adoption.animal_info} />
                     ))}
                   </div>
                   <h5 className='fw-medium'>Tus Testimonios</h5>
                   <div className='d-flex flex-wrap align-items-start gap-3 gap-lg-4 my-4'>
-                    {animalDetails.map((animal) => (
-                      <React.Fragment key={animal.id}>
-                        {console.log("testimonio de animal:", animal?.testimony?.status)}
-                        {animal.testimony && animal?.testimony?.status === "approved" &&
-                          <CardTestimony key={animal.id} testimony={animal.testimony} />
-                        }
-                        {animal.testimony && animal?.testimony?.status === "pending" &&
-                          <div className='position-relative'>
-                            <p className='position-absolute bg-secondary bg-opacity-75 p-3 text-center'
-                              style={{
-                                top: 0,
-                                left: 0,
-                                zIndex: 1,
-                                width: '100%'
-                              }}>
-                              Testimonio pendiente
-                            </p>
-                            <CardTestimony key={animal.id} testimony={animal.testimony} />
-                          </div>
-                        }
-                        {animal.testimony && animal?.testimony?.status === "rejected" &&
-                          <Link to="/testimony">
-                            <button className="btn btn-secondary rounded-pill px-4 py-2 testimony-card bg-secondary">
-                              Lo sentimos, tu testimonio sobre {animal.name} fue rechazado
+                    {adoptions.map((adoption) => {
+                      const testimony = adoption.testimony_info || null;
+                      if (testimony) {
+                        testimony.user_info = userInfo;
+                      }
+                      return (
+                        <React.Fragment key={adoption.id}>
+                          {testimony && testimony?.status === "approved" &&
+                            //<CardTestimony testimony={testimony} />
+                            <p>testimony card</p>
+                          }
+                          {testimony && testimony?.status === "pending" &&
+                            <div className='position-relative'>
+                              <p className='position-absolute bg-secondary bg-opacity-75 p-3 text-center'
+                                style={{
+                                  top: 0,
+                                  left: 0,
+                                  zIndex: 1,
+                                  width: '100%'
+                                }}>
+                                Testimonio pendiente
+                              </p>
+                              {/*<CardTestimony testimony={testimony} />>*/}
+                              <p>testimony card</p>
+                            </div>
+                          }
+                          {testimony && testimony?.status === "rejected" &&
+                            <button className="btn btn-secondary rounded-pill px-4 py-2 testimony-card bg-secondary" onClick={() => navigate(`/testimony/${adoption.id}`)}>
+                              Lo sentimos, tu testimonio sobre {adoption.animal_info.name}  fue rechazado
                               <br />
                               ¡Te invitamos a dejar otro testimonio!
                             </button>
-                          </Link>
-                        }
-                        {!animal.testimony &&
-                          <Link to="/testimony">
-                            <button className="btn btn-secondary rounded-pill px-4 py-2 testimony-card bg-secondary">¡Contanos tu experiencia con {animal.name}!</button>
-                          </Link>
-                        }
-                      </React.Fragment>
-                    ))}
+                          }
+                          {!testimony &&
+                            <button className="btn btn-secondary rounded-pill px-4 py-2 testimony-card bg-secondary" onClick={() => navigate(`/testimony/${adoption.id}`)}>
+                              ¡Contanos tu experiencia con {adoption.animal_info.name}!
+                            </button>
+                          }
+                        </React.Fragment>
+                      )
+                    }
+                    )}
                   </div>
-                  <Link to="/animal-list">
-                    <button className="btn btn-secondary rounded-pill px-4 py-2">Quiero adoptar otro peludito</button>
-                  </Link>
                 </div>
               )}
             </div>
