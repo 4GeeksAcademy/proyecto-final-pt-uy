@@ -521,3 +521,31 @@ export const modifyTestimonyStatus = async (testimonyId, new_status, token) => {
         throw error;
     }
 }
+
+
+// Get adoptions list by User
+export const getAdoptionsByUser = async (userId, token) => {
+    let requestParams = `page=1&per_page=12`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones/usuario/${userId}?${requestParams}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        // Devuelve un array con todas las adopciones vinculadas al usuario
+        return data.result;
+
+    } catch (error) {
+        console.error('Error fetching adoptions list by user:', error);
+        throw error;
+    }
+}

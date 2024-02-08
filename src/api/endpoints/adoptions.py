@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, Blueprint
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_cors import CORS
 
-from api.models import RoleEnum, StatusEnum, Testimony, db, User, Animals, Adoption_Users
+from api.models import Animals_images, RoleEnum, StatusEnum, Testimony, db, User, Animals, Adoption_Users
 
 adoptions_bp = Blueprint('adopciones', __name__)
 
@@ -120,6 +120,11 @@ def get_adoptions():
         # Serializar la información
         user_info = user.serialize()
         animal_info = animal.serialize()
+        images_query = Animals_images.query.filter_by(animal_id=animal_info['id']).all()
+        image_urls = [image.image_url for image in images_query]
+        if not image_urls:
+            image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
+        animal_info['image_urls'] = image_urls
         adoption_info = adoption.serialize()
         if testimony:
             testimony_info = testimony.serialize()
@@ -181,6 +186,11 @@ def get_adoptions_by_user(user_id):
 
         # Serializar la información
         animal_info = animal.serialize()
+        images_query = Animals_images.query.filter_by(animal_id=animal_info['id']).all()
+        image_urls = [image.image_url for image in images_query]
+        if not image_urls:
+            image_urls = ["https://res.cloudinary.com/dnwfyqslx/image/upload/v1706630825/default_image_ppkr6u.jpg"]
+        animal_info['image_urls'] = image_urls
         adoption_info = adoption.serialize()
         if testimony:
             testimony_info = testimony.serialize()
