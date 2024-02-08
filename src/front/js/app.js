@@ -35,6 +35,7 @@ import TermsAndConditions from "./pages/TermsAndConditions.js";
 import PrivacyPolicies from "./pages/PrivacyPolicies.js";
 import Donate from "./pages/Donate.js";
 import NotFound from "./pages/NotFound.js";
+import Prueba from "./pages/Prueba.js";
 
 import { BackendURL } from "./component/backendURL";
 
@@ -62,7 +63,7 @@ const App = () => {
                             user.id &&
                             <>
                             <Route path="/edit-profile" element={<FormEditProfile />} />
-                            <Route path="/testimony" element={<FormTestimony />} />
+                            <Route path="/testimony/:adoptionId" element={<FormTestimony />} />
                             <Route path="/profile" element={<Profile />} />
                             </>
                         }
