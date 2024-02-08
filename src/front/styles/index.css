@@ -289,6 +289,13 @@ body {
     fill: white;
 }
 
+.pink-red-button:hover {
+    background-color: #FF564F;
+}
+.pink-red-button:hover i {
+    color: white;
+}
+
 .floating {
     animation: float 3s ease-out infinite;
 }
