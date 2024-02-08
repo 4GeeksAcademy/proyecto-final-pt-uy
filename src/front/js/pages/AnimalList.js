@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAnimalsContext } from '../contexts/animalsContext';
@@ -34,7 +34,7 @@ const AnimalList = () => {
   }, [filters, sorting, pagination.currentPage]);
 
   useEffect(() => {
-    if(!isLoading) {
+    if (!isLoading) {
       window.scrollTo({
         top: 0,
         left: 0,
@@ -42,6 +42,17 @@ const AnimalList = () => {
       });
     }
   }, [isLoading]);
+
+  const iframeRef = useRef(null);
+
+  const handleCloseModal = () => {
+    // Detener el video al cerrar el modal
+    if (iframeRef.current) {
+      const iframe = iframeRef.current;
+      const videoSrc = iframe.src;
+      iframe.src = videoSrc;
+    }
+  };
 
 
   return (
@@ -56,11 +67,28 @@ const AnimalList = () => {
           <p className="mb-0 mt-4 fw-medium">¿Es tu hogar el hogar que un peludito necesita?</p>
           <p className="fw-medium">Te contamos qué tener en cuenta antes de tomar tu decisión.</p>
           <div>
-            <button className="btn btn-outline-primary btn-outline-css-biggerSize rounded-pill mt-3 px-4 py-2 me-3 fw-medium">Ver Video <i className="fa-solid fa-play ms-2"></i></button>
+            <button className="btn btn-outline-primary btn-outline-css-biggerSize rounded-pill mt-3 px-4 py-2 me-3 fw-medium" data-bs-toggle="modal" data-bs-target="#staticBackdrop5">
+              Ver Video <i className="fa-solid fa-play ms-2"></i>
+            </button>
             <Link to="/recomendations">
               <button className="btn btn-primary btn-css-biggerSize rounded-pill px-4 py-2 mt-3 fw-medium">Más información</button>
             </Link>
-         </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade text-center" id="staticBackdrop5" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body p-0">
+              <div class="ratio text-center ratio-16x9">
+                <iframe ref={iframeRef} class="embed-responsive-item ratio-16x9  " src="https://www.youtube.com/embed/X9QxvAaf_kY?si=cs1zI3kBonUNLeO0" ></iframe>
+              </div>
+            </div>
+            <div className="modal-footer m-0 p-0">
+              <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={handleCloseModal}>volver</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -132,7 +160,7 @@ const AnimalList = () => {
           </div>
 
           {/* Paginado */}
-          <Pagination pagination={pagination} setPagination={setPagination}/>
+          <Pagination pagination={pagination} setPagination={setPagination} />
 
         </div>
       </main>
