@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import EmailCopy from "./emailCopy";
 import PhoneCopy from "./phoneCopy";
 
@@ -29,9 +29,35 @@ export const Footer = () => (
 						<Link to="/about" className="text-body-color fw-medium text-decoration-none mx-3">
 							Sobre Nosotros
 						</Link>
-						<Link to="/about" className="text-body-color fw-medium text-decoration-none mx-3">
+						<button data-bs-toggle="modal" data-bs-target="#staticBackdrop" className="nav-link text-primary">
 							Contacto
-						</Link>
+						</button>
+					</div>
+				</div>
+
+				<div class="modal fade text-center" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+					<div className="modal-dialog" role="document">
+						<div className="modal-content">
+							<div className="modal-header">
+								<h5 className="modal-title">Contacto</h5>
+								<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+							</div>
+							<div className="modal-body">
+								<p className='f-5 fw-medium'>Nuestros medios de contacto:</p>
+								<div className="text-start">
+									<p><i className="fa-solid fa-phone me-2"></i>+598 12 345 678</p>
+									<p><i className="fa-solid fa-envelope me-2"></i>elproyectorefugio@gmail.com</p>
+								</div>
+								<hr />
+								<p>¡También te invitamos a seguirnos en nuestras redes sociales!</p>
+								<NavLink to="" className="text-body-color fs-5 fw-medium text-decoration-none me-3">
+									<i className="fa-brands fa-facebook"></i>
+								</NavLink>
+								<NavLink to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
+									<i className="fa-brands fa-instagram"></i>
+								</NavLink>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -49,7 +75,7 @@ export const Footer = () => (
 					<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none ms-3">
 						<EmailCopy />
 					</Link>
-					
+
 				</div>
 			</div>
 

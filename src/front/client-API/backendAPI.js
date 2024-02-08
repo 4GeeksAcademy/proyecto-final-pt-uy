@@ -27,6 +27,7 @@ export const login = async (email, password) => {
 }
 
 
+
 // Register user
 export const registerUser = async ({ name, last_name, username, email, password }) => {
     try {
@@ -50,6 +51,8 @@ export const registerUser = async ({ name, last_name, username, email, password 
         throw error;
     }
 }
+
+
 
 // Get user by id
 export const getUser = async (user_id, token) => {
@@ -75,8 +78,13 @@ export const getUser = async (user_id, token) => {
     }
 }
 
+
+
 //Modify user
 export const modifyUser = async (id, formData, token) => {
+    console.log("desde modifyUser", id, formData, token)
+    formData.phone_number = formData.phone_number === "null" ? null : formData.phone_number;
+    formData.address = formData.address === "null" ? null : formData.address;
     try {
         const response = await fetch(`${apiUrlBase}/usuarios/usuario/${id}`, {
             method: "PUT",
@@ -158,6 +166,7 @@ export const modifyAnimal = async (id, formData, token) => {
         throw error;
     }
 }
+
 
 
 // Delete animal
@@ -250,6 +259,7 @@ export const getAnimalList = async (pagination, sorting, filtering) => {
 }
 
 
+
 // Get random animals list
 export const getRandomAnimalsList = async (type = "", limit = 4) => {
     const requestParams = `type=${type}&limit=${limit}`
@@ -317,7 +327,6 @@ export const getTestimony = async (id) => {
         throw error;
     }
 }
-
 
 
 
@@ -410,6 +419,7 @@ export const getAdoptionsList = async (pagination, token) => {
 }
 
 
+
 // Get all adoptions
 export const getAdoptions = async (token) => {
     try {
@@ -465,6 +475,7 @@ export const forgotPassRequest = async (email) => {
 }
 
 
+
 // Update password request
 export const updatePassRequest = async (password, authTokenFromURL) => {
 
@@ -496,6 +507,7 @@ export const updatePassRequest = async (password, authTokenFromURL) => {
 }
 
 
+
 // Modify testimony status
 export const modifyTestimonyStatus = async (testimonyId, new_status, token) => {
     try {
@@ -523,6 +535,7 @@ export const modifyTestimonyStatus = async (testimonyId, new_status, token) => {
 }
 
 
+
 // Register testimony
 export const addTestimony = async (formData, token) => {
     try {
@@ -548,3 +561,33 @@ export const addTestimony = async (formData, token) => {
         throw error;
     }
 }
+
+
+
+// Get adoptions list by User
+export const getAdoptionsByUser = async (userId, token) => {
+    let requestParams = `page=1&per_page=12`;
+
+    try {
+        const response = await fetch(`${apiUrlBase}/adopciones/usuario/${userId}?${requestParams}`, {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg);
+        }
+
+        const data = await response.json();
+        // Devuelve un array con todas las adopciones vinculadas al usuario
+        return data.result;
+
+    } catch (error) {
+        console.error('Error fetching adoptions list by user:', error);
+        throw error;
+    }
+}
+

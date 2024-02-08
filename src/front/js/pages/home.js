@@ -30,7 +30,7 @@ export const Home = () => {
 						En nuestro refugio, cada adopción es una oportunidad para hacer una diferencia. Al abrir tu corazón y hogar a un animal necesitado, no solo estás salvando una vida, sino también transformando la tuya. Descubre el amor incondicional que solo un compañero peludo puede brindar. ¡Adopta hoy y cambia dos vidas para siempre!"
 						</p>
 						<div>
-							<button className="btn btn-outline-primary rounded-pill me-3 mt-3 px-4 py-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Ver Intro <i className="fa-solid fa-play ms-2"></i></button>
+							<button className="btn btn-outline-primary rounded-pill me-3 mt-3 px-4 py-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Ver Intro <i className="fa-solid fa-play ms-2"></i></button>
 							<Link to="/animal-list">
 								<button className="btn btn-primary rounded-pill px-4 py-2 mt-3">Encuentra tu amigo ideal</button>
 							</Link>
@@ -44,7 +44,7 @@ export const Home = () => {
 				</div>
 			</div>
 
-			<div class="modal fade text-center" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+			<div class="modal fade text-center" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-body p-0">
@@ -84,7 +84,7 @@ export const Home = () => {
 						<Link to="/recomendations">
 							<button className="btn btn-primary rounded-pill px-4 py-2 mt-3 me-3">Más información</button>
 						</Link>
-						<button className="btn btn-outline-primary rounded-pill mt-3 px-4 py-2">Ver Video <i className="fa-solid fa-play ms-2"></i></button>
+						<button className="btn btn-outline-primary rounded-pill me-3 mt-3 px-4 py-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop2">Ver Intro <i className="fa-solid fa-play ms-2"></i></button>
 					</div>
 				</div>
 				<img src="https://res.cloudinary.com/dnwfyqslx/image/upload/v1706902051/Site/homeBanner_image.png" alt="hand and paw" className="col-lg-6 d-none d-lg-block" />

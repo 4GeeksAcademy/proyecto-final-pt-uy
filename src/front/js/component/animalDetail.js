@@ -26,12 +26,39 @@ export default function AnimalDetail({ animal }) {
                         <p className='mb-1'>ref. <span className='fw-semibold'>{formattedAnimal.identification_code}</span></p>
                         <h1 className="fw-semibold">{formattedAnimal.name}</h1>
                         <div className='mb-4'>
-                            <button className="btn btn-primary rounded-pill px-4 py-2 mt-3">Quiero Adoptarlo!</button>
+                            <button className="btn btn-primary rounded-pill px-4 py-2 mt-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop1">Quiero Adoptarlo!</button>
                             <button className="btn btn-outline-primary rounded-pill py-2 mt-3 ms-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                 <i className="fa-regular fa-message me-2"></i>Contáctanos
                             </button>
                         </div>
                     </div>
+                     
+                     
+                    <div class="modal fade text-center" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true">
+						<div className="modal-dialog" role="document">
+							<div className="modal-content">
+								<div className="modal-header bg-secondary">
+									<h5 className="modal-title ">Información importante, lea con atención.</h5>
+									<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+								</div>
+								<div className="modal-body">
+                                <p> Contáctanos a través de WhatsApp al número 123456789 o por correo electrónico a elrefugio@, mencionando el nombre y número de referencia del peludito. De esta manera, comenzaremos a analizar tu petición y a iniciar el proceso de adopción.</p>
+									<p className='f-5 fw-medium'>Los datos específicos de este peludito:</p>
+									<div className="text-start f-5 fw-medium">
+										<p>Nombre:{formattedAnimal.name}</p>
+										<p>Numero de Referencia:{formattedAnimal.identification_code}</p>
+									</div>
+									<hr />
+									<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none me-3">
+										<i className="fa-brands fa-facebook"></i>
+									</Link>
+									<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
+										<i className="fa-brands fa-instagram"></i>
+									</Link>
+								</div>
+							</div>
+						</div>
+					</div>
 
                     <div class="modal fade text-center" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 						<div className="modal-dialog" role="document">
