@@ -29,13 +29,13 @@ export const Footer = () => (
 						<Link to="/about" className="text-body-color fw-medium text-decoration-none mx-3">
 							Sobre Nosotros
 						</Link>
-						<button data-bs-toggle="modal" data-bs-target="#staticBackdrop" className="nav-link text-primary">
+						<Link to="" data-bs-toggle="modal" data-bs-target="#contactModalFooter" className="text-body-color fw-medium text-decoration-none mx-3">
 							Contacto
-						</button>
+						</Link>
 					</div>
 				</div>
 
-				<div class="modal fade text-center" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+				<div class="modal fade text-center" id="contactModalFooter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="contactModalFooterLabel" aria-hidden="true">
 					<div className="modal-dialog" role="document">
 						<div className="modal-content">
 							<div className="modal-header">
@@ -45,17 +45,23 @@ export const Footer = () => (
 							<div className="modal-body">
 								<p className='f-5 fw-medium'>Nuestros medios de contacto:</p>
 								<div className="text-start">
-									<p><i className="fa-solid fa-phone me-2"></i>+598 12 345 678</p>
-									<p><i className="fa-solid fa-envelope me-2"></i>elproyectorefugio@gmail.com</p>
+									<div className="d-flex align-items-center mb-2">
+										<PhoneCopy />
+										<p className="ms-2 mb-0">(+598) 12 345 678</p>
+									</div>
+									<div className="d-flex align-items-center mb-2">
+										<EmailCopy />
+										<p className="ms-2 mb-0">elrefugio@website-demo.com</p>
+									</div>
 								</div>
 								<hr />
 								<p>¡También te invitamos a seguirnos en nuestras redes sociales!</p>
-								<NavLink to="" className="text-body-color fs-5 fw-medium text-decoration-none me-3">
+								<a href="https://www.facebook.com/" className="text-body-color fs-5 fw-medium text-decoration-none me-3" target="_blank">
 									<i className="fa-brands fa-facebook"></i>
-								</NavLink>
-								<NavLink to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
+								</a>
+								<a href="https://www.instagram.com/" className="text-body-color fs-5 fw-medium text-decoration-none mx-3" target="_blank">
 									<i className="fa-brands fa-instagram"></i>
-								</NavLink>
+								</a>
 							</div>
 						</div>
 					</div>

@@ -2,6 +2,9 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
+import EmailCopy from "./emailCopy";
+import PhoneCopy from "./phoneCopy";
+
 import { formatAnimalData } from "../../utils/fromattingFunctions";
 
 import Carousel from './carrousel';
@@ -32,59 +35,65 @@ export default function AnimalDetail({ animal }) {
                             </button>
                         </div>
                     </div>
-                     
-                     
+
+
                     <div class="modal fade text-center" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop1Label" aria-hidden="true">
-						<div className="modal-dialog" role="document">
-							<div className="modal-content">
-								<div className="modal-header bg-secondary">
-									<h5 className="modal-title ">Información importante, lea con atención.</h5>
-									<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-								</div>
-								<div className="modal-body">
-                                <p> Contáctanos a través de WhatsApp al número 123456789 o por correo electrónico a elrefugio@, mencionando el nombre y número de referencia del peludito. De esta manera, comenzaremos a analizar tu petición y a iniciar el proceso de adopción.</p>
-									<p className='f-5 fw-medium'>Los datos específicos de este peludito:</p>
-									<div className="text-start f-5 fw-medium">
-										<p>Nombre:{formattedAnimal.name}</p>
-										<p>Numero de Referencia:{formattedAnimal.identification_code}</p>
-									</div>
-									<hr />
-									<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none me-3">
-										<i className="fa-brands fa-facebook"></i>
-									</Link>
-									<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
-										<i className="fa-brands fa-instagram"></i>
-									</Link>
-								</div>
-							</div>
-						</div>
-					</div>
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header bg-secondary">
+                                    <h5 className="modal-title ">Información importante, lea con atención.</h5>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                                </div>
+                                <div className="modal-body">
+                                    <p> Contáctanos a través de WhatsApp al número (+598) 12 345 6789 o por correo electrónico a elrefugio@website-demo.com, mencionando el nombre y número de referencia del peludito. De esta manera, comenzaremos a analizar tu petición y a iniciar el proceso de adopción.</p>
+                                    <p className='f-5 fw-medium'>Los datos específicos de este peludito:</p>
+                                    <div className="text-start f-5 fw-medium">
+                                        <p>Nombre:{formattedAnimal.name}</p>
+                                        <p>Numero de Referencia:{formattedAnimal.identification_code}</p>
+                                    </div>
+                                    <hr />
+                                    <a href="https://www.facebook.com/" className="text-body-color fs-5 fw-medium text-decoration-none me-3" target="_blank">
+                                        <i className="fa-brands fa-facebook"></i>
+                                    </a>
+                                    <a href="https://www.instagram.com/" className="text-body-color fs-5 fw-medium text-decoration-none mx-3" target="_blank">
+                                        <i className="fa-brands fa-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="modal fade text-center" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-						<div className="modal-dialog" role="document">
-							<div className="modal-content">
-								<div className="modal-header">
-									<h5 className="modal-title">Contacto</h5>
-									<button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
-								</div>
-								<div className="modal-body">
-									<p className='f-5 fw-medium'>Nuestros medios de contacto:</p>
-									<div className="text-start">
-										<p><i className="fa-solid fa-phone me-2"></i>+598 12 345 678</p>
-										<p><i className="fa-solid fa-envelope me-2"></i>elproyectorefugio@gmail.com</p>
-									</div>
-									<hr />
-									<p>¡También te invitamos a seguirnos en nuestras redes sociales!</p>
-									<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none me-3">
-										<i className="fa-brands fa-facebook"></i>
-									</Link>
-									<Link to="" className="text-body-color fs-5 fw-medium text-decoration-none mx-3">
-										<i className="fa-brands fa-instagram"></i>
-									</Link>
-								</div>
-							</div>
-						</div>
-					</div>
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Contacto</h5>
+                                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
+                                </div>
+                                <div className="modal-body">
+                                    <p className='f-5 fw-medium'>Nuestros medios de contacto:</p>
+                                    <div className="text-start">
+                                        <div className="d-flex align-items-center mb-2">
+                                            <PhoneCopy />
+                                            <p className="ms-2 mb-0">(+598) 12 345 678</p>
+                                        </div>
+                                        <div className="d-flex align-items-center mb-2">
+                                            <EmailCopy />
+                                            <p className="ms-2 mb-0">elrefugio@website-demo.com</p>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <p>¡También te invitamos a seguirnos en nuestras redes sociales!</p>
+                                    <a href="https://www.facebook.com/" className="text-body-color fs-5 fw-medium text-decoration-none me-3" target="_blank">
+                                        <i className="fa-brands fa-facebook"></i>
+                                    </a>
+                                    <a href="https://www.instagram.com/" className="text-body-color fs-5 fw-medium text-decoration-none mx-3" target="_blank">
+                                        <i className="fa-brands fa-instagram"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <table className="table mb-3">
                         <tbody>
