@@ -220,3 +220,63 @@ def delete_user(user_id):
     db.session.commit()
 
     return jsonify({"msg": "Usuario eliminado exitosamente"}), 200
+
+
+
+# ================= Modify user role ================== #
+@users_bp.route('/modificar-rol/<int:user_id>', methods=['PUT'])
+@jwt_required()
+def modify_user_role(user_id):
+    """
+    Modifica el rol de un usuario
+
+    Endpoint:
+        PUT /usuarios/modificar-rol/<int:user_id>
+
+    Parámetro de consulta obligatorio:
+        - new_role : Nuevo rol del usuario ("user" o "admin").
+
+    Header:
+        - Authorization: Token JWT del usuario logeado con rol "admin".
+
+    Retorna:
+        - Mensaje de éxito o error.
+    """
+
+    # Obtener el usuario actual
+    current_user_id = get_jwt_identity()
+    current_user = User.query.get(current_user_id)
+
+    # Verificar que el usuario actual sea un administrador
+    if current_user.role != RoleEnum.ADMIN:
+        return jsonify({"msg": "Acceso denegado. Se requiere rol de administrador"}), 403
+
+    # Obtener el nuevo rol del usuario del body de la solicitud
+    body = request.get_json(silent=True)
+
+    if body is None:
+        return jsonify({"msg": "Debes enviar los datos en el body"}), 400
+    if 'new_role' not in body:
+        return jsonify({"msg": "El campo new_role es obligatorio"}), 400
+   
+    new_role = request.json.get('new_role')
+
+    # Validar que el nuevo rol sea válido
+    if new_role not in ["user", "admin"]:
+        return jsonify({"msg": "El rol proporcionado no es válido"}), 400
+
+    # Buscar el usuario en la base de datos
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"msg": "Usuario no encontrado"}), 404
+
+    # Actualizar el estado del testimonio
+    if new_role == 'user':
+        user.role = RoleEnum.USER
+    if new_role == 'admin':
+        user.role = RoleEnum.ADMIN
+
+    # Guardar los cambios en la base de datos
+    db.session.commit()
+
+    return jsonify({"msg": f"El rol del usuario {user_id} ha sido actualizado a {new_role}"}), 200
