@@ -27,6 +27,7 @@ export const login = async (email, password) => {
 }
 
 
+
 // Register user
 export const registerUser = async ({ name, last_name, username, email, password }) => {
     try {
@@ -51,6 +52,8 @@ export const registerUser = async ({ name, last_name, username, email, password 
     }
 }
 
+
+
 // Get user by id
 export const getUser = async (user_id, token) => {
     try {
@@ -74,6 +77,8 @@ export const getUser = async (user_id, token) => {
         throw error;
     }
 }
+
+
 
 //Modify user
 export const modifyUser = async (id, formData, token) => {
@@ -161,6 +166,7 @@ export const modifyAnimal = async (id, formData, token) => {
         throw error;
     }
 }
+
 
 
 // Delete animal
@@ -253,6 +259,7 @@ export const getAnimalList = async (pagination, sorting, filtering) => {
 }
 
 
+
 // Get random animals list
 export const getRandomAnimalsList = async (type = "", limit = 4) => {
     const requestParams = `type=${type}&limit=${limit}`
@@ -320,7 +327,6 @@ export const getTestimony = async (id) => {
         throw error;
     }
 }
-
 
 
 
@@ -413,6 +419,7 @@ export const getAdoptionsList = async (pagination, token) => {
 }
 
 
+
 // Get all adoptions
 export const getAdoptions = async (token) => {
     try {
@@ -468,6 +475,7 @@ export const forgotPassRequest = async (email) => {
 }
 
 
+
 // Update password request
 export const updatePassRequest = async (password, authTokenFromURL) => {
 
@@ -499,6 +507,7 @@ export const updatePassRequest = async (password, authTokenFromURL) => {
 }
 
 
+
 // Modify testimony status
 export const modifyTestimonyStatus = async (testimonyId, new_status, token) => {
     try {
@@ -524,6 +533,35 @@ export const modifyTestimonyStatus = async (testimonyId, new_status, token) => {
         throw error;
     }
 }
+
+
+
+// Register testimony
+export const addTestimony = async (formData, token) => {
+    try {
+        const response = await fetch(`${apiUrlBase}/testimonios/testimonio`, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            body: formData,
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+            const errorData = data;
+            throw new Error(errorData.msg);
+        }
+
+        // Returns message
+        return data;
+
+    } catch (error) {
+        console.error('Error trying to register an testimony', error);
+        throw error;
+    }
+}
+
 
 
 // Get adoptions list by User
@@ -552,3 +590,4 @@ export const getAdoptionsByUser = async (userId, token) => {
         throw error;
     }
 }
+
